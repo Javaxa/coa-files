@@ -14,6 +14,12 @@
             cursor: pointer;
         }
 
+        .editable-dh:hover {
+            background-color: #ff9914;
+            color: white;
+            cursor: pointer;
+        }
+
         #resultTable th {
             text-align: center;
         }
@@ -1477,7 +1483,7 @@ function loadData() {
 
   
 
-    function updateElementTable() {
+  function updateElementTable() {
     const selectedElement = document.getElementById('elementSelect').value;
     const tbody = document.querySelector('#elementTable tbody');
     const minCutoff = parseFloat(document.getElementById('minCutoff').value) || -Infinity;
@@ -1550,6 +1556,24 @@ function loadData() {
                         const modal = new bootstrap.Modal(document.getElementById('coaModal'));
                         modal.show();
                     });
+                } else if (header === 'DH') {
+                    cell.classList.add('editable-dh');
+                    cell.addEventListener('click', function() {
+                        const dh = this.textContent.trim();
+                        const indices = sampleData.reduce((acc, sample, idx) => {
+                            if (sample.DH === dh) {
+                                acc.push(idx);
+                            }
+                            return acc;
+                        }, []);
+                        if (indices.length > 0) {
+                            filterTableByPoint(indices);
+                            const marker = markers.find(m => m.getPopup().getContent().includes(`DH: ${dh}`));
+                            if (marker) {
+                                marker.openPopup();
+                            }
+                        }
+                    });
                 }
                 row.appendChild(cell);
             });
@@ -1578,6 +1602,7 @@ function loadData() {
     updateZoneAverages();
     updateSelectedDHAverage();
 }
+
 
 
 

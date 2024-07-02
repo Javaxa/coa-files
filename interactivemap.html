@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Search Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+           .editable:hover {
+            background-color: #ff9914;
+            color: white;
+            cursor: pointer;
+        }
+
+        #resultTable th {
+            text-align: center;
+        }
+
+        #elementTable th {
+            vertical-align: middle !important;
+            text-align: center;
+            background-color: #075496;
+            color: white;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        #elementTable td {
+            vertical-align: middle !important;
+            text-align: center;
+        }
+
+        /* Add border radius to the first and last th elements */
+        #elementTable th:first-child {
+            border-top-left-radius: 8px;
+        }
+
+        #elementTable th:last-child {
+            border-top-right-radius: 8px;
+        }
+
+        /* Add border radius to the bottom corners of the table */
+        #elementTable {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        #elementTable tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 8px;
+        }
+
+        #elementTable tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 8px;
+        }
+
+        .filter-badge {
+            margin-right: 5px;
+        }
+
+        #resultTable .btn-outline-danger {
+            display: block;
+            margin: auto;
+        }
+
+        .leaflet-control-attribution a {
+            display: none;
+        }
+
+        #map {
+            height: 650px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        .custom-div-icon {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 1px solid black;
+            text-align: center;
+            font-size: 6px;
+            line-height: 9px;
+            font-weight: bold;
+        }
+
+        .red-dot-icon {
+            background-color: red;
+            border-radius: 50%;
+            border: 1px solid black;
+        }
+
+        .purple-rectangle-icon {
+            background-color: rgb(221, 0, 255);
+            border: 1px solid black;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        .source-icon {
+            background-color: rgb(242, 255, 0);
+            border: 1px solid black;
+            border-radius: 50% / 40%; /* Make it an oval shape */
+        }
+
+        .shaft-icon {
+            background-color: rgb(98, 42, 48);
+            border: 1px solid black;
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+        }
+
+        .checkbox-container, .overlay-checkbox-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            overflow-y: scroll;
+            max-height: 500px;
+        }
+
+        .checkbox-container label, .overlay-checkbox-container label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 0;
+            padding: 5px 10px;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .sidebar label {
+            width: 100%;
+        }
+
+        .checkbox-container label:hover, .overlay-checkbox-container label:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+        }
+
+        .checkbox-container input[type="checkbox"], .overlay-checkbox-container input[type="checkbox"] {
+            margin: 0;
+        }
+
+
+        .checkbox-container {
+            font-size: 12px;
+        }
+
+        .scrollable-tooltip {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .fixed-box {
+            position: fixed;
+            top: 20px;
+            right: 10px;
+            width: 190px;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #zoneAveragesBox {
+            top: 140px; 
+            right: 20px;
+            width: 200px;
+        }
+
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .settings-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .filter-container {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+
+        .filter-toggle {
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .filter-toggle:hover {
+            background-color: #ededed;
+        }
+
+        .sidebar {
+            display: block;
+            position: fixed;
+            top: 110px;
+            width: 200px;
+            height: 100%;
+            padding: 10px;
+            z-index: 1000;
+            overflow-y: scroll;
+            max-height: 800px;
+        }
+
+        .sidebar .btn {
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .filter-arrow {
+            margin-left: 10px;
+            transition: transform 0.3s;
+        }
+
+        .btn-style {
+            background-color: #245d98;
+        }
+        
+        #zoneAveragesList {
+            padding-left: 20px;
+        }
+
+        .sortable {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .sortable::after {
+            content: ""; /* Initially empty */
+            font-size: 0.8em;
+            position: absolute;
+            right: 2px; /* Adjust this to control the arrow's position */
+            top: 50%;
+            transform: translateY(-50%);
+            visibility: hidden; /* Hidden by default */
+        }
+
+        .sortable.sorted-asc::after {
+            content: "▲"; /* Ascending sort arrow */
+            visibility: visible;
+        }
+
+        .sortable.sorted-desc::after {
+            content: "▼"; /* Descending sort arrow */
+            visibility: visible;
+        }
+
+        #selectedDH {
+            background-color: #ff872d;
+            padding: 5px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            color: white;
+            vertical-align: super;
+            display: none;
+        }
+
+        #selectedElementPPM {
+            background-color: #075496;
+            padding: 5px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            color: white;
+            vertical-align: super;
+            display: none;
+        }
+
+        #selectedElementHighestPPM {
+            background-color: #ffffff;
+            padding: 5px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            color: rgb(0, 187, 255);
+            vertical-align: super;
+            display: none;
+        }
+
+
+        .dark-mode .checkbox-container label {
+            background: #282828;
+        }
+
+        .dark-mode .leaflet-marker-icon {
+            color: black;
+        }
+
+        .dark-mode .modal-content {
+            color: black;
+        }
+
+        .dark-mode .filter-toggle {
+            color: black;
+        }
+
+        .dark-mode .legend-wrapper {
+            color: black;
+        }
+
+        .dark-mode .checkbox-container {
+            background: #282828;
+            color: white;
+        }
+
+        .dark-mode .overlay-checkbox-container {
+            background: #282828;
+            color: white;
+        }
+
+        .dark-mode .checkbox-container {
+            background: #282828;
+        }
+
+        .dark-mode .overlay-checkbox-container label {
+            background: #282828;
+        }
+
+        .dark-mode .checkbox-container label {
+            background: #282828;
+        }
+
+        .dark-mode .checkbox-container label:hover {
+            background-color: #484848;
+            border-color: #adb5bd;
+        }
+
+        .dark-mode .overlay-checkbox-container label:hover {
+            background-color: #484848;
+            border-color: #adb5bd;
+        }
+
+        .legend-wrapper {
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 200px;
+            position: fixed;
+            right: 20px;
+            bottom: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .legend-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .point-dot {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .legend-text {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .icon-width {
+            height: 15px;
+            width: 25px;
+        }
+
+        .select-style {
+            width: max-content;
+            float: right;
+        }
+
+        .toggle-element-selection {
+            float: right;
+        }
+
+        #sidebarCOAFilters {
+            font-size: 11px;
+        }
+
+        .overlay-checkbox-container {
+            font-size: 11px;
+        }
+
+        .main-title {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: max-content;
+        }
+
+        .heatmap-legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .heatmap-legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .heatmap-legend-text {
+            font-size: 14px;
+            color: #333;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="settings-button">
+        <button class="btn btn-primary btn-style" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="fa-solid fa-gear"></i></button>
+    </div>
+    <div class="legend-wrapper">
+        <h5>Legend</h5>
+        <div class="legend-item">
+            <div class="point-dot custom-div-icon" style="background: #fff; border: 1px solid #000; margin-left: 2px;">DH</div>
+            <span class="legend-text">20ft Incursion</span>
+        </div>
+        <div class="legend-item">
+            <div class="point-dot red-dot-icon" style="margin-left: 2px;"></div>
+            <span class="legend-text">4ft Incursion</span>
+        </div>
+        <div class="legend-item">
+            <div class="point-dot shaft-icon" style="margin-left: 2px;"></div>
+            <span class="legend-text">Shaft</span>
+        </div>
+        <div class="legend-item">
+            <div class="point-dot source-icon icon-width"></div>
+            <span class="legend-text">Source Sample</span>
+        </div>
+        <div class="legend-item">
+            <div class="point-dot purple-rectangle-icon icon-width"></div>
+            <span class="legend-text">Rock</span>
+        </div>
+    </div>
+<div class="sidebar" id="sidebar" style="display: block;">
+    <h5>Filters</h3>
+    <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#incursionFilters" aria-expanded="false" aria-controls="incursionFilters">
+        Incursion Type <span class="filter-arrow">&darr;</span>
+    </button>
+    <div class="collapse" id="incursionFilters">
+        <div class="checkbox-container">
+            <label><input type="checkbox" value="HY20" checked> HY20</label>
+            <label><input type="checkbox" value="HN04" checked> HN04</label>
+            <label><input type="checkbox" value="Shaft" checked> Shaft</label>
+            <label><input type="checkbox" value="Source Sample" checked> Source Sample</label>
+            <label><input type="checkbox" value="Rock" checked> Rock</label>
+        </div>
+    </div>
+    <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#assayFilters" aria-expanded="false" aria-controls="assayFilters">
+        Assay Type <span class="filter-arrow">&darr;</span>
+    </button>
+    <div class="collapse" id="assayFilters">
+        <div class="checkbox-container">
+            <label><input type="checkbox" value="4-Acid Dig" checked> 4-Acid</label>
+            <label><input type="checkbox" value="LMB Flux" checked> LMB Flux</label>
+            <label><input type="checkbox" value="LMB+" checked> LMB+</label>
+            <label><input type="checkbox" value="LMB+ (Mtlg-AqRg-SMB)" checked> LMB+ (Mtlg-AqRg-SMB)</label>
+            <label><input type="checkbox" value="LMB+ (Mtlg-AqRg-AC)" checked> LMB+ (Mtlg-AqRg-AC)</label>
+            <label><input type="checkbox" value="LMB+ (Mtlg-AqRg)" checked> LMB+ (Mtlg-AqRg)</label>
+        </div>
+    </div>
+    <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#zoneFilters" aria-expanded="false" aria-controls="zoneFilters">
+        Zone <span class="filter-arrow">&darr;</span>
+    </button>
+    <div class="collapse" id="zoneFilters">
+        <div class="checkbox-container">
+            <label><input type="checkbox" value="1" checked> Zone 1</label>
+            <label><input type="checkbox" value="2" checked> Zone 2</label>
+            <label><input type="checkbox" value="3" checked> Zone 3</label>
+            <label><input type="checkbox" value="4" checked> Zone 4</label>
+            <label><input type="checkbox" value="5" checked> Zone 5</label>
+            <label><input type="checkbox" value="6" checked> Zone 6</label>
+        </div>
+    </div>
+    <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCOAFilters" aria-expanded="false" aria-controls="sidebarCOAFilters">
+        COA <span class="filter-arrow">&darr;</span>
+    </button>
+    <div class="collapse mt-2" id="sidebarCOAFilters">
+        <div class="checkbox-container" id="sidebarCOACheckboxContainer">
+
+        </div>
+    </div>
+<button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#cutoffGradeFilter" aria-expanded="false" aria-controls="cutoffGradeFilter">
+    Cut-off Grade <span class="filter-arrow">&darr;</span>
+</button>
+<div class="collapse mt-2" id="cutoffGradeFilter">
+        <div class="checkbox-container">
+            <div class="form-group">
+                Minimum PPM:
+                <input type="number" class="form-control" id="minCutoff">
+            </div>
+            <div class="form-group">
+                Maximum PPM:
+                <input type="number" class="form-control" id="maxCutoff">
+            </div>
+            <button class="btn btn-primary mt-2" id="applyCutoff">Apply</button>
+    </div>
+</div>
+
+    <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#overlayFilters" aria-expanded="false" aria-controls="overlayFilters">
+        Overlays <span class="filter-arrow">&darr;</span>
+    </button>
+    <div class="collapse" id="overlayFilters">
+        <div class="overlay-checkbox-container">
+            <label><input type="checkbox" value="Zone" checked> Zone</label>
+            <label><input type="checkbox" value="Claims"> Claims</label>
+            <label><input type="checkbox" value="Sections"> Sections</label>
+        </div>
+    </div>
+</div>
+
+    <div class="container mt-5">
+        <button id="toggleHeatmapButton"  style="float: right;" class="btn btn-outline-primary mb-3">Toggle Heatmap</button>
+        <h1 class="main-title">Cuddeback Lake Basin</h1>
+        <h1 class="mb-4">Interactive Map</h1>
+        <div id="map"></div>
+            <div id="elementAverageBox" class="fixed-box">
+                <div style="display: flex; justify-content: space-between;">
+                    <h4>Elemental Average:</h4>
+                    <span id="selectedElement" style="font-weight: bold;">Au</span>
+                </div>
+                <p id="averageValue">N/A</p>
+                <div id="zoneAveragesBox" class="mt-2">
+                    <h6>Zonal Average Grades:</h5>
+                    <ul id="zoneAveragesList"></ul>
+                </div>
+            </div>
+        <div class="filter-container" id="filters">
+            <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#incursionFilters" aria-expanded="false" aria-controls="incursionFilters">
+                Incursion Filters <span class="filter-arrow">&darr;</span>
+            </div>
+            <div class="collapse" id="incursionFilters">
+                <div class="checkbox-container">
+                    <label><input type="checkbox" value="HY20" checked> HY20</label>
+                    <label><input type="checkbox" value="HN04" checked> HN04</label>
+                    <label><input type="checkbox" value="Shaft" checked> Shaft</label>
+                    <label><input type="checkbox" value="Source Sample" checked> Source Sample</label>
+                    <label><input type="checkbox" value="Rock" checked> Rock</label>
+                </div>
+            </div>
+            <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#assayFilters" aria-expanded="false" aria-controls="assayFilters">
+                Assay Filters <span class="filter-arrow">&darr;</span>
+            </div>
+            <div class="collapse" id="assayFilters">
+                <div class="checkbox-container">
+                    <label><input type="checkbox" value="4-Acid Dig" checked> 4-Acid</label>
+                    <label><input type="checkbox" value="LMB Flux" checked> LMB Flux</label>
+                    <label><input type="checkbox" value="LMB+" checked> LMB+</label>
+                    <label><input type="checkbox" value="LMB+ (Mtlg-AqRg-SMB)" checked> LMB+ (Mtlg-AqRg-SMB)</label>
+                    <label><input type="checkbox" value="LMB+ (Mtlg-AqRg-AC)" checked> LMB+ (Mtlg-AqRg-AC)</label>
+                    <label><input type="checkbox" value="LMB+ (Mtlg-AqRg)" checked> LMB+ (Mtlg-AqRg)</label>
+                </div>
+            </div>
+            <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#zoneFilters" aria-expanded="false" aria-controls="zoneFilters">
+                Zone Filters <span class="filter-arrow">&darr;</span>
+            </div>
+            <div class="collapse" id="zoneFilters">
+                <div class="checkbox-container">
+                    <label><input type="checkbox" value="1" checked> Zone 1</label>
+                    <label><input type="checkbox" value="2" checked> Zone 2</label>
+                    <label><input type="checkbox" value="3" checked> Zone 3</label>
+                    <label><input type="checkbox" value="4" checked> Zone 4</label>
+                    <label><input type="checkbox" value="5" checked> Zone 5</label>
+                    <label><input type="checkbox" value="6" checked> Zone 6</label>
+                </div>
+            </div>
+            <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#mapCOAFilters" aria-expanded="false" aria-controls="mapCOAFilters">
+                COA Filters <span class="filter-arrow">&darr;</span>
+            </div>
+            <div class="collapse mt-2" id="mapCOAFilters">
+                <div class="checkbox-container" id="mapCOACheckboxContainer">
+
+                </div>
+            </div>
+            <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#cutoffGradeFilterUnderMap" aria-expanded="false" aria-controls="cutoffGradeFilterUnderMap">
+                Cut-off Grade Filter <span class="filter-arrow">&darr;</span>
+            </div>
+            <div class="collapse mt-2" id="cutoffGradeFilterUnderMap">
+                <div class="checkbox-container">
+                    <div class="form-group">
+                        Minimum PPM:
+                        <input type="number" class="form-control" id="minCutoffUnderMap">
+                    </div>
+                    <div class="form-group">
+                        Maximum PPM:
+                        <input type="number" class="form-control" id="maxCutoffUnderMap">
+                    </div>
+                    <button class="btn btn-primary mt-2" id="applyCutoffUnderMap">Apply</button>
+                </div>
+            </div>
+            <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#overlayFilters" aria-expanded="false" aria-controls="overlayFilters">
+                Overlays <span class="filter-arrow">&darr;</span>
+            </div>
+            <div class="collapse" id="overlayFilters">
+                <div class="overlay-checkbox-container">
+                    <label><input type="checkbox" value="Zone" checked> Zone</label>
+                    <label><input type="checkbox" value="Claims"> Claims</label>
+                    <label><input type="checkbox" value="Sections"> Sections</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="coaModal" tabindex="-1" aria-labelledby="coaModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" style="max-width: 1150px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="coaModalLabel"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <iframe id="coaIframe" src="" width="100%" height="600px" style="display: none;"></iframe>
+                        <div id="excelContainer" style="display: none;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>          
+        <div class="modal fade" id="periodicModal" tabindex="-1" aria-labelledby="periodicModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" style="max-width: 1100px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="periodicModalLabel">Periodic Table</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="heatmapLegend" class="legend-wrapper" style="display: none;">
+            <h5>Heatmap Legend</h5>
+            <div id="legendColors"></div>
+        </div>
+        <div class="mt-4">
+            <select id="elementSelect" class="form-select select-style mb-3">
+                <option value="Au">Gold (Au)</option>
+                <option value="Pt">Platinum (Pt)</option>
+                <option value="Pd">Palladium (Pd)</option>
+                <option value="Rh">Rhodium (Rh)</option>
+                <option value="Ir">Iridium (Ir)</option>
+                <option value="Os">Osmium (Os)</option>
+                <option value="Ru">Ruthenium (Ru)</option>
+                <option value="Ag">Silver (Ag)</option>
+                <option value="Al">Aluminum (Al)</option>
+                <option value="As">Arsenic (As)</option>
+                <option value="B">Boron (B)</option>
+                <option value="Ba">Barium (Ba)</option>
+                <option value="Be">Beryllium (Be)</option>
+                <option value="Bi">Bismuth (Bi)</option>
+                <option value="Ca">Calcium (Ca)</option>
+                <option value="Cd">Cadmium (Cd)</option>
+                <option value="Ce">Cerium (Ce)</option>
+                <option value="Co">Cobalt (Co)</option>
+                <option value="Cr">Chromium (Cr)</option>
+                <option value="Cs">Cesium (Cs)</option>
+                <option value="Cu">Copper (Cu)</option>
+                <option value="Cl">Chlorine (Cl)</option>
+                <option value="Fe">Iron (Fe)</option>
+                <option value="Ga">Gallium (Ga)</option>
+                <option value="Ge">Germanium (Ge)</option>
+                <option value="Hf">Hafnium (Hf)</option>
+                <option value="Hg">Mercury (Hg)</option>
+                <option value="In">Indium (In)</option>
+                <option value="K">Potassium (K)</option>
+                <option value="La">Lanthanum (La)</option>
+                <option value="Li">Lithium (Li)</option>
+                <option value="Mg">Magnesium (Mg)</option>
+                <option value="Mn">Manganese (Mn)</option>
+                <option value="Mo">Molybdenum (Mo)</option>
+                <option value="Na">Sodium (Na)</option>
+                <option value="Nb">Niobium (Nb)</option>
+                <option value="Ni">Nickel (Ni)</option>
+                <option value="P">Phosphorus (P)</option>
+                <option value="Pb">Lead (Pb)</option>
+                <option value="Rb">Rubidium (Rb)</option>
+                <option value="Re">Rhenium (Re)</option>
+                <option value="S">Sulfur (S)</option>
+                <option value="Sb">Antimony (Sb)</option>
+                <option value="Sc">Scandium (Sc)</option>
+                <option value="Se">Selenium (Se)</option>
+                <option value="Sn">Tin (Sn)</option>
+                <option value="Sr">Strontium (Sr)</option>
+                <option value="Ta">Tantalum (Ta)</option>
+                <option value="Te">Tellurium (Te)</option>
+                <option value="Th">Thorium (Th)</option>
+                <option value="Ti">Titanium (Ti)</option>
+                <option value="Tl">Thallium (Tl)</option>
+                <option value="U">Uranium (U)</option>
+                <option value="V">Vanadium (V)</option>
+                <option value="W">Tungsten (W)</option>
+                <option value="Y">Yttrium (Y)</option>
+                <option value="Zn">Zinc (Zn)</option>
+                <option value="Zr">Zirconium (Zr)</option>
+                <option value="Dy">Dysprosium (Dy)</option>
+                <option value="Er">Erbium (Er)</option>
+                <option value="Eu">Europium (Eu)</option>
+                <option value="Gd">Gadolinium (Gd)</option>
+                <option value="Ho">Holmium (Ho)</option>
+                <option value="Lu">Lutetium (Lu)</option>
+                <option value="Nd">Neodymium (Nd)</option>
+                <option value="Pr">Praseodymium (Pr)</option>
+                <option value="Sm">Samarium (Sm)</option>
+                <option value="Tb">Terbium (Tb)</option>
+                <option value="Tm">Thulium (Tm)</option>
+                <option value="Yb">Ytterbium (Yb)</option>                               
+            </select>   
+            <button class="toggle-element-selection btn btn-outline-primary mb-3" data-bs-toggle="modal" data-bs-target="#periodicModal">Expand Element Selection</button>
+            <button id="clearSelectionButton" class="btn btn-outline-danger mb-3" style="display:none;" onclick="clearPointSelection()">Remove Drill Hole Selection</button>
+            <span id="selectedDH" class="ml-2"></span>    
+            <span id="selectedElementPPM" class="ml-2"></span>
+            <span id="selectedElementHighestPPM" class="ml-2"></span>             
+            <table id="elementTable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th data-column="Description" class="sortable">Description</th>
+                        <th data-column="Incursion Type" class="sortable">Incursion Type</th>
+                        <th data-column="Lab" class="sortable">Lab</th>
+                        <th data-column="STID" class="sortable">STID</th>
+                        <th data-column="Zone" class="sortable">Zone</th>
+                        <th data-column="Northing" class="sortable">Northing</th>
+                        <th data-column="Easting" class="sortable">Easting</th>
+                        <th data-column="DH" class="sortable">DH</th>
+                        <th data-column="Depth" class="sortable">Depth (ft)</th>
+                        <th data-column="Assay Type" class="sortable">Assay Type</th>
+                        <th data-column="COA" class="sortable">COA</th>
+                        <th data-column="Sample Weight" class="sortable">Sample Weight (g)</th>
+                        <th data-column="Element (PPM)" class="sortable">Element (PPM)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                        <label class="form-check-label" for="darkModeToggle">
+                            Dark Mode
+                        </label>
+                    </div>
+                    <div class="form-check mt-3">
+                        <input class="form-check-input" type="checkbox" id="filtersOnRightToggle">
+                        <label class="form-check-label" for="filtersOnRightToggle">
+                            Move Filters Under the Map
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    </div>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+        const coaFiles = {
+    "Nexus_COA_Set_2.xlsx": "https://main--stellular-khapse-e51f2d.netlify.app/Nexus_COA_Set_2.xlsx",
+    "Nexus_COA_Set_NA.xlsx": "https://main--stellular-khapse-e51f2d.netlify.app/Nexus_COA_Set_NA.xlsx",
+    "Nexus_COA_SD.xlsx": "https://main--stellular-khapse-e51f2d.netlify.app/Nexus_COA_SD.xlsx",
+    "Nexus_COA_Set_1.xlsx": "https://main--stellular-khapse-e51f2d.netlify.app/Nexus_COA_Set_1.xlsx",
+    "Nexus_COA_Set_0.xlsx": "https://main--stellular-khapse-e51f2d.netlify.app/Nexus_COA_Set_0.xlsx",
+    "Nexus_COA_Set_3.xlsx": "https://main--stellular-khapse-e51f2d.netlify.app/Nexus_COA_Set_3.xlsx",
+    "Nexus_COA_Set_4.xlsx": "https://main--stellular-khapse-e51f2d.netlify.app/Nexus_COA_Set_4.xlsx",
+    "Nexus_COA_Set_5.xlsx": "https://main--stellular-khapse-e51f2d.netlify.app/Nexus_COA_Set_5.xlsx",
+    "Nexus_COA_Set_6.xlsx": "https://main--stellular-khapse-e51f2d.netlify.app/Nexus_COA_Set_6.xlsx",
+    "Nexus_COA_Set_9.xlsx": "https://main--stellular-khapse-e51f2d.netlify.app/Nexus_COA_Set_9.xlsx",
+    "Nexus_COA_Set_20.xlsx": "https://main--stellular-khapse-e51f2d.netlify.app/Nexus_COA_Set_20.xlsx",
+    "Nexus_COA_Set_10.xlsx": "https://main--stellular-khapse-e51f2d.netlify.app/Nexus_COA_Set_10.xlsx",
+    "blank": "",
+    "COA_RE20211599.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20211599.pdf",
+    "COA_RE20206582.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20206582.pdf",
+    "COA_RE20199978.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20199978.pdf",
+    "COA_RE20185806.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20185806.pdf",
+    "COA_RE20213510.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20213510.pdf",
+    "COA_RE20162154.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20162154.pdf",
+    "COA_RE20259732.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20259732.pdf",
+    "COA_RE19312060.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE19312060.pdf",
+    "COA_RE19316786.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE19316786.pdf",
+    "COA_RE20066840.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20066840.pdf",
+    "COA_RE20034549.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20034549.pdf",
+    "COA_RE20066842.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20066842.pdf",
+    "COA_RE20065194.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20065194.pdf",
+    "COA_RE20124950.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20124950.pdf",
+    "COA_RE20131728.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE20131728.pdf",
+    "COA_RE21096417.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE21096417.pdf",
+    "COA_RE21095480.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE21095480.pdf",
+    "COA_RE21096266.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE21096266.pdf",
+    "COA_RE21096307.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/COA_RE21096307.pdf"
+};
+
+    let sampleData = [];
+    let elementData = {};
+    let appliedFilters = {}; 
+    let map;
+    let markers = [];
+    let activeCOAs = new Set();
+    let heatLayer;
+    let heatmapEnabled = false;
+    let selectedIndices = [];
+    let currentSortColumn = 'Element (PPM)';
+    let currentSortDirection = 'desc';
+    let activeZones = new Set(['1', '2', '3', '4', '5', '6']);
+    let activeAssayTypes = new Set([
+    'LMB Flux', 'LMB+', 'LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', '4-Acid Dig', 'LMB+ (Mtlg-AqRg)']);
+    let activeIncursionTypes = new Set(['HY20', 'HN04', 'Rock', 'Source Sample', 'Shaft']);
+    let overlayImages = {
+        "Zone": {
+            url: '/overlays/zone.png', 
+            bounds: [
+                convertUTMToLatLng(3913300, 443088),
+                convertUTMToLatLng(3893000, 463668)
+            ],
+            layer: null
+        },
+        "Claims": {
+            url: '/overlays/claims.png',
+            bounds: [
+                convertUTMToLatLng(3913300, 443088),
+                convertUTMToLatLng(3893000, 463668)
+            ],
+            layer: null
+        },
+        "Sections": {
+            url: '/overlays/sections.png',
+            bounds: [
+                convertUTMToLatLng(3913300, 443088),
+                convertUTMToLatLng(3893000, 463668)
+            ],
+            layer: null
+        }
+    };
+
+    const headers = ['Description', 'Incursion Type', 'Lab', 'Stid', 'Zone', 'Northing', 'Easting', 'DH', 'Depth', 'Assay Type', 'COA', 'Weight'];
+    const elements = ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag', 'Al', 'As', 'B', 'Ba', 'Be', 'Bi', 'Ca', 'Cd', 'Ce', 'Co', 'Cr', 'Cs', 'Cu', 'Cl', 'Fe', 'Ga', 'Ge', 'Hf', 'Hg', 'In', 'K', 'La', 'Li', 'Mg', 'Mn', 'Mo', 'Na', 'Nb', 'Ni', 'P', 'Pb', 'Rb', 'Re', 'S', 'Sb', 'Sc', 'Se', 'Sn', 'Sr', 'Ta', 'Te', 'Th', 'Ti', 'Tl', 'U', 'V', 'W', 'Y', 'Zn', 'Zr', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb'];
+
+    function parseCSV(text) {
+        const lines = text.trim().split('\n');
+        const data = lines.slice(1).map(line => {
+            const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            return headers.reduce((object, header, index) => {
+                let value = values[index] ? values[index].trim() : '';
+                if (value.startsWith('"') && value.endsWith('"')) {
+                    value = value.slice(1, -1);
+                }
+                object[header.trim()] = value;
+                return object;
+            }, {});
+        });
+
+        const uniqueCOAs = new Set();
+        lines.slice(1).forEach((line, rowIndex) => {
+            const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            elements.forEach((element, elementIndex) => {
+                const elementColumnIndex = headers.length + elementIndex;
+                let value = values[elementColumnIndex] ? values[elementColumnIndex].trim() : '';
+                if (value.startsWith('"') && value.endsWith('"')) {
+                    value = value.slice(1, -1);
+                }
+                value = value.replace(/,/g, ''); 
+                elementData[rowIndex] = elementData[rowIndex] || {};
+                elementData[rowIndex][element] = value;
+            });
+
+            const coaValue = values[headers.indexOf('COA')].trim();
+            if (coaValue) {
+                uniqueCOAs.add(coaValue);
+            }
+        });
+
+        createCOACheckboxes(uniqueCOAs);
+
+        return data;
+    }
+
+    document.getElementById('applyCutoffUnderMap').addEventListener('click', () => {
+    const minCutoff = parseFloat(document.getElementById('minCutoffUnderMap').value) || -Infinity;
+    const maxCutoff = parseFloat(document.getElementById('maxCutoffUnderMap').value) || Infinity;
+
+    document.getElementById('minCutoff').value = minCutoff;
+    document.getElementById('maxCutoff').value = maxCutoff;
+
+    updateMap();
+    updateElementTable();
+});
+
+    function createCOACheckboxes(coaValues) {
+    const sidebarContainer = document.querySelector('#sidebarCOACheckboxContainer');
+    const mapContainer = document.querySelector('#mapCOACheckboxContainer');
+    
+    sidebarContainer.innerHTML = '';
+    mapContainer.innerHTML = '';
+
+    coaValues.forEach(coa => {
+        const sidebarLabel = document.createElement('label');
+        const mapLabel = document.createElement('label');
+        
+        sidebarLabel.innerHTML = `<input type="checkbox" value="${coa}" checked> ${coa}`;
+        mapLabel.innerHTML = `<input type="checkbox" value="${coa}" checked> ${coa}`;
+        
+        sidebarContainer.appendChild(sidebarLabel);
+        mapContainer.appendChild(mapLabel);
+        
+        activeCOAs.add(coa);
+    });
+
+    document.querySelectorAll('#sidebarCOACheckboxContainer input[type="checkbox"], #mapCOACheckboxContainer input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                activeCOAs.add(this.value);
+            } else {
+                activeCOAs.delete(this.value);
+            }
+            updateMap();
+            updateElementTable();
+        });
+    });
+}
+
+
+
+
+    function displayDebugInfo(message) {
+        const debugDiv = document.getElementById('debugInfo');
+        if (debugDiv) {
+            debugDiv.innerHTML += `<p>${new Date().toLocaleTimeString()} - ${message}</p>`;
+        } else {
+            console.log(message);
+        }
+    }
+
+    $(document).ready(function() {
+    $('#periodicModal').on('shown.bs.modal', function () {
+        $(this).find('.modal-body').load('/periodic.html', function() {
+            $('.chip').click(function() {
+                var elementName = $(this).find('.face.front strong').text();
+                var $dropdown = $('#elementSelect');
+                
+                $dropdown.val(elementName);
+                
+                setTimeout(function() {
+                    $dropdown.trigger('change');
+                    
+                    var event = new Event('change', { bubbles: true });
+                    $dropdown[0].dispatchEvent(event);
+                }, 10); 
+                
+                $('#periodicModal').modal('hide');
+            });
+        });
+    });
+});
+
+
+document.getElementById('applyCutoff').addEventListener('click', () => {
+    updateMap();
+    updateElementTable();
+});
+
+
+
+
+    function initMap() {
+        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; RRCM &mdash; BGS'
+        });
+
+        const topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; RRCM &mdash; BGS'
+        });
+
+        const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; RRCM &mdash; BGS'
+        });
+
+        map = L.map('map', {
+            layers: [satelliteLayer]
+        }).setView([0, 0], 2);
+
+        const baseLayers = {
+            "Satellite": satelliteLayer,
+            "Topographic": topoLayer,
+            "Street": streetLayer,
+        };
+
+        L.control.layers(baseLayers).addTo(map);
+
+        for (let key in overlayImages) {
+            overlayImages[key].layer = L.imageOverlay(overlayImages[key].url, overlayImages[key].bounds);
+            if (key === "Zone") {
+                overlayImages[key].layer.addTo(map);
+            }
+        }
+    }
+
+    function convertUTMToLatLng(northing, easting) {
+        const utm = "+proj=utm +zone=11 +datum=WGS84";
+        const wgs84 = "+proj=longlat +datum=WGS84 +no_defs";
+        const result = proj4(utm, wgs84, [parseFloat(easting), parseFloat(northing)]);
+        return [result[1], result[0]];
+    }
+
+    function createPopupContent(indices) {
+        let content = '<div class="scrollable-tooltip">';
+        indices.forEach(index => {
+            content += `<div id="tooltipContent-${index}">${generateTooltipTable(sampleData[index])}</div>`;
+        });
+        content += '</div>';
+        return content;
+    }
+
+
+    function generateTooltipTable(sample) {
+        let content = '<table class="table table-sm">';
+        headers.forEach(header => {
+            content += `<tr><th>${header}</th><td>${sample[header]}</td></tr>`;
+        });
+        content += '</table>';
+        return content;
+    }
+
+
+   
+        // Your JavaScript code here
+        function filterTableByPoint(indices) {
+            selectedIndices = indices;
+            const selectedElement = document.getElementById('elementSelect').value;
+            const tbody = document.querySelector('#elementTable tbody');
+            tbody.innerHTML = '';
+
+            const selectedDH = sampleData[indices[0]].DH;
+            document.getElementById('selectedDH').textContent = `Selected DH: ${selectedDH}`;
+            document.getElementById('selectedDH').style.display = 'inline-block';
+
+            let totalElementPPM = 0;
+            let countElementPPM = 0;
+            let highestElementPPM = -Infinity;
+
+            indices.sort((a, b) => {
+                const aValue = elementData[a] ? parseFloat(elementData[a][selectedElement].replace(/,/g, '')) : NaN;
+                const bValue = elementData[b] ? parseFloat(elementData[b][selectedElement].replace(/,/g, '')) : NaN;
+                return bValue - aValue;
+            });
+
+            indices.forEach(index => {
+                const sample = sampleData[index];
+                const row = document.createElement('tr');
+                headers.forEach(header => {
+                    const cell = document.createElement('td');
+                    cell.textContent = sample[header] || '';
+                    if (header === 'COA') {
+                        cell.classList.add('editable');
+                        cell.addEventListener('click', function() {
+                            const cellValue = this.textContent.trim();
+                            const fileExtension = cellValue.split('.').pop().toLowerCase();
+                            document.getElementById('coaModalLabel').textContent = cellValue;
+
+                            if (fileExtension === 'pdf') {
+                                document.getElementById('coaIframe').src = `/coas/${cellValue}`;
+                                document.getElementById('coaIframe').style.display = 'block';
+                                document.getElementById('excelContainer').style.display = 'none';
+                            } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+                                const encodedUrl = encodeURIComponent(window.location.origin + '/coas/' + cellValue);
+                                document.getElementById('coaIframe').style.display = 'block';
+                                document.getElementById('excelContainer').style.display = 'none';
+                            } else {
+                                document.getElementById('coaIframe').src = '';
+                                document.getElementById('coaIframe').style.display = 'none';
+                                document.getElementById('excelContainer').textContent = 'Cannot display the file. Unsupported file format.';
+                                document.getElementById('excelContainer').style.display = 'block';
+                            }
+
+                            const modal = new bootstrap.Modal(document.getElementById('coaModal'));
+                            modal.show();
+                        });
+                    }
+                    row.appendChild(cell);
+                });
+                const elementCell = document.createElement('td');
+                const elementValue = elementData[index] ? elementData[index][selectedElement] : '';
+                elementCell.textContent = formatNumberWithCommas(elementValue);
+                row.appendChild(elementCell);
+                tbody.appendChild(row);
+
+                if (elementValue) {
+                    const value = parseFloat(elementValue.replace(/,/g, ''));
+                    if (!isNaN(value)) {
+                        totalElementPPM += value;
+                        countElementPPM++;
+                        if (value > highestElementPPM) {
+                            highestElementPPM = value;
+                        }
+                    }
+                }
+            });
+
+            const averageElementPPM = countElementPPM > 0 ? (totalElementPPM / countElementPPM).toFixed(2) : 'N/A';
+            const highestElementPPMFormatted = highestElementPPM > -Infinity ? formatNumberWithCommas(highestElementPPM.toFixed(2)) : 'N/A';
+
+            document.getElementById('selectedElementPPM').textContent = `Average Grade: ${formatNumberWithCommas(averageElementPPM)}`;
+            document.getElementById('selectedElementHighestPPM').textContent = `Highest Grade: ${highestElementPPMFormatted}`;
+
+            document.getElementById('selectedElementPPM').style.display = 'inline-block';
+            document.getElementById('selectedElementHighestPPM').style.display = 'inline-block';
+
+            document.getElementById('clearSelectionButton').style.display = 'inline-block';
+        }
+
+function viewExcelFile(filePath) {
+    fetch(filePath)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.arrayBuffer();
+        })
+        .then(data => {
+            const workbook = XLSX.read(data, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const excelContainer = document.getElementById('excelContainer');
+            excelContainer.innerHTML = XLSX.utils.sheet_to_html(worksheet);
+            document.getElementById('coaIframe').style.display = 'none';
+            excelContainer.style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error loading Excel file:', error);
+        });
+}
+
+
+
+
+
+
+function clearPointSelection() {
+    selectedIndices = [];
+    updateElementTable();
+    document.getElementById('clearSelectionButton').style.display = 'none';
+    document.getElementById('selectedDH').style.display = 'none';
+    document.getElementById('selectedElementPPM').style.display = 'none';
+    document.getElementById('selectedElementHighestPPM').style.display = 'none';
+}
+
+
+    function createCustomIcon(dh, incursionType) {
+        if (incursionType === 'HN04') {
+            return L.divIcon({
+                className: 'red-dot-icon',
+                iconSize: [6, 6]
+            });
+        } if (incursionType === 'Rock') {
+            return L.divIcon({
+                className: 'purple-rectangle-icon',
+                iconSize: [12, 8]
+            });
+        } if (incursionType === 'Source Sample') {
+            return L.divIcon({
+                className: 'source-icon',
+                iconSize: [10, 7]
+            });
+        } if (incursionType === 'Shaft') {
+            return L.divIcon({
+                className: 'shaft-icon',
+                iconSize: [10, 10]
+            });
+        } else {
+            return L.divIcon({
+                className: 'custom-div-icon',
+                html: dh,
+                iconSize: [11, 11],
+                iconAnchor: [11, 11],
+                popupAnchor: [0, -11],
+            });
+        }
+    }
+
+    document.getElementById('toggleHeatmapButton').addEventListener('click', () => {
+    const selectedElement = document.getElementById('elementSelect').value;
+    if (selectedElement) {
+        toggleHeatmap(selectedElement);
+    } else {
+        alert('Please select an element first.');
+    }
+});
+
+function toggleHeatmap(selectedElement) {
+    if (heatLayer) {
+        map.removeLayer(heatLayer);
+        heatLayer = null;
+        document.getElementById('toggleHeatmapButton').textContent = 'Show Heatmap';
+        document.getElementById('heatmapLegend').style.display = 'none';
+        heatmapEnabled = false;
+    } else {
+        const heatData = calculateHeatmapData(selectedElement);
+        heatLayer = L.heatLayer(heatData.data, { radius: 25, maxZoom: 12 }).addTo(map);
+        document.getElementById('toggleHeatmapButton').textContent = 'Hide Heatmap';
+        document.getElementById('heatmapLegend').style.display = 'block';
+        updateHeatmapLegend(heatData.maxPPM);
+        heatmapEnabled = true;
+    }
+}
+
+
+
+function calculateHeatmapData(selectedElement) {
+    const minCutoff = parseFloat(document.getElementById('minCutoff').value) || -Infinity;
+    const maxCutoff = parseFloat(document.getElementById('maxCutoff').value) || Infinity;
+    const dhMap = new Map();
+    let maxPPM = 0;
+
+    sampleData.forEach((sample, index) => {
+        if (sample.Northing && sample.Easting &&
+            activeIncursionTypes.has(sample['Incursion Type']) &&
+            activeAssayTypes.has(sample['Assay Type']) &&
+            activeZones.has(sample['Zone']) &&
+            activeCOAs.has(sample['COA'])) {
+
+            const latLng = convertUTMToLatLng(sample.Northing, sample.Easting);
+            const dh = sample.DH;
+
+            const elementValue = elementData[index] ? parseFloat(elementData[index][selectedElement].replace(/,/g, '')) : NaN;
+
+            if (!isNaN(elementValue) && elementValue >= minCutoff && elementValue <= maxCutoff) {
+                if (!dhMap.has(dh)) {
+                    dhMap.set(dh, { latLng, totalPPM: 0, count: 0 });
+                }
+
+                const dhData = dhMap.get(dh);
+                dhData.totalPPM += elementValue;
+                dhData.count++;
+            }
+        }
+    });
+
+    const heatData = [];
+    dhMap.forEach((value, dh) => {
+        if (value.count > 0) {
+            const avgPPM = value.totalPPM / value.count;
+            if (avgPPM > maxPPM) {
+                maxPPM = avgPPM;
+            }
+            heatData.push([value.latLng[0], value.latLng[1], avgPPM]);
+        }
+    });
+
+    return { data: heatData.map(([lat, lng, ppm]) => [lat, lng, ppm / maxPPM]), maxPPM };
+}
+
+function updateHeatmapLegend(maxPPM) {
+    const legendColors = [
+        { color: '#00f', value: (maxPPM * 0.2).toFixed(2) },
+        { color: '#0ff', value: (maxPPM * 0.4).toFixed(2) },
+        { color: '#0f0', value: (maxPPM * 0.6).toFixed(2) },
+        { color: '#ff0', value: (maxPPM * 0.8).toFixed(2) },
+        { color: '#f00', value: maxPPM.toFixed(2) }
+    ];
+
+    const legendContainer = document.getElementById('legendColors');
+    legendContainer.innerHTML = '';
+
+    legendColors.forEach(({ color, value }) => {
+        const legendItem = document.createElement('div');
+        legendItem.className = 'heatmap-legend-item';
+        
+        const colorBox = document.createElement('div');
+        colorBox.className = 'heatmap-legend-color';
+        colorBox.style.backgroundColor = color;
+
+        const legendText = document.createElement('div');
+        legendText.className = 'heatmap-legend-text';
+        legendText.textContent = `${formatNumberWithCommas(value)} PPM`;
+
+        legendItem.appendChild(colorBox);
+        legendItem.appendChild(legendText);
+        legendContainer.appendChild(legendItem);
+    });
+}
+
+
+function updateMap() {
+    const minCutoff = parseFloat(document.getElementById('minCutoff').value) || -Infinity;
+    const maxCutoff = parseFloat(document.getElementById('maxCutoff').value) || Infinity;
+    const selectedElement = document.getElementById('elementSelect').value;
+
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = [];
+
+    if (heatLayer) {
+        map.removeLayer(heatLayer);
+        heatLayer = null;
+    }
+
+    const uniquePoints = new Map();
+
+    sampleData.forEach((sample, index) => {
+        if (sample.Northing && sample.Easting &&
+            activeIncursionTypes.has(sample['Incursion Type']) &&
+            activeAssayTypes.has(sample['Assay Type']) &&
+            activeZones.has(sample['Zone']) &&
+            activeCOAs.has(sample['COA'])) {
+
+            const elementValue = elementData[index] && elementData[index][selectedElement] ? 
+                                 parseFloat(elementData[index][selectedElement].replace(/["',]/g, '')) : NaN;
+
+            if (!isNaN(elementValue) && elementValue >= minCutoff && elementValue <= maxCutoff) {
+                const latLng = convertUTMToLatLng(sample.Northing, sample.Easting);
+                const key = `${latLng[0]},${latLng[1]},${sample.DH}`;
+
+                if (!uniquePoints.has(key)) {
+                    uniquePoints.set(key, []);
+                }
+                uniquePoints.get(key).push(index);
+            }
+        }
+    });
+
+    uniquePoints.forEach((indices, key) => {
+        const [lat, lng] = key.split(',').map(Number);
+        const marker = L.marker([lat, lng], { icon: createCustomIcon(sampleData[indices[0]].DH, sampleData[indices[0]]['Incursion Type']) }).addTo(map);
+        
+        const tooltipContent = generateTooltipContent(indices);
+        marker.bindTooltip(tooltipContent, { className: 'custom-tooltip' });
+        marker.bindPopup(() => createPopupContent(indices));
+        marker.on('click', () => filterTableByPoint(indices));
+        marker.on('popupclose', () => clearPointSelection());
+        markers.push(marker);
+    });
+
+    if (markers.length > 0) {
+        const group = new L.featureGroup(markers);
+        map.fitBounds(group.getBounds());
+    }
+
+    if (heatmapEnabled) {
+        const heatData = calculateHeatmapData(selectedElement);
+        heatLayer = L.heatLayer(heatData.data, { radius: 25, maxZoom: 12 }).addTo(map);
+        document.getElementById('toggleHeatmapButton').textContent = 'Hide Heatmap';
+        updateHeatmapLegend(heatData.maxPPM); 
+    } else {
+        document.getElementById('toggleHeatmapButton').textContent = 'Show Heatmap';
+    }
+
+    updateElementTable();
+}
+
+
+function generateTooltipContent(indices) {
+    const selectedElement = document.getElementById('elementSelect').value;
+    let totalPPM = 0;
+    let highestPPM = -Infinity;
+    let count = 0;
+    const stids = new Set();
+
+    indices.forEach(index => {
+        const elementValue = elementData[index] ? parseFloat(elementData[index][selectedElement].replace(/,/g, '')) : NaN;
+        if (!isNaN(elementValue)) {
+            totalPPM += elementValue;
+            if (elementValue > highestPPM) {
+                highestPPM = elementValue;
+            }
+            count++;
+        }
+        stids.add(sampleData[index].Stid);
+    });
+
+    const averagePPM = count > 0 ? (totalPPM / count).toFixed(2) : 'N/A';
+    const highestPPMDisplay = count > 0 ? highestPPM.toFixed(2) : 'N/A';
+    const stidList = Array.from(stids).join(', ');
+
+    return `<div class="tooltip-content">
+                <div>DH: ${sampleData[indices[0]].DH}</div>
+                <div>STID: <span class="stid-list">${stidList}</span></div>
+                <div>Average Grade: <span style="color: red; font-weight: bold;">${formatNumberWithCommas(averagePPM)}</span></div>
+                <div>Highest Grade: <span style="color: #34b2ef; font-weight: bold;">${formatNumberWithCommas(highestPPMDisplay)}</span></div>
+            </div>`;
+}
+
+
+const style = document.createElement('style');
+style.innerHTML = `
+.custom-tooltip {
+    max-width: 300px !important;
+    word-wrap: break-word !important;
+}
+
+.tooltip-content {
+    overflow: auto;
+}
+
+.tooltip-content .stid-list {
+    white-space: pre-wrap; /* Preserve whitespace and wrap the text */
+    word-break: break-word; /* Break long words */
+}
+`;
+document.head.appendChild(style);
+
+
+
+function loadData() {
+    const csvFileUrl = 'https://main--stellular-khapse-e51f2d.netlify.app/mapdata.csv'; // 
+    const timestamp = new Date().getTime();
+    fetch(`${csvFileUrl}?t=${timestamp}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(text => {
+            sampleData = parseCSV(text);
+            updateMap();
+            updateElementTable();
+        })
+        .catch(error => {
+            console.error('Error loading the CSV file:', error);
+            displayDebugInfo(`Error loading CSV: ${error.message}`);
+        });
+}
+
+
+  
+
+    function updateElementTable() {
+    const selectedElement = document.getElementById('elementSelect').value;
+    const tbody = document.querySelector('#elementTable tbody');
+    const minCutoff = parseFloat(document.getElementById('minCutoff').value) || -Infinity;
+    const maxCutoff = parseFloat(document.getElementById('maxCutoff').value) || Infinity;
+    tbody.innerHTML = '';
+
+    let sortedData = [...sampleData];
+    let total = 0;
+    let count = 0;
+
+    if (selectedIndices.length > 0) {
+        sortedData = selectedIndices.map(index => sampleData[index]);
+    }
+
+    sortedData = sortedData.filter(sample =>
+        activeIncursionTypes.has(sample['Incursion Type']) &&
+        activeAssayTypes.has(sample['Assay Type']) &&
+        activeZones.has(sample['Zone']) &&
+        activeCOAs.has(sample['COA'])
+    );
+
+    sortedData.sort((a, b) => {
+        let aValue = a[currentSortColumn];
+        let bValue = b[currentSortColumn];
+
+        if (currentSortColumn === 'Element (PPM)') {
+            aValue = elementData[sampleData.indexOf(a)] && elementData[sampleData.indexOf(a)][selectedElement] ?
+                parseFloat(elementData[sampleData.indexOf(a)][selectedElement].replace(/["',]/g, '')) || 0 : 0;
+            bValue = elementData[sampleData.indexOf(b)] && elementData[sampleData.indexOf(b)][selectedElement] ?
+                parseFloat(elementData[sampleData.indexOf(b)][selectedElement].replace(/["',]/g, '')) || 0 : 0;
+        }
+
+        if (aValue < bValue) {
+            return currentSortDirection === 'asc' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+            return currentSortDirection === 'asc' ? 1 : -1;
+        }
+        return 0;
+    });
+
+    sortedData.forEach((sample, index) => {
+        if (selectedIndices.length === 0 || selectedIndices.includes(sampleData.indexOf(sample))) {
+            const row = document.createElement('tr');
+            headers.forEach(header => {
+                const cell = document.createElement('td');
+                cell.textContent = sample[header] || '';
+                if (header === 'COA') {
+                    cell.classList.add('editable');
+                    cell.addEventListener('click', function() {
+                        const cellValue = this.textContent.trim();
+                        const fileExtension = cellValue.split('.').pop().toLowerCase();
+                        document.getElementById('coaModalLabel').textContent = cellValue;
+
+                        if (fileExtension === 'pdf') {
+                            document.getElementById('coaIframe').src = `/coas/${cellValue}`;
+                            document.getElementById('coaIframe').style.display = 'block';
+                            document.getElementById('excelContainer').style.display = 'none';
+                        } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+                            const encodedUrl = encodeURIComponent(window.location.origin + '/coas/' + cellValue);
+                            document.getElementById('coaIframe').style.display = 'block';
+                            document.getElementById('excelContainer').style.display = 'none';
+                        } else {
+                            document.getElementById('coaIframe').src = '';
+                            document.getElementById('coaIframe').style.display = 'none';
+                            document.getElementById('excelContainer').textContent = 'Cannot display the file. Unsupported file format.';
+                            document.getElementById('excelContainer').style.display = 'block';
+                        }
+
+                        const modal = new bootstrap.Modal(document.getElementById('coaModal'));
+                        modal.show();
+                    });
+                }
+                row.appendChild(cell);
+            });
+            const elementCell = document.createElement('td');
+            let elementValue = elementData[sampleData.indexOf(sample)] && elementData[sampleData.indexOf(sample)][selectedElement] ?
+                elementData[sampleData.indexOf(sample)][selectedElement] : '';
+            elementValue = elementValue.replace(/["']/g, ''); // Remove double quotes
+
+            const numericValue = parseFloat(elementValue.replace(/,/g, ''));
+            if (!isNaN(numericValue) && numericValue >= minCutoff && numericValue <= maxCutoff) {
+                elementCell.textContent = formatNumberWithCommas(elementValue);
+                row.appendChild(elementCell);
+                tbody.appendChild(row);
+
+                if (selectedElement) {
+                    if (!isNaN(numericValue)) {
+                        total += numericValue;
+                        count++;
+                    }
+                }
+            }
+        }
+    });
+
+    updateAverageValue(total, count);
+    updateZoneAverages();
+    updateSelectedDHAverage();
+}
+
+
+
+
+
+function updateSelectedDHAverage() {
+    if (selectedIndices.length > 0) {
+        let totalElementPPM = 0;
+        let countElementPPM = 0;
+        let highestElementPPM = -Infinity;
+        const selectedElement = document.getElementById('elementSelect').value;
+
+        selectedIndices.forEach(index => {
+            const elementValue = elementData[index] ? elementData[index][selectedElement] : '';
+            if (elementValue) {
+                const value = parseFloat(elementValue.replace(/,/g, ''));
+                if (!isNaN(value)) {
+                    totalElementPPM += value;
+                    countElementPPM++;
+                    if (value > highestElementPPM) {
+                        highestElementPPM = value;
+                    }
+                }
+            }
+        });
+
+        const averageElementPPM = countElementPPM > 0 ? (totalElementPPM / countElementPPM).toFixed(2) : 'N/A';
+        const highestElementPPMFormatted = highestElementPPM > -Infinity ? formatNumberWithCommas(highestElementPPM.toFixed(2)) : 'N/A';
+
+        document.getElementById('selectedElementPPM').textContent = `Average Grade: ${formatNumberWithCommas(averageElementPPM)}`;
+        document.getElementById('selectedElementPPM').style.display = 'inline-block';
+
+        document.getElementById('selectedElementHighestPPM').textContent = `Highest Grade: ${highestElementPPMFormatted}`;
+        document.getElementById('selectedElementHighestPPM').style.display = 'inline-block';
+    } else {
+        document.getElementById('selectedElementPPM').style.display = 'none';
+        document.getElementById('selectedElementHighestPPM').style.display = 'none';
+    }
+}
+
+function updateAverageValue(total, count) {
+    const averageValueElement = document.getElementById('averageValue');
+    if (count > 0) {
+        const average = total / count;
+        averageValueElement.textContent = formatNumberWithCommas(average.toFixed(2));
+    } else {
+        averageValueElement.textContent = 'N/A';
+    }
+}
+
+function formatNumberWithCommas(value) {
+    if (!value) return value;
+    const parts = value.toString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.join('.');
+}
+
+
+document.getElementById('elementSelect').addEventListener('change', () => {
+    const selectedElement = document.getElementById('elementSelect').value;
+    document.getElementById('selectedElement').textContent = selectedElement;
+    updateElementTable();
+    updateMap();
+    updateSelectedDHAverage();
+});
+
+
+
+    function updateZoneAverages() {
+    const selectedElement = document.getElementById('elementSelect').value;
+    const zoneAverages = {};
+    const zoneCounts = {};
+
+    sampleData.forEach((sample, index) => {
+        if (activeIncursionTypes.has(sample['Incursion Type']) &&
+            activeAssayTypes.has(sample['Assay Type']) &&
+            activeZones.has(sample['Zone']) &&
+            activeCOAs.has(sample['COA'])) {
+
+            const zone = sample['Zone'];
+            const elementValue = elementData[index] && elementData[index][selectedElement] ? 
+                                 parseFloat(elementData[index][selectedElement].replace(/["',]/g, '')) : NaN;
+
+            if (!isNaN(elementValue)) {
+                if (!zoneAverages[zone]) {
+                    zoneAverages[zone] = 0;
+                    zoneCounts[zone] = 0;
+                }
+                zoneAverages[zone] += elementValue;
+                zoneCounts[zone]++;
+            }
+        }
+    });
+
+    const zoneAveragesList = document.getElementById('zoneAveragesList');
+    zoneAveragesList.innerHTML = '';
+
+    for (const [zone, total] of Object.entries(zoneAverages)) {
+        const average = total / zoneCounts[zone];
+        const listItem = document.createElement('li');
+        listItem.textContent = `Zone ${zone}: ${formatNumberWithCommas(average.toFixed(2))} PPM`;
+        zoneAveragesList.appendChild(listItem);
+    }
+}
+
+
+  
+
+document.addEventListener('DOMContentLoaded', () => {
+    initMap();
+    loadData();
+
+    document.querySelectorAll('#elementTable th.sortable').forEach(header => {
+        header.addEventListener('click', function() {
+            const column = this.getAttribute('data-column');
+            if (currentSortColumn === column) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortColumn = column;
+                currentSortDirection = 'asc';
+            }
+            updateElementTable();
+            updateSortArrows();
+        });
+    });
+
+
+// Update the existing COA cell click event handler
+ // Function to open files from Google Drive
+ function openFileFromGoogleDrive(fileId, fileType) {
+            let viewerUrl = '';
+
+            if (fileType === 'pdf') {
+                viewerUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+            } else if (fileType === 'xlsx' || fileType === 'xls') {
+                viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=https://drive.google.com/uc?export=download&id=${fileId}`;
+            }
+
+            document.getElementById('coaIframe').src = viewerUrl;
+            document.getElementById('coaIframe').style.display = 'block';
+            document.getElementById('excelContainer').style.display = 'none';
+        }
+
+        // Existing COA cell click event handler
+        document.querySelector('#elementTable tbody').addEventListener('click', function(e) {
+    if (e.target && e.target.classList.contains('editable')) {
+        const cellValue = e.target.textContent.trim();
+        const fileUrl = coaFiles[cellValue];
+
+        if (fileUrl) {
+            document.getElementById('coaModalLabel').textContent = cellValue;
+            const fileExtension = cellValue.split('.').pop().toLowerCase();
+
+            if (fileExtension === 'pdf') {
+                document.getElementById('coaIframe').src = fileUrl;
+                document.getElementById('coaIframe').style.display = 'block';
+                document.getElementById('excelContainer').style.display = 'none';
+            } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+                const viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`;
+                document.getElementById('coaIframe').src = viewerUrl;
+                document.getElementById('coaIframe').style.display = 'block';
+                document.getElementById('excelContainer').style.display = 'none';
+            } else {
+                document.getElementById('coaIframe').src = '';
+                document.getElementById('coaIframe').style.display = 'none';
+                document.getElementById('excelContainer').textContent = 'Cannot display the file. Unsupported file format.';
+                document.getElementById('excelContainer').style.display = 'block';
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('coaModal'));
+            modal.show();
+        } else {
+            alert('File not found.');
+        }
+    }
+});
+
+
+
+    function updateSortArrows() {
+        document.querySelectorAll('#elementTable th.sortable').forEach(header => {
+            header.classList.remove('sorted-asc', 'sorted-desc');
+            if (header.getAttribute('data-column') === currentSortColumn) {
+                if (currentSortDirection === 'asc') {
+                    header.classList.add('sorted-asc');
+                } else {
+                    header.classList.add('sorted-desc');
+                }
+            }
+        });
+    }
+
+    document.querySelectorAll('.checkbox-container input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const value = this.value;
+            if (['HY20', 'HN04', 'Rock', 'Source Sample', 'Shaft'].includes(value)) {
+                if (this.checked) {
+                    activeIncursionTypes.add(value);
+                } else {
+                    activeIncursionTypes.delete(value);
+                }
+            } else if (['LMB Flux', 'LMB+', 'LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', '4-Acid Dig', 'LMB+ (Mtlg-AqRg)'].includes(value)) {
+                if (this.checked) {
+                    activeAssayTypes.add(value);
+                } else {
+                    activeAssayTypes.delete(value);
+                }
+            } else {
+                if (this.checked) {
+                    activeZones.add(value);
+                } else {
+                    activeZones.delete(value);
+                }
+            }
+            updateMap();
+            updateElementTable();
+        });
+    });
+
+    document.querySelectorAll('.overlay-checkbox-container input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                overlayImages[this.value].layer.addTo(map);
+            } else {
+                map.removeLayer(overlayImages[this.value].layer);
+            }
+        });
+    });
+
+    document.getElementById('darkModeToggle').addEventListener('change', function() {
+        if (this.checked) {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+    });
+
+    document.getElementById('filtersOnRightToggle').addEventListener('change', function() {
+        const filters = document.getElementById('filters');
+        const sidebar = document.getElementById('sidebar');
+        if (this.checked) {
+            filters.style.display = 'flex';
+            sidebar.style.display = 'none';
+        } else {
+            filters.style.display = 'none';
+            sidebar.style.display = 'block';
+        }
+    });
+
+    document.querySelectorAll('.collapse').forEach(collapseElement => {
+        collapseElement.addEventListener('show.bs.collapse', function () {
+            this.previousElementSibling.querySelector('.filter-arrow').textContent = '↑';
+        });
+        collapseElement.addEventListener('hide.bs.collapse', function () {
+            this.previousElementSibling.querySelector('.filter-arrow').textContent = '↓';
+        });
+    });
+
+    const filtersOnRightToggle = document.getElementById('filtersOnRightToggle');
+    const filters = document.getElementById('filters');
+    const sidebar = document.getElementById('sidebar');
+    if (filtersOnRightToggle.checked) {
+        filters.style.display = 'flex';
+        sidebar.style.display = 'none';
+    } else {
+        filters.style.display = 'none';
+        sidebar.style.display = 'block';
+    }
+
+    updateElementTable();
+});
+
+    </script>
+</body>
+</html>
+

@@ -551,6 +551,7 @@
 </div>
 
     <div class="container mt-5">
+        <button id="heatmapModeButton" class="btn btn-outline-primary mb-3" style="float: right;">Heatmap by Highest ppm</button>
         <button id="toggleHeatmapButton"  style="float: right;" class="btn btn-outline-primary mb-3">Toggle Heatmap</button>
         <h1 class="main-title">Cuddeback Lake Basin</h1>
         <h1 class="mb-4">Interactive Map</h1>
@@ -859,6 +860,7 @@
     let activeCOAs = new Set();
     let heatLayer;
     let heatmapEnabled = false;
+    let heatmapMode = 'average'; // default mode
     let selectedIndices = [];
     let currentSortColumn = 'Element (PPM)';
     let currentSortDirection = 'desc';
@@ -1254,7 +1256,7 @@ function toggleHeatmap(selectedElement) {
         document.getElementById('heatmapLegend').style.display = 'none';
         heatmapEnabled = false;
     } else {
-        const heatData = calculateHeatmapData(selectedElement);
+        const heatData = calculateHeatmapData(selectedElement, heatmapMode);
         heatLayer = L.heatLayer(heatData.data, { radius: 25, maxZoom: 12 }).addTo(map);
         document.getElementById('toggleHeatmapButton').textContent = 'Hide Heatmap';
         document.getElementById('heatmapLegend').style.display = 'block';
@@ -1265,7 +1267,22 @@ function toggleHeatmap(selectedElement) {
 
 
 
-function calculateHeatmapData(selectedElement) {
+document.getElementById('heatmapModeButton').addEventListener('click', () => {
+    heatmapMode = heatmapMode === 'average' ? 'highest' : 'average';
+    document.getElementById('heatmapModeButton').textContent = heatmapMode === 'average' ? 'Heatmap by Highest ppm' : 'Heatmap by Average ppm';
+
+    // Reapply the heatmap based on the new mode
+    const selectedElement = document.getElementById('elementSelect').value;
+    if (heatmapEnabled && selectedElement) {
+        toggleHeatmap(selectedElement); // Remove current heatmap
+        toggleHeatmap(selectedElement); // Apply new heatmap with updated mode
+    }
+});
+
+
+
+
+function calculateHeatmapData(selectedElement, mode) {
     const minCutoff = parseFloat(document.getElementById('minCutoff').value) || -Infinity;
     const maxCutoff = parseFloat(document.getElementById('maxCutoff').value) || Infinity;
     const dhMap = new Map();
@@ -1285,29 +1302,36 @@ function calculateHeatmapData(selectedElement) {
 
             if (!isNaN(elementValue) && elementValue >= minCutoff && elementValue <= maxCutoff) {
                 if (!dhMap.has(dh)) {
-                    dhMap.set(dh, { latLng, totalPPM: 0, count: 0 });
+                    dhMap.set(dh, { latLng, totalPPM: 0, count: 0, highestPPM: -Infinity });
                 }
 
                 const dhData = dhMap.get(dh);
                 dhData.totalPPM += elementValue;
                 dhData.count++;
+                if (elementValue > dhData.highestPPM) {
+                    dhData.highestPPM = elementValue;
+                }
             }
         }
     });
 
     const heatData = [];
     dhMap.forEach((value, dh) => {
-        if (value.count > 0) {
-            const avgPPM = value.totalPPM / value.count;
-            if (avgPPM > maxPPM) {
-                maxPPM = avgPPM;
-            }
-            heatData.push([value.latLng[0], value.latLng[1], avgPPM]);
+        let heatmapValue;
+        if (mode === 'highest') {
+            heatmapValue = value.highestPPM;
+        } else {
+            heatmapValue = value.totalPPM / value.count;
         }
+        if (heatmapValue > maxPPM) {
+            maxPPM = heatmapValue;
+        }
+        heatData.push([value.latLng[0], value.latLng[1], heatmapValue]);
     });
 
     return { data: heatData.map(([lat, lng, ppm]) => [lat, lng, ppm / maxPPM]), maxPPM };
 }
+
 
 function updateHeatmapLegend(maxPPM) {
     const legendColors = [

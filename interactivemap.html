@@ -480,8 +480,8 @@
     </button>
     <div class="collapse" id="incursionFilters">
         <div class="checkbox-container">
-            <label><input type="checkbox" value="HY20" checked> HY20</label>
-            <label><input type="checkbox" value="HN04" checked> HN04</label>
+            <label><input type="checkbox" value="HY20" checked> 20-Foot</label>
+            <label><input type="checkbox" value="HN04" checked> 4-Foot</label>
             <label><input type="checkbox" value="Shaft" checked> Shaft</label>
             <label><input type="checkbox" value="Source Sample" checked> Source Sample</label>
             <label><input type="checkbox" value="Rock" checked> Rock</label>
@@ -573,8 +573,8 @@
             </div>
             <div class="collapse" id="incursionFilters">
                 <div class="checkbox-container">
-                    <label><input type="checkbox" value="HY20" checked> HY20</label>
-                    <label><input type="checkbox" value="HN04" checked> HN04</label>
+                    <label><input type="checkbox" value="HY20" checked> 20-Foot</label>
+                    <label><input type="checkbox" value="HN04" checked> 4-Foot</label>
                     <label><input type="checkbox" value="Shaft" checked> Shaft</label>
                     <label><input type="checkbox" value="Source Sample" checked> Source Sample</label>
                     <label><input type="checkbox" value="Rock" checked> Rock</label>
@@ -1022,7 +1022,28 @@ document.getElementById('applyCutoff').addEventListener('click', () => {
 });
 
 
+function hideModalBackdrop(modalId) {
+        const modal = document.getElementById(modalId);
+        const modalBackdrop = document.querySelector('.modal-backdrop');
 
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+        
+        if (modalBackdrop) {
+            modalBackdrop.parentNode.removeChild(modalBackdrop);
+        }
+
+        document.body.classList.remove('modal-open');
+        document.body.style = '';
+    }
+
+    document.getElementById('coaModal').addEventListener('hidden.bs.modal', function () {
+        hideModalBackdrop('coaModal');
+    });
+
+    document.getElementById('periodicModal').addEventListener('hidden.bs.modal', function () {
+        hideModalBackdrop('periodicModal');
+    });
 
     function initMap() {
         const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {

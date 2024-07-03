@@ -1749,7 +1749,7 @@ document.getElementById('elementSelect').addEventListener('change', () => {
     for (const [zone, total] of Object.entries(zoneAverages)) {
         const average = total / zoneCounts[zone];
         const listItem = document.createElement('li');
-        listItem.textContent = `Zone ${zone}: ${formatNumberWithCommas(average.toFixed(2))} PPM`;
+        listItem.textContent = `Zone ${zone}: ${formatNumberWithCommas(average.toFixed(2))} ppm`;
         zoneAveragesList.appendChild(listItem);
     }
 }

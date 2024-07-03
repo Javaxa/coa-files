@@ -528,11 +528,11 @@
 <div class="collapse mt-2" id="cutoffGradeFilter">
         <div class="checkbox-container">
             <div class="form-group">
-                Minimum PPM:
+                Minimum ppm:
                 <input type="number" class="form-control" id="minCutoff">
             </div>
             <div class="form-group">
-                Maximum PPM:
+                Maximum ppm:
                 <input type="number" class="form-control" id="maxCutoff">
             </div>
             <button class="btn btn-primary mt-2" id="applyCutoff">Apply</button>
@@ -621,11 +621,11 @@
             <div class="collapse mt-2" id="cutoffGradeFilterUnderMap">
                 <div class="checkbox-container">
                     <div class="form-group">
-                        Minimum PPM:
+                        Minimum ppm:
                         <input type="number" class="form-control" id="minCutoffUnderMap">
                     </div>
                     <div class="form-group">
-                        Maximum PPM:
+                        Maximum ppm:
                         <input type="number" class="form-control" id="maxCutoffUnderMap">
                     </div>
                     <button class="btn btn-primary mt-2" id="applyCutoffUnderMap">Apply</button>
@@ -772,7 +772,7 @@
                         <th data-column="Assay Type" class="sortable">Assay Type</th>
                         <th data-column="COA" class="sortable">COA</th>
                         <th data-column="Sample Weight" class="sortable">Sample Weight (g)</th>
-                        <th data-column="Element (PPM)" class="sortable">Element (PPM)</th>
+                        <th data-column="Element (PPM)" class="sortable">Element (ppm)</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -1377,7 +1377,7 @@ function updateHeatmapLegend(maxPPM) {
 
         const legendText = document.createElement('div');
         legendText.className = 'heatmap-legend-text';
-        legendText.textContent = `${formatNumberWithCommas(value)} PPM`;
+        legendText.textContent = `${formatNumberWithCommas(value)} ppm`;
 
         legendItem.appendChild(colorBox);
         legendItem.appendChild(legendText);

@@ -164,6 +164,23 @@
             overflow-y: auto;
         }
 
+        .tooltip-content {
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .tooltip-content div {
+            margin-bottom: 5px;
+        }
+
+        .tooltip-content .stid-list {
+            word-break: break-all;
+        }
+
+        .leaflet-tooltip {
+            max-width: 300px !important;
+        }
+
         .fixed-box {
             position: fixed;
             top: 120px;
@@ -680,7 +697,7 @@
             <div id="overallAverages">
                 <p>Average: <span id="averageValue" class="average-value">N/A</span></p>
                 <p>Highest: <span id="highestValue" class="highest-value">N/A</span></p>
-                <p>Value/tonne: <span id="pricePerTonne" class="price-value">N/A</span></p>
+                <p><span id="pricePerTonne" class="price-value">N/A</span></p>
             </div>
             <div id="zoneAveragesBox" class="mt-2">
                 <h6>Zonal Grades:</h6>
@@ -1832,6 +1849,9 @@ function generateTooltipContent(indices) {
     let count = 0;
     const stids = new Set();
 
+    // Find the price of the selected element (price is per kg in the data)
+    const elementPrice = elementPricesData.find(el => el.symbol === selectedElement)?.price || 0;
+
     indices.forEach(index => {
         const elementValue = elementData[index] ? parseFloat(elementData[index][selectedElement].replace(/,/g, '')) : NaN;
         if (!isNaN(elementValue)) {
@@ -1844,16 +1864,27 @@ function generateTooltipContent(indices) {
         stids.add(sampleData[index].Stid);
     });
 
-    const averagePPM = count > 0 ? (totalPPM / count).toFixed(2) : 'N/A';
-    const highestPPMDisplay = count > 0 ? highestPPM.toFixed(2) : 'N/A';
+    const averagePPM = count > 0 ? (totalPPM / count) : NaN;
     const stidList = Array.from(stids).join(', ');
 
-    return `<div class="tooltip-content">
-                <div>DH: ${sampleData[indices[0]].DH}</div>
-                <div>STID: <span class="stid-list">${stidList}</span></div>
-                <div>Average Grade: <span style="color: red; font-weight: bold;">${formatNumberWithCommas(averagePPM)}</span></div>
-                <div>Highest Grade: <span style="color: #34b2ef; font-weight: bold;">${formatNumberWithCommas(highestPPMDisplay)}</span></div>
-            </div>`;
+    // Calculate value/tonne for average and highest
+    const valuePerTonneAvg = (averagePPM / 1000) * elementPrice;
+    const valuePerTonneHighest = (highestPPM / 1000) * elementPrice;
+
+    return `
+        <div class="tooltip-content">
+            <div>DH: ${sampleData[indices[0]].DH}</div>
+            <div>STID: <span class="stid-list">${stidList}</span></div>
+            <div>
+                Average Grade: <span style="color: red; font-weight: bold;">${formatNumberWithCommas(averagePPM.toFixed(2))} ppm</span><br>
+                Value/tonne: <span style="color: green; font-weight: bold;">$${formatNumberWithCommas(valuePerTonneAvg.toFixed(2))}</span>
+            </div>
+            <div>
+                Highest Grade: <span style="color: #34b2ef; font-weight: bold;">${formatNumberWithCommas(highestPPM.toFixed(2))} ppm</span><br>
+                Value/tonne: <span style="color: green; font-weight: bold;">$${formatNumberWithCommas(valuePerTonneHighest.toFixed(2))}</span>
+            </div>
+        </div>
+    `;
 }
 
 

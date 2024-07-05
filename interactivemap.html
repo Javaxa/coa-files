@@ -597,7 +597,7 @@
             <span class="legend-text">4ft Incursion</span>
         </div>
         <div class="legend-item">
-            <div class="point-dot shaft-icon" style="margin-left: 2px;"></div>
+            <img src="/shafticon.png" alt="Shaft" style="width: 26px; height: 26px; margin-right: 8px">
             <span class="legend-text">Shaft</span>
         </div>
         <div class="legend-item">
@@ -1630,37 +1630,39 @@ function clearPointSelection() {
 }
 
 
-    function createCustomIcon(dh, incursionType) {
-        if (incursionType === 'HN04') {
-            return L.divIcon({
-                className: 'red-dot-icon',
-                iconSize: [6, 6]
-            });
-        } if (incursionType === 'Rock') {
-            return L.divIcon({
-                className: 'purple-rectangle-icon',
-                iconSize: [12, 8]
-            });
-        } if (incursionType === 'Source Sample') {
-            return L.divIcon({
-                className: 'source-icon',
-                iconSize: [10, 7]
-            });
-        } if (incursionType === 'Shaft') {
-            return L.divIcon({
-                className: 'shaft-icon',
-                iconSize: [10, 10]
-            });
-        } else {
-            return L.divIcon({
-                className: 'custom-div-icon',
-                html: dh,
-                iconSize: [11, 11],
-                iconAnchor: [11, 11],
-                popupAnchor: [0, -11],
-            });
-        }
+function createCustomIcon(dh, incursionType) {
+    if (incursionType === 'HN04') {
+        return L.divIcon({
+            className: 'red-dot-icon',
+            iconSize: [6, 6]
+        });
+    } if (incursionType === 'Rock') {
+        return L.divIcon({
+            className: 'purple-rectangle-icon',
+            iconSize: [12, 8]
+        });
+    } if (incursionType === 'Source Sample') {
+        return L.divIcon({
+            className: 'source-icon',
+            iconSize: [10, 7]
+        });
+    } if (incursionType === 'Shaft') {
+        return L.icon({
+            iconUrl: '/shafticon.png',  // Update this path if necessary
+            iconSize: [20, 20],  // Adjust size as needed
+            iconAnchor: [10, 10],  // Adjust anchor point as needed
+            popupAnchor: [0, -10]  // Adjust popup anchor as needed
+        });
+    } else {
+        return L.divIcon({
+            className: 'custom-div-icon',
+            html: dh,
+            iconSize: [11, 11],
+            iconAnchor: [11, 11],
+            popupAnchor: [0, -11],
+        });
     }
+}
 
     document.getElementById('toggleHeatmapButton').addEventListener('click', () => {
     const selectedElement = document.getElementById('elementSelect').value;

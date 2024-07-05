@@ -555,6 +555,9 @@
             top: 70px;
         }
 
+        .empty-space {
+            margin-top: 15px;
+        }
 
     </style>
 </head>
@@ -563,7 +566,7 @@
         <button class="btn btn-primary btn-style" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="fa-solid fa-gear"></i></button>
     </div>
     <div class="legend-wrapper">
-        <h5>Legend</h5>
+        <h5>Map Legend</h5>
         <div class="legend-item">
             <div class="point-dot custom-div-icon" style="background: #fff; border: 1px solid #000; margin-left: 2px;">DH</div>
             <span class="legend-text">20ft Incursion</span>
@@ -677,7 +680,7 @@
             <div id="overallAverages">
                 <p>Average: <span id="averageValue" class="average-value">N/A</span></p>
                 <p>Highest: <span id="highestValue" class="highest-value">N/A</span></p>
-                <p>Price/tonne: <span id="pricePerTonne" class="price-value">N/A</span></p>
+                <p>Value/tonne: <span id="pricePerTonne" class="price-value">N/A</span></p>
             </div>
             <div id="zoneAveragesBox" class="mt-2">
                 <h6>Zonal Grades:</h6>
@@ -988,7 +991,7 @@
     let sampleData = [];
     let elementData = {};
     const elementPricesData = [
-    { symbol: "Au", name: "Gold", price: 63900 },
+    { symbol: "Au", name: "Gold", price: 108900 },
     { symbol: "Pt", name: "Platinum", price: 30200 },
     { symbol: "Pd", name: "Palladium", price: 52000 },
     { symbol: "Rh", name: "Rhodium", price: 462000 },
@@ -1007,7 +1010,7 @@
     { symbol: "Ce", name: "Cerium", price: 1.19 },
     { symbol: "Co", name: "Cobalt", price: 68.2 },
     { symbol: "Cr", name: "Chromium", price: 10.1 },
-    { symbol: "Cs", name: "Cesium", price: 100 }, // Estimated price, not in original data
+    { symbol: "Cs", name: "Cesium", price: 73000 }, // Estimated price, not in original data
     { symbol: "Cu", name: "Copper", price: 8.3 },
     { symbol: "Cl", name: "Chlorine", price: 0.21 },
     { symbol: "Fe", name: "Iron", price: 0.12 },
@@ -1027,11 +1030,11 @@
     { symbol: "Ni", name: "Nickel", price: 18.3 },
     { symbol: "P", name: "Phosphorus", price: 1.15 },
     { symbol: "Pb", name: "Lead", price: 2.01 },
-    { symbol: "Rb", name: "Rubidium", price: 1340 }, // Estimated price, not in original data
+    { symbol: "Rb", name: "Rubidium", price: 15000 }, // Estimated price, not in original data
     { symbol: "Re", name: "Rhenium", price: 4670 },
     { symbol: "S", name: "Sulfur", price: 0.6 },
     { symbol: "Sb", name: "Antimony", price: 11.7 },
-    { symbol: "Sc", name: "Scandium", price: 6520 },
+    { symbol: "Sc", name: "Scandium", price: 256000 },
     { symbol: "Se", name: "Selenium", price: 33.4 },
     { symbol: "Sn", name: "Tin", price: 23.6 },
     { symbol: "Sr", name: "Strontium", price: 6.08 },
@@ -1272,16 +1275,21 @@ function updateElementAverages() {
     const pricePerTonneElement = document.getElementById('pricePerTonne');
     if (count > 0) {
         const average = total / count;
-        averageValueElement.textContent = `${formatNumberWithCommas(average.toFixed(2))} ppm`;
-        highestValueElement.textContent = `${formatNumberWithCommas(highest.toFixed(2))} ppm`;
-        
-        // Calculate correct price per tonne
-        // Convert ppm to kg/tonne and multiply by price per kg
-        const pricePerTonne = (average / 1000) * elementPrice;
-        pricePerTonneElement.textContent = `$${formatNumberWithCommas(pricePerTonne.toFixed(2))}`;
+        const pricePerTonneHighest = (highest / 1000) * elementPrice;
+        const pricePerTonneAverage = (average / 1000) * elementPrice;
+
+        highestValueElement.innerHTML = `
+            <span class="highest-value">${formatNumberWithCommas(highest.toFixed(2))} ppm</span><br>
+            <span style="color: black; font-weight: normal;">Value/tonne:</span> <span class="price-value">$${formatNumberWithCommas(pricePerTonneHighest.toFixed(2))}</span>
+        `;
+        averageValueElement.innerHTML = `
+            <span class="average-value">${formatNumberWithCommas(average.toFixed(2))} ppm</span><br>
+            <span style="color: black; font-weight: normal;">Value/tonne:</span> <span class="price-value">$${formatNumberWithCommas(pricePerTonneAverage.toFixed(2))}</span>
+        `;
+        pricePerTonneElement.style.display = 'none'; // Hide this element as we've incorporated its info above
     } else {
-        averageValueElement.textContent = 'N/A';
         highestValueElement.textContent = 'N/A';
+        averageValueElement.textContent = 'N/A';
         pricePerTonneElement.textContent = 'N/A';
     }
 
@@ -1294,22 +1302,26 @@ function updateElementAverages() {
         const zoneItem = document.createElement('div');
         zoneItem.className = 'zone-item';
         
-        // Calculate correct zonal price per tonne
-        const zonalPricePerTonne = (average / 1000) * elementPrice;
+        const pricePerTonneHighest = (data.highest / 1000) * elementPrice;
+        const pricePerTonneAverage = (average / 1000) * elementPrice;
 
         zoneItem.innerHTML = `
             <div class="zone-title">Zone ${zone}</div>
-            <div class="zone-stat">
-                <span>Average:</span>
-                <span class="average-value">${formatNumberWithCommas(average.toFixed(2))} ppm</span>
-            </div>
             <div class="zone-stat">
                 <span>Highest:</span>
                 <span class="highest-value">${formatNumberWithCommas(data.highest.toFixed(2))} ppm</span>
             </div>
             <div class="zone-stat">
-                <span>Price/tonne:</span>
-                <span class="price-value">$${formatNumberWithCommas(zonalPricePerTonne.toFixed(2))}</span>
+                <span>Value/tonne:</span>
+                <span class="price-value">$${formatNumberWithCommas(pricePerTonneHighest.toFixed(2))}</span>
+            </div>
+            <div class="zone-stat empty-space">
+                <span>Average:</span>
+                <span class="average-value">${formatNumberWithCommas(average.toFixed(2))} ppm</span>
+            </div>
+            <div class="zone-stat">
+                <span>Value/tonne:</span>
+                <span class="price-value">$${formatNumberWithCommas(pricePerTonneAverage.toFixed(2))}</span>
             </div>
         `;
         zoneAveragesList.appendChild(zoneItem);

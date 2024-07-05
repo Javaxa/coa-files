@@ -276,8 +276,8 @@
 
         .settings-button {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 15px;
+            left: 10px;
             z-index: 1000;
         }
 
@@ -576,6 +576,10 @@
             margin-top: 15px;
         }
 
+        .data-points {
+            margin-bottom: 15px;
+        }
+
     </style>
 </head>
 <body>
@@ -694,13 +698,14 @@
                 <h4>Elemental Data:</h4>
                 <span id="selectedElement" style="font-weight: bold;">Au</span>
             </div>
+            <div id="overallDataPoints" class="data-points"></div>
             <div id="overallAverages">
-                <p>Average: <span id="averageValue" class="average-value">N/A</span></p>
                 <p>Highest: <span id="highestValue" class="highest-value">N/A</span></p>
+                <p>Average: <span id="averageValue" class="average-value">N/A</span></p>
                 <p><span id="pricePerTonne" class="price-value">N/A</span></p>
             </div>
             <div id="zoneAveragesBox" class="mt-2">
-                <h6>Zonal Grades:</h6>
+                <h6>Grades by Zones:</h6>
                 <ul id="zoneAveragesList"></ul>
             </div>
         </div>
@@ -1171,6 +1176,7 @@
 
     updateMap();
     updateElementTable();
+    updateElementAverages()
 });
 
     function createCOACheckboxes(coaValues) {
@@ -1244,7 +1250,9 @@
 document.getElementById('applyCutoff').addEventListener('click', () => {
     updateMap();
     updateElementTable();
+    updateElementAverages()
 });
+
 
 
 
@@ -1258,6 +1266,10 @@ function updateElementAverages() {
     let highest = -Infinity;
     const zoneData = {};
 
+    // Get cut-off values
+    const minCutoff = parseFloat(document.getElementById('minCutoff').value) || -Infinity;
+    const maxCutoff = parseFloat(document.getElementById('maxCutoff').value) || Infinity;
+
     // Find the price of the selected element (price is per kg in the data)
     const elementPrice = elementPricesData.find(el => el.symbol === selectedElement)?.price || 0;
 
@@ -1270,7 +1282,7 @@ function updateElementAverages() {
             const elementValue = elementData[index] && elementData[index][selectedElement] ? 
                                  parseFloat(elementData[index][selectedElement].replace(/["',]/g, '')) : NaN;
 
-            if (!isNaN(elementValue)) {
+            if (!isNaN(elementValue) && elementValue >= minCutoff && elementValue <= maxCutoff) {
                 total += elementValue;
                 count++;
                 highest = Math.max(highest, elementValue);
@@ -1286,6 +1298,10 @@ function updateElementAverages() {
         }
     });
 
+    // Update overall data points
+    const overallDataPointsElement = document.getElementById('overallDataPoints');
+    overallDataPointsElement.textContent = `Assays Done: ${count}`;
+
     // Update overall averages
     const averageValueElement = document.getElementById('averageValue');
     const highestValueElement = document.getElementById('highestValue');
@@ -1296,11 +1312,11 @@ function updateElementAverages() {
         const pricePerTonneAverage = (average / 1000) * elementPrice;
 
         highestValueElement.innerHTML = `
-            <span class="highest-value">${formatNumberWithCommas(highest.toFixed(2))} ppm</span><br>
+            ${formatNumberWithCommas(highest.toFixed(2))} ppm<br>
             <span style="color: black; font-weight: normal;">Value/tonne:</span> <span class="price-value">$${formatNumberWithCommas(pricePerTonneHighest.toFixed(2))}</span>
         `;
         averageValueElement.innerHTML = `
-            <span class="average-value">${formatNumberWithCommas(average.toFixed(2))} ppm</span><br>
+            ${formatNumberWithCommas(average.toFixed(2))} ppm<br>
             <span style="color: black; font-weight: normal;">Value/tonne:</span> <span class="price-value">$${formatNumberWithCommas(pricePerTonneAverage.toFixed(2))}</span>
         `;
         pricePerTonneElement.style.display = 'none'; // Hide this element as we've incorporated its info above
@@ -1315,7 +1331,7 @@ function updateElementAverages() {
     zoneAveragesList.innerHTML = '';
 
     Object.entries(zoneData).sort((a, b) => a[0].localeCompare(b[0])).forEach(([zone, data]) => {
-        const average = data.total / data.count;
+        const average = data.count > 0 ? data.total / data.count : 0;
         const zoneItem = document.createElement('div');
         zoneItem.className = 'zone-item';
         
@@ -1324,6 +1340,9 @@ function updateElementAverages() {
 
         zoneItem.innerHTML = `
             <div class="zone-title">Zone ${zone}</div>
+            <div class="zone-stat">
+                <span style="color: black; font-weight: normal; margin-bottom: 15px;">Assays Done: ${data.count}</span>
+            </div>
             <div class="zone-stat">
                 <span>Highest:</span>
                 <span class="highest-value">${formatNumberWithCommas(data.highest.toFixed(2))} ppm</span>
@@ -1344,13 +1363,6 @@ function updateElementAverages() {
         zoneAveragesList.appendChild(zoneItem);
     });
 }
-
-
-
-
-
-
-
 
 
 
@@ -1873,8 +1885,9 @@ function generateTooltipContent(indices) {
 
     return `
         <div class="tooltip-content">
-            <div>DH: ${sampleData[indices[0]].DH}</div>
-            <div>STID: <span class="stid-list">${stidList}</span></div>
+            <div>DH: <b>${sampleData[indices[0]].DH}</b></div>
+            <div>STID: <span class="stid-list"><b>${stidList}</b></span></div>
+            <div>Assays Done: <strong>${count}</strong></div>
             <div>
                 Average Grade: <span style="color: red; font-weight: bold;">${formatNumberWithCommas(averagePPM.toFixed(2))} ppm</span><br>
                 Value/tonne: <span style="color: green; font-weight: bold;">$${formatNumberWithCommas(valuePerTonneAvg.toFixed(2))}</span>

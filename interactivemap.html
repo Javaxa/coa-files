@@ -193,6 +193,7 @@
             background-color: white;
             max-height: 50vh;
             overflow-y: auto;
+            font-size: 13px;
         }
 
         .element-header {
@@ -219,6 +220,7 @@
 
         #zoneAveragesBox h6 {
             text-align: center;
+            margin-bottom: 15px;
         }
 
         .stat-row {
@@ -580,6 +582,11 @@
             margin-bottom: 15px;
         }
 
+        #selectedElement {
+            font-weight: bold;
+            font-size: 22px;
+        }
+
     </style>
 </head>
 <body>
@@ -696,7 +703,7 @@
         <div id="elementAverageBox" class="fixed-box">
             <div style="display: flex; justify-content: space-between;">
                 <h4>Elemental Data:</h4>
-                <span id="selectedElement" style="font-weight: bold;">Au</span>
+                <span id="selectedElement">Au</span>
             </div>
             <div id="overallDataPoints" class="data-points"></div>
             <div id="overallAverages">
@@ -909,6 +916,7 @@
                 <option value="Tm">Thulium (Tm)</option>
                 <option value="Yb">Ytterbium (Yb)</option>                               
             </select>   
+            <button class="table-download btn btn-outline-primary mb-3">Export Table to Excel</button>
             <button class="toggle-element-selection btn btn-outline-primary mb-3" data-bs-toggle="modal" data-bs-target="#periodicModal">Expand Element Selection</button>
             <button id="clearSelectionButton" class="btn btn-outline-danger mb-3" style="display:none;" onclick="clearPointSelection()">Remove Drill Hole Selection</button>
             <span id="selectedDH" class="ml-2"></span>    
@@ -1253,7 +1261,57 @@ document.getElementById('applyCutoff').addEventListener('click', () => {
     updateElementAverages()
 });
 
+// Function to export table data to CSV
+function exportTableToCSV(filename) {
+    const table = document.getElementById('elementTable');
+    const rows = table.querySelectorAll('tr');
+    const csv = [];
 
+    // Get headers
+    const headers = [];
+    const headerCells = rows[0].querySelectorAll('th');
+    headerCells.forEach(cell => {
+        headers.push(cell.textContent.trim());
+    });
+    csv.push(headers.join(','));
+
+    // Get data rows
+    for (let i = 1; i < rows.length; i++) {
+        const row = [];
+        const cells = rows[i].querySelectorAll('td');
+        cells.forEach(cell => {
+            // Escape double quotes and wrap the content in quotes
+            let content = cell.textContent.trim().replace(/"/g, '""');
+            row.push(`"${content}"`);
+        });
+        csv.push(row.join(','));
+    }
+
+    // Create CSV content
+    const csvContent = csv.join('\n');
+
+    // Create a Blob with the CSV content
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    // Create a download link
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
+// Add click event listener to the export button
+document.querySelector('.table-download').addEventListener('click', function() {
+    const selectedElement = document.getElementById('elementSelect').value;
+    const filename = `RRCM_Table_Element_${selectedElement}_${new Date().toISOString().slice(0,10)}.csv`;
+    exportTableToCSV(filename);
+});
 
 
 

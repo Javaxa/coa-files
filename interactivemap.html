@@ -688,12 +688,15 @@
             <label><input type="checkbox" value="Claims"> Claims</label>
             <label><input type="checkbox" value="Sections"> Sections</label>
         </div>
+        <div class="heatmap-controls">
+            <h6>Heatmap Controls</h6>
+            <button id="toggleHeatmapButton" class="btn btn-sm btn-outline-primary">Show Heatmap</button>
+            <button id="heatmapModeButton" class="btn btn-sm btn-outline-secondary">Heatmap by Highest ppm</button>
+        </div>
     </div>
 </div>
 
     <div class="container mt-5">
-        <button id="heatmapModeButton" class="btn btn-outline-primary mb-3" style="float: right;">Heatmap by Highest ppm</button>
-        <button id="toggleHeatmapButton"  style="float: right;" class="btn btn-outline-primary mb-3">Toggle Heatmap</button>
         <button id="elementPricesBtn" class="btn btn-primary mb-3">View Element Prices</button>
         <h1 class="main-title">Cuddeback Lake Basin</h1>
         <h1 class="mb-4">Interactive Map</h1>
@@ -705,7 +708,7 @@
             </div>
             <div id="overallDataPoints" class="data-points"></div>
             <div id="overallAverages" class="zone-item">
-                <div class="zone-title">Overall Statistics</div>
+                <div class="zone-title">Basin Statistics:</div>
                 <div class="zone-stat">
                     <span id="overallAssayCount" style="color: black; font-weight: normal; margin-bottom: 15px;"></span>
                 </div>
@@ -727,7 +730,7 @@
                 </div>
             </div>
             <div id="zoneAveragesBox" class="mt-2">
-                <h6>Grades by Zones:</h6>
+                <h6>Zone Statistics:</h6>
                 <div id="zoneAveragesList"></div>
             </div>
         </div>
@@ -800,6 +803,11 @@
                     <label><input type="checkbox" value="Zone" checked> Zone</label>
                     <label><input type="checkbox" value="Claims"> Claims</label>
                     <label><input type="checkbox" value="Sections"> Sections</label>
+                </div>
+                <div class="heatmap-controls">
+                    <h6>Heatmap Controls</h6>
+                    <button id="toggleHeatmapButton" class="btn btn-sm btn-outline-primary">Show Heatmap</button>
+                    <button id="heatmapModeButton" class="btn btn-sm btn-outline-secondary">Heatmap by Highest ppm</button>
                 </div>
             </div>
         </div>

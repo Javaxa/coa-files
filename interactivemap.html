@@ -701,17 +701,34 @@
         <div id="elementAverageBox" class="fixed-box">
             <div style="display: flex; justify-content: space-between;">
                 <h4>Elemental Data:</h4>
-                <span id="selectedElement">Au</span>
+                <span id="selectedElement" style="font-weight: bold;">Au</span>
             </div>
             <div id="overallDataPoints" class="data-points"></div>
-            <div id="overallAverages">
-                <p>Highest: <span id="highestValue" class="highest-value">N/A</span></p>
-                <p>Average: <span id="averageValue" class="average-value">N/A</span></p>
-                <p><span id="pricePerTonne" class="price-value">N/A</span></p>
+            <div id="overallAverages" class="zone-item">
+                <div class="zone-title">Overall Statistics</div>
+                <div class="zone-stat">
+                    <span id="overallAssayCount" style="color: black; font-weight: normal; margin-bottom: 15px;"></span>
+                </div>
+                <div class="zone-stat">
+                    <span>Highest:</span>
+                    <span id="highestValue" class="highest-value"></span>
+                </div>
+                <div class="zone-stat">
+                    <span>Value/tonne:</span>
+                    <span id="highestValuePerTonne" class="price-value"></span>
+                </div>
+                <div class="zone-stat empty-space">
+                    <span>Average:</span>
+                    <span id="averageValue" class="average-value"></span>
+                </div>
+                <div class="zone-stat">
+                    <span>Value/tonne:</span>
+                    <span id="averageValuePerTonne" class="price-value"></span>
+                </div>
             </div>
             <div id="zoneAveragesBox" class="mt-2">
                 <h6>Grades by Zones:</h6>
-                <ul id="zoneAveragesList"></ul>
+                <div id="zoneAveragesList"></div>
             </div>
         </div>
         <div class="filter-container" id="filters">
@@ -1355,31 +1372,23 @@ function updateElementAverages() {
     });
 
     // Update overall data points
-    const overallDataPointsElement = document.getElementById('overallDataPoints');
-    overallDataPointsElement.textContent = `Assays Done: ${count}`;
+    document.getElementById('overallAssayCount').textContent = `Assays Done: ${count}`;
 
     // Update overall averages
-    const averageValueElement = document.getElementById('averageValue');
-    const highestValueElement = document.getElementById('highestValue');
-    const pricePerTonneElement = document.getElementById('pricePerTonne');
     if (count > 0) {
         const average = total / count;
         const pricePerTonneHighest = (highest / 1000) * elementPrice;
         const pricePerTonneAverage = (average / 1000) * elementPrice;
 
-        highestValueElement.innerHTML = `
-            ${formatNumberWithCommas(highest.toFixed(2))} ppm<br>
-            <span style="color: black; font-weight: normal;">Value/tonne:</span> <span class="price-value">$${formatNumberWithCommas(pricePerTonneHighest.toFixed(2))}</span>
-        `;
-        averageValueElement.innerHTML = `
-            ${formatNumberWithCommas(average.toFixed(2))} ppm<br>
-            <span style="color: black; font-weight: normal;">Value/tonne:</span> <span class="price-value">$${formatNumberWithCommas(pricePerTonneAverage.toFixed(2))}</span>
-        `;
-        pricePerTonneElement.style.display = 'none'; // Hide this element as we've incorporated its info above
+        document.getElementById('highestValue').textContent = `${formatNumberWithCommas(highest.toFixed(2))} ppm`;
+        document.getElementById('highestValuePerTonne').textContent = `$${formatNumberWithCommas(pricePerTonneHighest.toFixed(2))}`;
+        document.getElementById('averageValue').textContent = `${formatNumberWithCommas(average.toFixed(2))} ppm`;
+        document.getElementById('averageValuePerTonne').textContent = `$${formatNumberWithCommas(pricePerTonneAverage.toFixed(2))}`;
     } else {
-        highestValueElement.textContent = 'N/A';
-        averageValueElement.textContent = 'N/A';
-        pricePerTonneElement.textContent = 'N/A';
+        document.getElementById('highestValue').textContent = 'N/A';
+        document.getElementById('highestValuePerTonne').textContent = 'N/A';
+        document.getElementById('averageValue').textContent = 'N/A';
+        document.getElementById('averageValuePerTonne').textContent = 'N/A';
     }
 
     // Update zone averages

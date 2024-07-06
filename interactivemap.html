@@ -635,12 +635,10 @@
     </button>
     <div class="collapse" id="assayFilters">
         <div class="checkbox-container">
-            <label><input type="checkbox" value="4-Acid Dig"> 4-Acid</label>
+            <label><input type="checkbox" value="4-Acid Dig" checked> 4-Acid</label>
             <label><input type="checkbox" value="LMB Flux" checked> LMB Flux</label>
             <label><input type="checkbox" value="LMB+" checked> LMB+</label>
-            <label><input type="checkbox" value="LMB+ (Mtlg-AqRg-SMB)"> LMB+ (Mtlg-AqRg-SMB)</label>
-            <label><input type="checkbox" value="LMB+ (Mtlg-AqRg-AC)"> LMB+ (Mtlg-AqRg-AC)</label>
-            <label><input type="checkbox" value="LMB+ (Mtlg-AqRg)"> LMB+ (Mtlg-AqRg)</label>
+            <label><input type="checkbox" value="LMB+ (Metallurgical)" checked> LMB+ (Metallurgical)</label>
         </div>
     </div>
     <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#zoneFilters" aria-expanded="false" aria-controls="zoneFilters">
@@ -737,9 +735,7 @@
                     <label><input type="checkbox" value="4-Acid Dig"> 4-Acid</label>
                     <label><input type="checkbox" value="LMB Flux" checked> LMB Flux</label>
                     <label><input type="checkbox" value="LMB+" checked> LMB+</label>
-                    <label><input type="checkbox" value="LMB+ (Mtlg-AqRg-SMB)"> LMB+ (Mtlg-AqRg-SMB)</label>
-                    <label><input type="checkbox" value="LMB+ (Mtlg-AqRg-AC)"> LMB+ (Mtlg-AqRg-AC)</label>
-                    <label><input type="checkbox" value="LMB+ (Mtlg-AqRg)"> LMB+ (Mtlg-AqRg)</label>
+                    <label><input type="checkbox" value="LMB+ (Metallurgical)" checked> LMB+ (Metallurgical)</label>
                 </div>
             </div>
             <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#zoneFilters" aria-expanded="false" aria-controls="zoneFilters">
@@ -1099,6 +1095,8 @@
     let heatLayer;
     let heatmapEnabled = false;
     let heatmapMode = 'average'; // default mode
+    const metallurgicalTypes = ['LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', 'LMB+ (Mtlg-AqRg)'];
+    const metallurgicalCheckboxes = document.querySelectorAll('input[value="LMB+ (Metallurgical)"]');
     let selectedIndices = [];
     let currentSortColumn = 'Element (PPM)';
     let currentSortDirection = 'desc';
@@ -1434,7 +1432,7 @@ function fetchElementPrices() {
     elementPricesData.forEach(element => {
         elementPrices[element.symbol] = { 
             name: element.name, 
-            price: element.price  // Price is already in $/kg
+            price: element.price  // Price is in $/kg
         };
     });
     lastUpdated = new Date();
@@ -1474,13 +1472,6 @@ document.getElementById('elementPricesBtn').addEventListener('click', () => {
     const modal = new bootstrap.Modal(document.getElementById('elementPricesModal'));
     modal.show();
 });
-
-
-
-
-
-
-
 
 function hideModalBackdrop(modalId) {
         const modal = document.getElementById(modalId);
@@ -1565,8 +1556,31 @@ function hideModalBackdrop(modalId) {
     }
 
 
-   
-        // Your JavaScript code here
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         function filterTableByPoint(indices) {
             selectedIndices = indices;
             const selectedElement = document.getElementById('elementSelect').value;
@@ -1651,41 +1665,38 @@ function hideModalBackdrop(modalId) {
             document.getElementById('clearSelectionButton').style.display = 'inline-block';
         }
 
-function viewExcelFile(filePath) {
-    fetch(filePath)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.arrayBuffer();
-        })
-        .then(data => {
-            const workbook = XLSX.read(data, { type: 'array' });
-            const sheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[sheetName];
-            const excelContainer = document.getElementById('excelContainer');
-            excelContainer.innerHTML = XLSX.utils.sheet_to_html(worksheet);
-            document.getElementById('coaIframe').style.display = 'none';
-            excelContainer.style.display = 'block';
-        })
-        .catch(error => {
-            console.error('Error loading Excel file:', error);
-        });
-}
+        function viewExcelFile(filePath) {
+            fetch(filePath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.arrayBuffer();
+                })
+                .then(data => {
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const excelContainer = document.getElementById('excelContainer');
+                    excelContainer.innerHTML = XLSX.utils.sheet_to_html(worksheet);
+                    document.getElementById('coaIframe').style.display = 'none';
+                    excelContainer.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error loading Excel file:', error);
+                });
+        }
 
 
 
-
-
-
-function clearPointSelection() {
-    selectedIndices = [];
-    updateElementTable();
-    document.getElementById('clearSelectionButton').style.display = 'none';
-    document.getElementById('selectedDH').style.display = 'none';
-    document.getElementById('selectedElementPPM').style.display = 'none';
-    document.getElementById('selectedElementHighestPPM').style.display = 'none';
-}
+        function clearPointSelection() {
+            selectedIndices = [];
+            updateElementTable();
+            document.getElementById('clearSelectionButton').style.display = 'none';
+            document.getElementById('selectedDH').style.display = 'none';
+            document.getElementById('selectedElementPPM').style.display = 'none';
+            document.getElementById('selectedElementHighestPPM').style.display = 'none';
+        }
 
 
 function createCustomIcon(dh, incursionType) {
@@ -1706,10 +1717,10 @@ function createCustomIcon(dh, incursionType) {
         });
     } if (incursionType === 'Shaft') {
         return L.icon({
-            iconUrl: '/shafticon.png',  // Update this path if necessary
-            iconSize: [20, 20],  // Adjust size as needed
-            iconAnchor: [10, 10],  // Adjust anchor point as needed
-            popupAnchor: [0, -10]  // Adjust popup anchor as needed
+            iconUrl: '/shafticon.png', 
+            iconSize: [20, 20],  
+            iconAnchor: [10, 10],  
+            popupAnchor: [0, -10]  
         });
     } else {
         return L.divIcon({
@@ -1754,11 +1765,11 @@ document.getElementById('heatmapModeButton').addEventListener('click', () => {
     heatmapMode = heatmapMode === 'average' ? 'highest' : 'average';
     document.getElementById('heatmapModeButton').textContent = heatmapMode === 'average' ? 'Heatmap by Highest ppm' : 'Heatmap by Average ppm';
 
-    // Reapply the heatmap based on the new mode
+ 
     const selectedElement = document.getElementById('elementSelect').value;
     if (heatmapEnabled && selectedElement) {
-        toggleHeatmap(selectedElement); // Remove current heatmap
-        toggleHeatmap(selectedElement); // Apply new heatmap with updated mode
+        toggleHeatmap(selectedElement); 
+        toggleHeatmap(selectedElement);
     }
 });
 
@@ -1973,8 +1984,8 @@ style.innerHTML = `
 }
 
 .tooltip-content .stid-list {
-    white-space: pre-wrap; /* Preserve whitespace and wrap the text */
-    word-break: break-word; /* Break long words */
+    white-space: pre-wrap; 
+    word-break: break-word; 
 }
 `;
 document.head.appendChild(style);
@@ -2233,11 +2244,73 @@ document.getElementById('elementSelect').addEventListener('change', () => {
 
 
   
+function updateMetallurgicalCheckbox(checked) {
+    metallurgicalTypes.forEach(type => {
+        if (checked) {
+            activeAssayTypes.add(type);
+        } else {
+            activeAssayTypes.delete(type);
+        }
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
     loadData();
     fetchElementPrices();
+
+    document.querySelectorAll('.checkbox-container input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const value = this.value;
+            
+            if (['HY20', 'HN04', 'Rock', 'Source Sample', 'Shaft'].includes(value)) {
+                if (this.checked) {
+                    activeIncursionTypes.add(value);
+                } else {
+                    activeIncursionTypes.delete(value);
+                }
+            } else if (value === 'LMB+ (Metallurgical)') {
+                updateMetallurgicalCheckbox(this.checked);
+            } else if (['LMB Flux', 'LMB+', '4-Acid Dig'].includes(value)) {
+                if (this.checked) {
+                    activeAssayTypes.add(value);
+                } else {
+                    activeAssayTypes.delete(value);
+                }
+            } else if (['1', '2', '3', '4', '5', '6'].includes(value)) {
+                if (this.checked) {
+                    activeZones.add(value);
+                } else {
+                    activeZones.delete(value);
+                }
+            }
+
+            // Ensure all checkboxes with the same value are updated
+            document.querySelectorAll(`.checkbox-container input[value="${value}"]`).forEach(cb => {
+                cb.checked = this.checked;
+            });
+
+            updateMap();
+            updateElementTable();
+            updateElementAverages();
+        });
+    });
+
+    metallurgicalCheckboxes.forEach(checkbox => {
+        checkbox.checked = metallurgicalTypes.some(type => activeAssayTypes.has(type));
+        updateMetallurgicalCheckbox(checkbox.checked);
+    });
+
+        
+
+    function handleMetallurgicalCheckboxChange(e) {
+        updateMetallurgicalCheckbox(e.target);
+        updateMap();
+        updateElementTable();
+        updateElementAverages();
+    }
+
+
 
     document.querySelectorAll('#elementTable th.sortable').forEach(header => {
         header.addEventListener('click', function() {
@@ -2252,6 +2325,8 @@ document.addEventListener('DOMContentLoaded', () => {
             updateSortArrows();
         });
     });
+
+
 
 
 // Update the existing COA cell click event handler
@@ -2319,32 +2394,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    document.querySelectorAll('.checkbox-container input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const value = this.value;
-            if (['HY20', 'HN04', 'Rock', 'Source Sample', 'Shaft'].includes(value)) {
-                if (this.checked) {
-                    activeIncursionTypes.add(value);
-                } else {
-                    activeIncursionTypes.delete(value);
-                }
-            } else if (['LMB Flux', 'LMB+', 'LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', '4-Acid Dig', 'LMB+ (Mtlg-AqRg)'].includes(value)) {
-                if (this.checked) {
-                    activeAssayTypes.add(value);
-                } else {
-                    activeAssayTypes.delete(value);
-                }
-            } else {
-                if (this.checked) {
-                    activeZones.add(value);
-                } else {
-                    activeZones.delete(value);
-                }
-            }
-            updateMap();
-            updateElementTable();
-        });
-    });
+   
+
+
+
+
+
+
 
     document.querySelectorAll('.overlay-checkbox-container input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', function() {

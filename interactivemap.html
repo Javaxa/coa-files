@@ -575,6 +575,10 @@
         }
 
         .empty-space {
+            margin-bottom: 15px;
+        }
+
+        .empty-space-top {
             margin-top: 15px;
         }
 
@@ -706,11 +710,11 @@
                 <h4>Elemental Data:</h4>
                 <span id="selectedElement" style="font-weight: bold;">Au</span>
             </div>
-            <div id="overallDataPoints" class="data-points"></div>
             <div id="overallAverages" class="zone-item">
                 <div class="zone-title">Basin Statistics:</div>
-                <div class="zone-stat">
-                    <span id="overallAssayCount" style="color: black; font-weight: normal; margin-bottom: 15px;"></span>
+                <div class="zone-stat empty-space">
+                    <span>Assays Done:</span>
+                    <span id="overallAssayCount" style="font-weight: bold;"></span>
                 </div>
                 <div class="zone-stat">
                     <span>Highest:</span>
@@ -720,7 +724,7 @@
                     <span>Value/tonne:</span>
                     <span id="highestValuePerTonne" class="price-value"></span>
                 </div>
-                <div class="zone-stat empty-space">
+                <div class="zone-stat empty-space-top">
                     <span>Average:</span>
                     <span id="averageValue" class="average-value"></span>
                 </div>
@@ -1379,8 +1383,8 @@ function updateElementAverages() {
         }
     });
 
-    // Update overall data points
-    document.getElementById('overallAssayCount').textContent = `Assays Done: ${count}`;
+    // Update overall assay count
+    document.getElementById('overallAssayCount').textContent = count;
 
     // Update overall averages
     if (count > 0) {
@@ -1413,8 +1417,9 @@ function updateElementAverages() {
 
         zoneItem.innerHTML = `
             <div class="zone-title">Zone ${zone}</div>
-            <div class="zone-stat">
-                <span style="color: black; font-weight: normal; margin-bottom: 15px;">Assays Done: ${data.count}</span>
+            <div class="zone-stat empty-space">
+                <span>Assays Done:</span>
+                <span style="font-weight: bold;">${data.count}</span>
             </div>
             <div class="zone-stat">
                 <span>Highest:</span>
@@ -1424,7 +1429,7 @@ function updateElementAverages() {
                 <span>Value/tonne:</span>
                 <span class="price-value">$${formatNumberWithCommas(pricePerTonneHighest.toFixed(2))}</span>
             </div>
-            <div class="zone-stat empty-space">
+            <div class="zone-stat empty-space-top">
                 <span>Average:</span>
                 <span class="average-value">${formatNumberWithCommas(average.toFixed(2))} ppm</span>
             </div>

@@ -945,7 +945,7 @@
                 <option value="Tm">Thulium (Tm)</option>
                 <option value="Yb">Ytterbium (Yb)</option>                               
             </select>   
-            <button class="table-download btn btn-outline-primary mb-3">Export Table to Excel</button>
+            <button class="table-download btn btn-outline-primary mb-3">Export Data to Excel</button>
             <button class="toggle-element-selection btn btn-outline-primary mb-3" data-bs-toggle="modal" data-bs-target="#periodicModal">Expand Element Selection</button>
             <button id="clearSelectionButton" class="btn btn-outline-danger mb-3" style="display:none;" onclick="clearPointSelection()">Remove Drill Hole Selection</button>
             <span id="selectedDH" class="ml-2"></span>    
@@ -1983,7 +1983,7 @@ function generateTooltipContent(indices) {
     return `
         <div class="tooltip-content">
             <div>DH: <b>${sampleData[indices[0]].DH}</b></div>
-            <div>STID: <span class="stid-list"><b>${stidList}</b></span></div>
+            
             <div>Assays Done: <strong>${count}</strong></div>
             <div>
                 Average Grade: <span style="color: red; font-weight: bold;">${formatNumberWithCommas(averagePPM.toFixed(2))} ppm</span><br>

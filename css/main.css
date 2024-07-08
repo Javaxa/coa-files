@@ -1,0 +1,656 @@
+.tooltip {
+    position: fixed;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 9999;
+}
+
+.tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+.editable:hover {
+    background-color: #ff9914;
+    color: white;
+    cursor: pointer;
+}
+
+.editable-dh:hover {
+    background-color: #ff9914;
+    color: white;
+    cursor: pointer;
+}
+
+#resultTable th {
+    text-align: center;
+}
+
+#elementTable th {
+    vertical-align: middle !important;
+    text-align: center;
+    background-color: #075496;
+    color: white;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+#elementTable td {
+    vertical-align: middle !important;
+    text-align: center;
+}
+
+#elementTable th:first-child {
+    border-top-left-radius: 8px;
+}
+
+#elementTable th:last-child {
+    border-top-right-radius: 8px;
+}
+
+#elementTable {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+#elementTable tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 8px;
+}
+
+#elementTable tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 8px;
+}
+
+.filter-badge {
+    margin-right: 5px;
+}
+
+#resultTable .btn-outline-danger {
+    display: block;
+    margin: auto;
+}
+
+.leaflet-control-attribution a {
+    display: none;
+}
+
+#map {
+    height: 650px;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+.custom-div-icon {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border: 1px solid black;
+    text-align: center;
+    font-size: 6px;
+    line-height: 9px;
+    font-weight: bold;
+}
+
+.red-dot-icon {
+    background-color: red;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.purple-rectangle-icon {
+    background-color: rgb(221, 0, 255);
+    border: 1px solid black;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.source-icon {
+    background-color: rgb(242, 255, 0);
+    border: 1px solid black;
+    border-radius: 50% / 40%; 
+}
+
+.shaft-icon {
+    background-color: rgb(98, 42, 48);
+    border: 1px solid black;
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
+.checkbox-container, .overlay-checkbox-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    overflow-y: scroll;
+    max-height: 500px;
+}
+
+.checkbox-container label, .overlay-checkbox-container label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+    padding: 5px 10px;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.sidebar label {
+    width: 100%;
+}
+
+.checkbox-container label:hover, .overlay-checkbox-container label:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.checkbox-container input[type="checkbox"], .overlay-checkbox-container input[type="checkbox"] {
+    margin: 0;
+}
+
+
+.checkbox-container {
+    font-size: 12px;
+}
+
+.scrollable-tooltip {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.tooltip-content {
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.tooltip-content div {
+    margin-bottom: 5px;
+}
+
+.tooltip-content .stid-list {
+    word-break: break-all;
+}
+
+.leaflet-tooltip {
+    max-width: 300px !important;
+}
+
+.fixed-box {
+    position: fixed;
+    top: 120px;
+    left: 10px;
+    width: 200px;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    max-height: 50vh;
+    overflow-y: auto;
+    font-size: 13px;
+}
+
+.element-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.selected-element {
+    font-weight: bold;
+    color: #075496;
+}
+
+.overall-stats, .zonal-grades {
+    margin-bottom: 15px;
+}
+
+.overall-stats h5, .zonal-grades h5 {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+#zoneAveragesBox h6 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.average-value {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.highest-value {
+    color: #34b2ef;
+    font-weight: bold;
+}
+
+.zone-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.zone-item {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.zone-item:last-child {
+    border-bottom: none;
+}
+
+.zone-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.zone-stat {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+}
+
+#zoneAveragesBox {
+    top: 140px; 
+    right: 20px;
+    width: 175px;
+}
+
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.settings-button {
+    position: fixed;
+    top: 15px;
+    left: 10px;
+    z-index: 1000;
+}
+
+.filter-container {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+}
+
+.filter-toggle {
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.filter-toggle:hover {
+    background-color: #ededed;
+}
+
+.sidebar {
+    display: block;
+    position: fixed;
+    top: 110px;
+    width: 200px;
+    height: 100%;
+    padding: 10px;
+    z-index: 1000;
+    overflow-y: scroll;
+    max-height: 800px;
+    right: 0px;
+}
+
+.sidebar .btn {
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.filter-arrow {
+    margin-left: 10px;
+    transition: transform 0.3s;
+}
+
+.btn-style {
+    background-color: #245d98;
+}
+
+#zoneAveragesList {
+    padding-left: 0px;
+}
+
+.sortable {
+    position: relative;
+    cursor: pointer;
+}
+
+.sortable::after {
+    content: ""; 
+    font-size: 0.8em;
+    position: absolute;
+    right: 2px; 
+    top: 50%;
+    transform: translateY(-50%);
+    visibility: hidden;
+}
+
+.sortable.sorted-asc::after {
+    content: "▲";
+    visibility: visible;
+}
+
+.sortable.sorted-desc::after {
+    content: "▼";
+    visibility: visible;
+}
+
+#selectedDH {
+    background-color: #ff872d;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    color: white;
+    vertical-align: super;
+    display: none;
+}
+
+#selectedElementPPM {
+    background-color: #075496;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    color: white;
+    vertical-align: super;
+    display: none;
+}
+
+#selectedElementHighestPPM {
+    background-color: #ffffff;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    color: rgb(0, 187, 255);
+    vertical-align: super;
+    display: none;
+}
+
+
+.dark-mode .checkbox-container label {
+    background: #282828;
+}
+
+.dark-mode .leaflet-marker-icon {
+    color: black;
+}
+
+.dark-mode .modal-content {
+    color: black;
+}
+
+.dark-mode .filter-toggle {
+    color: black;
+}
+
+.dark-mode .legend-wrapper {
+    color: black;
+}
+
+.dark-mode .checkbox-container {
+    background: #282828;
+    color: white;
+}
+
+.dark-mode .overlay-checkbox-container {
+    background: #282828;
+    color: white;
+}
+
+.dark-mode .checkbox-container {
+    background: #282828;
+}
+
+.dark-mode .overlay-checkbox-container label {
+    background: #282828;
+}
+
+.dark-mode .checkbox-container label {
+    background: #282828;
+}
+
+.dark-mode .checkbox-container label:hover {
+    background-color: #484848;
+    border-color: #adb5bd;
+}
+
+.dark-mode .overlay-checkbox-container label:hover {
+    background-color: #484848;
+    border-color: #adb5bd;
+}
+
+.legend-wrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-width: 200px;
+    position: fixed;
+    left: 20px;
+    bottom: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.legend-item:last-child {
+    margin-bottom: 0;
+}
+
+.point-dot {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: black;
+}
+
+.legend-text {
+    font-size: 14px;
+    color: #333;
+}
+
+.icon-width {
+    height: 15px;
+    width: 25px;
+}
+
+.select-style {
+    width: max-content;
+    float: right;
+}
+
+.toggle-element-selection {
+    float: right;
+}
+
+#sidebarCOAFilters {
+    font-size: 11px;
+}
+
+.overlay-checkbox-container {
+    font-size: 11px;
+}
+
+.map-title {
+    text-align: center;
+    margin-top: -34px;
+}
+
+.main-title {
+    margin: auto;
+    width: max-content;
+    margin-top: -10px;
+}
+
+.heatmap-legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.heatmap-legend-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.heatmap-legend-text {
+    font-size: 14px;
+    color: #333;
+}
+
+.element-price-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.element-price-card:hover {
+    transform: translateY(-5px);
+}
+
+.element-symbol {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.element-name {
+    font-size: 14px;
+    color: #666;
+}
+
+.element-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.price-value {
+    color: #28a745;
+    font-weight: bold;
+}
+
+#elementPricesBtn {
+    position: absolute;
+    left: 10px;
+    top: 70px;
+}
+
+.empty-space {
+    margin-bottom: 15px;
+}
+
+.empty-space-top {
+    margin-top: 15px;
+}
+
+.data-points {
+    margin-bottom: 15px;
+}
+
+#elementSelect {
+    width: auto;
+}
+
+
+
+@keyframes glow {
+    0% {
+      box-shadow: 0 0 5px #e0e0e0;
+    }
+    50% {
+      box-shadow: 0 0 15px #ff4c4c;
+    }
+    100% {
+      box-shadow: 0 0 5px #e0e0e0;
+    }
+  }
+
+
+#selectedElementContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 7px;
+    justify-content: end;
+}
+
+#selectedElementName {
+    font-size: 16px;
+    margin-right: 5px;
+}
+
+#selectedElement {
+    font-weight: bold;
+    background: #e0e0e0;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    line-height: 20px;
+    font-size: 14px;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    animation: glow 2s infinite;
+}
+
+#selectedElement:hover {
+    animation: none;
+    box-shadow: 0 0 15px #ff4c4c;
+  }

@@ -308,7 +308,7 @@ body {
 .zone-stat {
     display: flex;
     justify-content: space-between;
-    font-size: 0.9em;
+    font-size: 11px;
 }
 
 #zoneAveragesBox {

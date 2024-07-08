@@ -414,15 +414,15 @@ function updateElementAverages() {
         const pricePerTonneHighest = (highest / 1000) * elementPrice;
         const pricePerTonneAverage = (average / 1000) * elementPrice;
 
-        document.getElementById('highestValue').textContent = `${formatNumberWithCommas(highest.toFixed(2))} ppm`;
-        document.getElementById('highestValuePerTonne').textContent = `$${formatNumberWithCommas(pricePerTonneHighest.toFixed(2))}`;
         document.getElementById('averageValue').textContent = `${formatNumberWithCommas(average.toFixed(2))} ppm`;
         document.getElementById('averageValuePerTonne').textContent = `$${formatNumberWithCommas(pricePerTonneAverage.toFixed(2))}`;
+        document.getElementById('highestValue').textContent = `${formatNumberWithCommas(highest.toFixed(2))} ppm`;
+        document.getElementById('highestValuePerTonne').textContent = `$${formatNumberWithCommas(pricePerTonneHighest.toFixed(2))}`;
     } else {
-        document.getElementById('highestValue').textContent = 'N/A';
-        document.getElementById('highestValuePerTonne').textContent = 'N/A';
         document.getElementById('averageValue').textContent = 'N/A';
         document.getElementById('averageValuePerTonne').textContent = 'N/A';
+        document.getElementById('highestValue').textContent = 'N/A';
+        document.getElementById('highestValuePerTonne').textContent = 'N/A';
     }
 
     // Update zone averages
@@ -444,20 +444,20 @@ function updateElementAverages() {
                 <span style="font-weight: bold;">${data.count}</span>
             </div>
             <div class="zone-stat">
-                <span>Highest:</span>
-                <span class="highest-value">${formatNumberWithCommas(data.highest.toFixed(2))} ppm</span>
-            </div>
-            <div class="zone-stat">
-                <span>Value/tonne:</span>
-                <span class="price-value">$${formatNumberWithCommas(pricePerTonneHighest.toFixed(2))}</span>
-            </div>
-            <div class="zone-stat empty-space-top">
                 <span>Average:</span>
                 <span class="average-value">${formatNumberWithCommas(average.toFixed(2))} ppm</span>
             </div>
             <div class="zone-stat">
                 <span>Value/tonne:</span>
                 <span class="price-value">$${formatNumberWithCommas(pricePerTonneAverage.toFixed(2))}</span>
+            </div>
+            <div class="zone-stat empty-space-top">
+                <span>Highest:</span>
+                <span class="highest-value">${formatNumberWithCommas(data.highest.toFixed(2))} ppm</span>
+            </div>
+            <div class="zone-stat">
+                <span>Value/tonne:</span>
+                <span class="price-value">$${formatNumberWithCommas(pricePerTonneHighest.toFixed(2))}</span>
             </div>
         `;
         zoneAveragesList.appendChild(zoneItem);

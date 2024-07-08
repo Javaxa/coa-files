@@ -55,7 +55,7 @@ const coaFiles = {
     { symbol: "Ce", name: "Cerium", price: 1.19 },
     { symbol: "Co", name: "Cobalt", price: 68.2 },
     { symbol: "Cr", name: "Chromium", price: 10.1 },
-    { symbol: "Cs", name: "Cesium", price: 73000 }, // Estimated price, not in original data
+    { symbol: "Cs", name: "Cesium", price: 125000 }, 
     { symbol: "Cu", name: "Copper", price: 8.3 },
     { symbol: "Cl", name: "Chlorine", price: 0.21 },
     { symbol: "Fe", name: "Iron", price: 0.12 },
@@ -75,7 +75,7 @@ const coaFiles = {
     { symbol: "Ni", name: "Nickel", price: 18.3 },
     { symbol: "P", name: "Phosphorus", price: 1.15 },
     { symbol: "Pb", name: "Lead", price: 2.01 },
-    { symbol: "Rb", name: "Rubidium", price: 15000 }, // Estimated price, not in original data
+    { symbol: "Rb", name: "Rubidium", price: 36000 }, // Estimated price, not in original data
     { symbol: "Re", name: "Rhenium", price: 4670 },
     { symbol: "S", name: "Sulfur", price: 0.6 },
     { symbol: "Sb", name: "Antimony", price: 11.7 },

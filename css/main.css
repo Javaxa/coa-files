@@ -1,6 +1,29 @@
+* {
+    box-sizing: border-box;
+    }
+
 body {
     margin: 0px;
     padding: 0px;
+}
+
+::-webkit-scrollbar {
+	width: 5px;
+	height: 8px;
+	background-color: #aaa; 
+}
+::-webkit-scrollbar-thumb {
+	background: #075496;
+    cursor: pointer;
+}
+::-moz-selection { 
+    color: white;
+    background: #ff9914;
+}
+
+::selection {
+    color: white;
+    background: #ff9914;
 }
 
 .tooltip {
@@ -204,7 +227,7 @@ body {
     top: 120px;
     left: 10px;
     width: 200px;
-    padding: 15px;
+    padding: 12px;
     border: 1px solid #dee2e6;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -236,9 +259,14 @@ body {
     padding-bottom: 5px;
 }
 
-#zoneAveragesBox h6 {
-    text-align: center;
-    margin-bottom: 15px;
+.basin-title {
+    font-size: 15px;
+}
+
+#zoneAveragesBox .zone-stat-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 15px;
 }
 
 .stat-row {

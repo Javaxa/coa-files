@@ -78,7 +78,7 @@ div .indexfix {
     z-index: 10000;
 }
 
-[class^="element-"] {
+[class^="elements-"] {
   cursor: pointer;
   position: relative;
   z-index: 1;
@@ -95,7 +95,7 @@ div .indexfix {
   -webkit-perspective: 1000;
   perspective: 1000;
 }
-[class^="element-"] .chip {
+[class^="elements-"] .chip {
   width: 100%;
   height: 100%;
   -moz-transform-style: preserve-3d;
@@ -114,19 +114,19 @@ div .indexfix {
   -webkit-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
-[class^="element-"] .chip.long .front strong {
+[class^="elements-"] .chip.long .front strong {
   margin-top: 8px;
   font-size: 1.38em;
 }
-[class^="element-"] .chip.long .back p {
+[class^="elements-"] .chip.long .back p {
   margin-top: 20px;
 }
-[class^="element-"]:hover .chip {
+[class^="elements-"]:hover .chip {
   -moz-transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
-[class^="element-"] .face {
+[class^="elements-"] .face {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -134,23 +134,23 @@ div .indexfix {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
-[class^="element-"] .face.front, [class^="element-"] .face.back {
+[class^="elements-"] .face.front, [class^="elements-"] .face.back {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-[class^="element-"] .face.front {
+[class^="elements-"] .face.front {
   padding: 4px;
   -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.3), inset 1px 0 0 rgba(255, 255, 255, 0.2), inset -1px 0 0 rgba(0, 0, 0, 0.15);
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.3), inset 1px 0 0 rgba(255, 255, 255, 0.2), inset -1px 0 0 rgba(0, 0, 0, 0.15);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.3), inset 1px 0 0 rgba(255, 255, 255, 0.2), inset -1px 0 0 rgba(0, 0, 0, 0.15);
 }
-[class^="element-"] .face.front i {
+[class^="elements-"] .face.front i {
   display: block;
   font-size: .8em;
   pointer-events: none;
 }
-    [class^="element-"] .face.front strong {
+    [class^="elements-"] .face.front strong {
         font-size: 20px;
         display: block;
         font-weight: bold;
@@ -161,7 +161,7 @@ div .indexfix {
         pointer-events: none;
         border-radius: 5px;
     }
-[class^="element-"] .face.back {
+[class^="elements-"] .face.back {
   display: block;
   -moz-transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
@@ -172,14 +172,14 @@ div .indexfix {
   background: #eee;
   color: #111;
 }
-[class^="element-"] .face.back p {
+[class^="elements-"] .face.back p {
   margin-top: 16px;
   line-height: 1.2;
   text-align: center;
   font-size: .7em;
   font-weight: 600;
 }
-[class^="element-"] .face.back p span {
+[class^="elements-"] .face.back p span {
   display: block;
 }
 
@@ -190,7 +190,7 @@ div .indexfix {
 /* -------------------
 	Elements
 -------------------- */
-span.swatch.element-metal {
+span.swatch.elements-metal {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M2YzZjNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzg2ODY4NiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
   background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #c6c6c6), color-stop(100%, #868686));
@@ -198,7 +198,7 @@ span.swatch.element-metal {
   background-image: -webkit-linear-gradient(left top, #c6c6c6, #868686);
   background-image: linear-gradient(to right bottom, #c6c6c6, #868686);
 }
-span.swatch.element-non-metal {
+span.swatch.elements-non-metal {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2E1YjNiOCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzYyNzU3YyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
   background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #a5b3b8), color-stop(100%, #62757c));
@@ -206,7 +206,7 @@ span.swatch.element-non-metal {
   background-image: -webkit-linear-gradient(left top, #a5b3b8, #62757c);
   background-image: linear-gradient(to right bottom, #a5b3b8, #62757c);
 }
-span.swatch.element-alkali-metal {
+span.swatch.elements-alkali-metal {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M2ZDg2NyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzg2OTkyNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
   background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #c6d867), color-stop(100%, #869927));
@@ -214,7 +214,7 @@ span.swatch.element-alkali-metal {
   background-image: -webkit-linear-gradient(left top, #c6d867, #869927);
   background-image: linear-gradient(to right bottom, #c6d867, #869927);
 }
-span.swatch.element-alkali-earth-metal {
+span.swatch.elements-alkali-earth-metal {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzhlZDViMyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNkYTY3NCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
   background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #8ed5b3), color-stop(100%, #3da674));
@@ -222,7 +222,7 @@ span.swatch.element-alkali-earth-metal {
   background-image: -webkit-linear-gradient(left top, #8ed5b3, #3da674);
   background-image: linear-gradient(to right bottom, #8ed5b3, #3da674);
 }
-span.swatch.element-transition-metal {
+span.swatch.elements-transition-metal {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2IwZGNmZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzMyYTVmZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
   background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #b0dcfe), color-stop(100%, #32a5fd));
@@ -230,7 +230,7 @@ span.swatch.element-transition-metal {
   background-image: -webkit-linear-gradient(left top, #b0dcfe, #32a5fd);
   background-image: linear-gradient(to right bottom, #b0dcfe, #32a5fd);
 }
-span.swatch.element-lanthoid {
+span.swatch.elements-lanthoid {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZWUzYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2JhYWEwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
   background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #ffee3a), color-stop(100%, #baaa00));
@@ -238,7 +238,7 @@ span.swatch.element-lanthoid {
   background-image: -webkit-linear-gradient(left top, #ffee3a, #baaa00);
   background-image: linear-gradient(to right bottom, #ffee3a, #baaa00);
 }
-span.swatch.element-actinoid {
+span.swatch.elements-actinoid {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmYzg0NyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M3OGIwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
   background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #ffc847), color-stop(100%, #c78b00));
@@ -246,7 +246,7 @@ span.swatch.element-actinoid {
   background-image: -webkit-linear-gradient(left top, #ffc847, #c78b00);
   background-image: linear-gradient(to right bottom, #ffc847, #c78b00);
 }
-span.swatch.element-metalloid {
+span.swatch.elements-metalloid {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U1OGE4YSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M0MmIyYiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
   background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #e58a8a), color-stop(100%, #c42b2b));
@@ -254,7 +254,7 @@ span.swatch.element-metalloid {
   background-image: -webkit-linear-gradient(left top, #e58a8a, #c42b2b);
   background-image: linear-gradient(to right bottom, #e58a8a, #c42b2b);
 }
-span.swatch.element-halogen {
+span.swatch.elements-halogen {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2NkYjI3NSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzhlNzMzNCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
   background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #cdb275), color-stop(100%, #8e7334));
@@ -262,7 +262,7 @@ span.swatch.element-halogen {
   background-image: -webkit-linear-gradient(left top, #cdb275, #8e7334);
   background-image: linear-gradient(to right bottom, #cdb275, #8e7334);
 }
-span.swatch.element-noble-gas {
+span.swatch.elements-noble-gas {
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2FkYWRkYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzU1NTViMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
   background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #adadda), color-stop(100%, #5555b2));
@@ -271,7 +271,7 @@ span.swatch.element-noble-gas {
   background-image: linear-gradient(to right bottom, #adadda, #5555b2);
 }
 
-.element-metal .front {
+.elements-metal .front {
   color: #2d2d2d;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M2YzZjNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzg2ODY4NiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -280,11 +280,11 @@ span.swatch.element-noble-gas {
   background-image: -webkit-linear-gradient(left top, #c6c6c6, #868686);
   background-image: linear-gradient(to right bottom, #c6c6c6, #868686);
 }
-.element-metal .face.back {
+.elements-metal .face.back {
   background-color: #c6c6c6;
 }
 
-.element-alkali-metal .front {
+.elements-alkali-metal .front {
   color: #3b4311;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M2ZDg2NyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzg2OTkyNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -293,11 +293,11 @@ span.swatch.element-noble-gas {
   background-image: -webkit-linear-gradient(left top, #c6d867, #869927);
   background-image: linear-gradient(to right bottom, #c6d867, #869927);
 }
-.element-alkali-metal .face.back {
+.elements-alkali-metal .face.back {
   background-color: #d5e38f;
 }
 
-.element-alkali-earth-metal .front {
+.elements-alkali-earth-metal .front {
   color: #133323;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzhlZDViMyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNkYTY3NCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -306,11 +306,11 @@ span.swatch.element-noble-gas {
   background-image: -webkit-linear-gradient(left top, #8ed5b3, #3da674);
   background-image: linear-gradient(to right bottom, #8ed5b3, #3da674);
 }
-.element-alkali-earth-metal .face.back {
+.elements-alkali-earth-metal .face.back {
   background-color: #b3e3cc;
 }
 
-.element-transition-metal .front {
+.elements-transition-metal .front {
   color: #012948;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2IwZGNmZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzMyYTVmZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -319,11 +319,11 @@ span.swatch.element-noble-gas {
   background-image: -webkit-linear-gradient(left top, #b0dcfe, #32a5fd);
   background-image: linear-gradient(to right bottom, #b0dcfe, #32a5fd);
 }
-.element-transition-metal .face.back {
+.elements-transition-metal .face.back {
   background-color: #b0dcfe;
 }
 
-.element-lanthoid .front {
+.elements-lanthoid .front {
   color: #443e00;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZWUzYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2JhYWEwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -332,11 +332,11 @@ span.swatch.element-noble-gas {
   background-image: -webkit-linear-gradient(left top, #ffee3a, #baaa00);
   background-image: linear-gradient(to right bottom, #ffee3a, #baaa00);
 }
-.element-lanthoid .face.back {
+.elements-lanthoid .face.back {
   background-color: #ffee3a;
 }
 
-.element-actinoid .front {
+.elements-actinoid .front {
   color: #140e00;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmYzg0NyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M3OGIwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -345,11 +345,11 @@ span.swatch.element-noble-gas {
   background-image: -webkit-linear-gradient(left top, #ffc847, #c78b00);
   background-image: linear-gradient(to right bottom, #ffc847, #c78b00);
 }
-.element-actinoid .face.back {
+.elements-actinoid .face.back {
   background-color: #ffc847;
 }
 
-.element-metalloid .front {
+.elements-metalloid .front {
   color: #320b0b;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U1OGE4YSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M0MmIyYiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -358,11 +358,11 @@ span.swatch.element-noble-gas {
   background-image: -webkit-linear-gradient(left top, #e58a8a, #c42b2b);
   background-image: linear-gradient(to right bottom, #e58a8a, #c42b2b);
 }
-.element-metalloid .face.back {
+.elements-metalloid .face.back {
   background-color: #e58a8a;
 }
 
-.element-non-metal .front {
+.elements-non-metal .front {
   color: #131718;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2E1YjNiOCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzYyNzU3YyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -371,11 +371,11 @@ span.swatch.element-noble-gas {
   background-image: -webkit-linear-gradient(left top, #a5b3b8, #62757c);
   background-image: linear-gradient(to right bottom, #a5b3b8, #62757c);
 }
-.element-non-metal .face.back {
+.elements-non-metal .face.back {
   background-color: #b9c4c8;
 }
 
-.element-halogen .front {
+.elements-halogen .front {
   color: #0c0904;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2NkYjI3NSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzhlNzMzNCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -384,11 +384,11 @@ span.swatch.element-noble-gas {
   background-image: -webkit-linear-gradient(left top, #cdb275, #8e7334);
   background-image: linear-gradient(to right bottom, #cdb275, #8e7334);
 }
-.element-halogen .face.back {
+.elements-halogen .face.back {
   background-color: #d6c190;
 }
 
-.element-noble-gas .front {
+.elements-noble-gas .front {
   color: #1b1b3a;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2FkYWRkYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzU1NTViMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -397,11 +397,11 @@ span.swatch.element-noble-gas {
   background-image: -webkit-linear-gradient(left top, #adadda, #5555b2);
   background-image: linear-gradient(to right bottom, #adadda, #5555b2);
 }
-.element-noble-gas .face.back {
+.elements-noble-gas .face.back {
   background-color: #adadda;
 }
 
-.element-lanthanoid-transitional-metal .front {
+.elements-lanthanoid-transitional-metal .front {
   color: #1b1b3a;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzRiYjBmZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2QzYzEwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -410,11 +410,11 @@ span.swatch.element-noble-gas {
   background-image: -webkit-linear-gradient(left top, #4bb0fd, #d3c100);
   background-image: linear-gradient(to right bottom, #4bb0fd, #d3c100);
 }
-.element-lanthanoid-transitional-metal .face.back {
+.elements-lanthanoid-transitional-metal .face.back {
   background-color: #b0dcfe;
 }
 
-.element-actinoid-transitional-metal .front {
+.elements-actinoid-transitional-metal .front {
   color: #1b1b3a;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzRiYjBmZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2UwOWQwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
@@ -423,15 +423,15 @@ span.swatch.element-noble-gas {
   background-image: -webkit-linear-gradient(left top, #4bb0fd, #e09d00);
   background-image: linear-gradient(to right bottom, #4bb0fd, #e09d00);
 }
-.element-actinoid-transitional-metal .face.back {
+.elements-actinoid-transitional-metal .face.back {
   background-color: #b0dcfe;
 }
 
-.element-blank {
+.elements-blank {
   background: transparent;
   cursor: auto;
 }
-.element-blank.full {
+.elements-blank.full {
   height: 27.5px;
   clear: both;
   width: 100%;
@@ -446,7 +446,7 @@ span.swatch.element-noble-gas {
             width: 90%;
         }
 
-            #wrapper .element-blank {
+            #wrapper .elements-blank {
                 display: none;
             }
 
@@ -528,25 +528,25 @@ span.swatch.element-noble-gas {
         <div id='wrapper'>
             <div id='key'>
                 <ul>
-                    <li><span class='swatch element-metal'></span>Metals</li>
-                    <li><span class='swatch element-non-metal'></span>Non-Metals</li>
-                    <li><span class='swatch element-alkali-metal'></span>Alkali Metals</li>
-                    <li><span class='swatch element-alkali-earth-metal'></span>Alkali Earth Metals</li>
+                    <li><span class='swatch elements-metal'></span>Metals</li>
+                    <li><span class='swatch elements-non-metal'></span>Non-Metals</li>
+                    <li><span class='swatch elements-alkali-metal'></span>Alkali Metals</li>
+                    <li><span class='swatch elements-alkali-earth-metal'></span>Alkali Earth Metals</li>
                 </ul>
                 <ul>
-                    <li><span class='swatch element-transition-metal'></span>Transitional Metals</li>
-                    <li><span class='swatch element-lanthoid'></span>Lanthoids</li>
-                    <li><span class='swatch element-actinoid'></span>Actinoids</li>
+                    <li><span class='swatch elements-transition-metal'></span>Transitional Metals</li>
+                    <li><span class='swatch elements-lanthoid'></span>Lanthoids</li>
+                    <li><span class='swatch elements-actinoid'></span>Actinoids</li>
                 </ul>
                 <ul>
-                    <li><span class='swatch element-metalloid'></span>Metaloids</li>
-                    <li><span class='swatch element-halogen'></span>Halogens</li>
-                    <li><span class='swatch element-noble-gas'></span>Noble Gas</li>
+                    <li><span class='swatch elements-metalloid'></span>Metaloids</li>
+                    <li><span class='swatch elements-halogen'></span>Halogens</li>
+                    <li><span class='swatch elements-noble-gas'></span>Noble Gas</li>
                 </ul>
             </div>
             <div id='elements'>
                 <!-- Row One -->
-                <div class='element-non-metal element-main'>
+                <div class='elements-non-metal elements-main'>
                     <div class='chip'>
                         <div class="face front">
                             <i>1</i>
@@ -557,23 +557,23 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-noble-gas element-main'>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-noble-gas elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>2</i>
@@ -586,7 +586,7 @@ span.swatch.element-noble-gas {
                     </div>
                 </div><!-- //Row One -->
                 <!-- Row Two -->
-                <div class='element-alkali-metal element-main'>
+                <div class='elements-alkali-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>3</i>
@@ -597,7 +597,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-alkali-earth-metal element-main'>
+                <div class='elements-alkali-earth-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>4</i>
@@ -608,17 +608,17 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-metalloid element-main'>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-metalloid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>5</i>
@@ -629,7 +629,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-non-metal element-main'>
+                <div class='elements-non-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>6</i>
@@ -640,7 +640,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-non-metal element-main'>
+                <div class='elements-non-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>7</i>
@@ -651,7 +651,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-non-metal element-main'>
+                <div class='elements-non-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>8</i>
@@ -662,7 +662,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-halogen element-main'>
+                <div class='elements-halogen elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>9</i>
@@ -673,7 +673,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-noble-gas element-main'>
+                <div class='elements-noble-gas elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>10</i>
@@ -685,7 +685,7 @@ span.swatch.element-noble-gas {
                     </div>
                 </div><!-- //Row Two -->
                 <!-- Row Three -->
-                <div class='element-alkali-metal element-main'>
+                <div class='elements-alkali-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>11</i>
@@ -696,7 +696,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-alkali-earth-metal element-main'>
+                <div class='elements-alkali-earth-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>12</i>
@@ -707,17 +707,17 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-metal element-main'>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>13</i>
@@ -728,7 +728,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metalloid element-main'>
+                <div class='elements-metalloid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>14</i>
@@ -739,7 +739,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-non-metal element-main'>
+                <div class='elements-non-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>15</i>
@@ -750,7 +750,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-non-metal element-main'>
+                <div class='elements-non-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>16</i>
@@ -761,7 +761,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-halogen element-main'>
+                <div class='elements-halogen elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>17</i>
@@ -772,7 +772,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-noble-gas element-main'>
+                <div class='elements-noble-gas elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>18</i>
@@ -784,7 +784,7 @@ span.swatch.element-noble-gas {
                     </div>
                 </div><!-- //Row Three -->
                 <!-- Row Four -->
-                <div class='element-alkali-metal element-main'>
+                <div class='elements-alkali-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>19</i>
@@ -795,7 +795,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-alkali-earth-metal element-main'>
+                <div class='elements-alkali-earth-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>20</i>
@@ -806,7 +806,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>21</i>
@@ -817,7 +817,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>22</i>
@@ -828,7 +828,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>23</i>
@@ -839,7 +839,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>24</i>
@@ -850,7 +850,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>25</i>
@@ -861,7 +861,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>26</i>
@@ -872,7 +872,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>27</i>
@@ -883,7 +883,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>28</i>
@@ -894,7 +894,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>29</i>
@@ -905,7 +905,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metal element-main'>
+                <div class='elements-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>30</i>
@@ -916,7 +916,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metal element-main'>
+                <div class='elements-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>31</i>
@@ -927,7 +927,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metalloid element-main'>
+                <div class='elements-metalloid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>32</i>
@@ -938,7 +938,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metalloid element-main'>
+                <div class='elements-metalloid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>33</i>
@@ -949,7 +949,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-non-metal element-main'>
+                <div class='elements-non-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>34</i>
@@ -960,7 +960,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-halogen element-main'>
+                <div class='elements-halogen elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>35</i>
@@ -971,7 +971,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-noble-gas element-main'>
+                <div class='elements-noble-gas elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>36</i>
@@ -983,7 +983,7 @@ span.swatch.element-noble-gas {
                     </div>
                 </div><!-- //Row Four -->
                 <!-- Row Five -->
-                <div class='element-alkali-metal element-main'>
+                <div class='elements-alkali-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>37</i>
@@ -994,7 +994,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-alkali-earth-metal element-main'>
+                <div class='elements-alkali-earth-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>38</i>
@@ -1005,7 +1005,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>39</i>
@@ -1016,7 +1016,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>40</i>
@@ -1027,7 +1027,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>41</i>
@@ -1038,7 +1038,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>42</i>
@@ -1049,7 +1049,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>43</i>
@@ -1060,7 +1060,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>44</i>
@@ -1071,7 +1071,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main' style="border: 2px solid #ffc800;">
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
                     <div class='chip'>
                         <div class='face front'>
                             <i>45</i>
@@ -1082,7 +1082,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main' style="border: 2px solid #ffc800;">
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
                     <div class='chip'>
                         <div class='face front'>
                             <i>46</i>
@@ -1093,7 +1093,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main' style="border: 2px solid #ffc800;">
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
                     <div class='chip'>
                         <div class='face front'>
                             <i>47</i>
@@ -1104,7 +1104,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metal element-main'>
+                <div class='elements-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>48</i>
@@ -1115,7 +1115,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metal element-main'>
+                <div class='elements-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>49</i>
@@ -1126,7 +1126,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metal element-main'>
+                <div class='elements-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>50</i>
@@ -1137,7 +1137,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metalloid element-main'>
+                <div class='elements-metalloid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>51</i>
@@ -1148,7 +1148,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metalloid element-main'>
+                <div class='elements-metalloid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>52</i>
@@ -1159,7 +1159,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-halogen element-main'>
+                <div class='elements-halogen elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>53</i>
@@ -1170,7 +1170,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-noble-gas element-main'>
+                <div class='elements-noble-gas elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>54</i>
@@ -1182,7 +1182,7 @@ span.swatch.element-noble-gas {
                     </div>
                 </div><!-- //Row Five -->
                 <!-- Row Six -->
-                <div class='element-alkali-metal element-main'>
+                <div class='elements-alkali-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>55</i>
@@ -1193,7 +1193,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-alkali-earth-metal element-main'>
+                <div class='elements-alkali-earth-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>56</i>
@@ -1204,7 +1204,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthanoid-transitional-metal element-main'>
+                <div class='elements-lanthanoid-transitional-metal elements-main'>
                     <div class='chip long'>
                         <div class='face front'>
                             <i>57-71</i>
@@ -1215,7 +1215,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>72</i>
@@ -1226,7 +1226,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>73</i>
@@ -1237,7 +1237,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>74</i>
@@ -1248,7 +1248,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>75</i>
@@ -1259,7 +1259,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main' style="border: 2px solid #ffc800;">
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
                     <div class='chip'>
                         <div class='face front'>
                             <i>76</i>
@@ -1270,7 +1270,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main' style="border: 2px solid #ffc800;">
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
                     <div class='chip'>
                         <div class='face front'>
                             <i>77</i>
@@ -1281,7 +1281,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main' style="border: 2px solid #ffc800;">
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
                     <div class='chip'>
                         <div class='face front'>
                             <i>78</i>
@@ -1292,7 +1292,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main' style="border: 2px solid #ffc800;">
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
                     <div class='chip'>
                         <div class='face front'>
                             <i>79</i>
@@ -1303,7 +1303,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metal element-main'>
+                <div class='elements-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>80</i>
@@ -1314,7 +1314,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metal element-main'>
+                <div class='elements-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>81</i>
@@ -1325,7 +1325,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metal element-main'>
+                <div class='elements-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>82</i>
@@ -1336,7 +1336,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metalloid element-main'>
+                <div class='elements-metalloid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>83</i>
@@ -1347,7 +1347,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-metalloid element-main'>
+                <div class='elements-metalloid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>84</i>
@@ -1358,7 +1358,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-halogen element-main'>
+                <div class='elements-halogen elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>85</i>
@@ -1369,7 +1369,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-noble-gas element-main'>
+                <div class='elements-noble-gas elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>86</i>
@@ -1381,7 +1381,7 @@ span.swatch.element-noble-gas {
                     </div>
                 </div><!-- //Row Six -->
                 <!-- Row Seven -->
-                <div class='element-alkali-metal element-main'>
+                <div class='elements-alkali-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>87</i>
@@ -1392,7 +1392,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-alkali-earth-metal element-main'>
+                <div class='elements-alkali-earth-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>88</i>
@@ -1403,7 +1403,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid-transitional-metal element-main'>
+                <div class='elements-actinoid-transitional-metal elements-main'>
                     <div class='chip long'>
                         <div class='face front'>
                             <i>89-103</i>
@@ -1414,7 +1414,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>104</i>
@@ -1425,7 +1425,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>105</i>
@@ -1436,7 +1436,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>106</i>
@@ -1447,7 +1447,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>107</i>
@@ -1458,7 +1458,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>108</i>
@@ -1469,7 +1469,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>109</i>
@@ -1480,7 +1480,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>110</i>
@@ -1491,7 +1491,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>111</i>
@@ -1502,7 +1502,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-transition-metal element-main'>
+                <div class='elements-transition-metal elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>112</i>
@@ -1514,12 +1514,12 @@ span.swatch.element-noble-gas {
                     </div>
                 </div><!-- //Row Seven -->
 
-                <div class='element-blank full'></div>
+                <div class='elements-blank full'></div>
 
                 <!-- Row Eight -->
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>57</i>
@@ -1530,7 +1530,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>58</i>
@@ -1541,7 +1541,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>59</i>
@@ -1552,7 +1552,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>60</i>
@@ -1563,7 +1563,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>61</i>
@@ -1574,7 +1574,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>62</i>
@@ -1585,7 +1585,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>63</i>
@@ -1596,7 +1596,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>64</i>
@@ -1607,7 +1607,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>65</i>
@@ -1618,7 +1618,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>66</i>
@@ -1629,7 +1629,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>67</i>
@@ -1640,7 +1640,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>68</i>
@@ -1651,7 +1651,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>69</i>
@@ -1662,7 +1662,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>70</i>
@@ -1673,7 +1673,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-lanthoid element-main'>
+                <div class='elements-lanthoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>71</i>
@@ -1684,12 +1684,12 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-blank'></div>
+                <div class='elements-blank'></div>
                 <!-- //Row Eight -->
                 <!-- Row Nine -->
-                <div class='element-blank'></div>
-                <div class='element-blank'></div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>89</i>
@@ -1700,7 +1700,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>90</i>
@@ -1711,7 +1711,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>91</i>
@@ -1722,7 +1722,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>92</i>
@@ -1733,7 +1733,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>93</i>
@@ -1744,7 +1744,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>94</i>
@@ -1755,7 +1755,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>95</i>
@@ -1766,7 +1766,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>96</i>
@@ -1777,7 +1777,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>97</i>
@@ -1788,7 +1788,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>98</i>
@@ -1799,7 +1799,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>99</i>
@@ -1810,7 +1810,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>100</i>
@@ -1821,7 +1821,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>101</i>
@@ -1832,7 +1832,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>102</i>
@@ -1843,7 +1843,7 @@ span.swatch.element-noble-gas {
                         </div>
                     </div>
                 </div>
-                <div class='element-actinoid element-main'>
+                <div class='elements-actinoid elements-main'>
                     <div class='chip'>
                         <div class='face front'>
                             <i>103</i>

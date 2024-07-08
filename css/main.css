@@ -115,12 +115,6 @@ body {
     display: none;
 }
 
-#map {
-    height: 650px;
-    margin-top: 20px;
-    border-radius: 8px;
-}
-
 .custom-div-icon {
     width: 20px;
     height: 20px;
@@ -165,12 +159,13 @@ body {
     background-color: #f8f9fa;
     border: 1px solid #dee2e6;
     border-radius: 5px;
-    overflow-y: scroll;
+    overflow-y: auto;
     max-height: 500px;
 }
 
 .checkbox-container label, .overlay-checkbox-container label {
     display: flex;
+    width: 100%;
     align-items: center;
     gap: 5px;
     margin: 0;
@@ -311,19 +306,13 @@ body {
     font-size: 11px;
 }
 
-#zoneAveragesBox {
-    top: 140px; 
-    right: 20px;
-    width: 175px;
-}
-
 .dark-mode {
     background-color: #121212;
     color: #ffffff;
 }
 
 .settings-button {
-    position: fixed;
+    position: absolute;
     top: 15px;
     left: 10px;
     z-index: 1000;
@@ -349,12 +338,7 @@ body {
     background-color: #ededed;
 }
 
-.sidebar {
-    display: block;
-    position: fixed;
-    top: 110px;
-    width: 200px;
-    height: 100%;
+#sidebar {
     padding: 10px;
     z-index: 1000;
     overflow-y: scroll;
@@ -362,7 +346,7 @@ body {
     right: 0px;
 }
 
-.sidebar .btn {
+#sidebar .btn {
     width: 100%;
     margin-bottom: 10px;
     font-size: 14px;
@@ -628,7 +612,7 @@ body {
 }
 
 #elementPricesBtn {
-    position: fixed;
+    position: absolute;
     left: 10px;
     top: 70px;
 }
@@ -704,3 +688,75 @@ body {
     animation: none;
     box-shadow: 0 0 15px #ff4c4c;
   }
+
+
+
+
+
+  .dashboard-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.dashboard-column {
+    flex: 1;
+    min-width: 250px;
+    margin-top: 20px;
+}
+
+#averages-column {
+    max-width: 250px;
+}
+
+#filters-column {
+    max-width: 250px;
+}
+
+#map-column {
+    flex: 2;
+    min-width: 400px;
+}
+
+#map {
+    height: 650px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+#elementAverageBox, #sidebar {
+    height: 100%;
+    overflow-y: auto;
+}
+
+#elementAverageBox {
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-height: 650px;
+}
+
+@media (max-width: 1200px) {
+    .dashboard-column {
+        flex-basis: 100%;
+    }
+
+    #map {
+        height: 450px;
+    }
+}
+
+/* Ensure other fixed elements don't overlap */
+.legend-wrapper, #elementPricesBtn, .settings-button {
+    z-index: 1001;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+    #elementAverageBox, #sidebar {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+}

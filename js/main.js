@@ -192,50 +192,35 @@ const coaFiles = {
         return data;
     }
 
-    document.getElementById('applyCutoffUnderMap').addEventListener('click', () => {
-    const minCutoff = parseFloat(document.getElementById('minCutoffUnderMap').value) || -Infinity;
-    const maxCutoff = parseFloat(document.getElementById('maxCutoffUnderMap').value) || Infinity;
 
-    document.getElementById('minCutoff').value = minCutoff;
-    document.getElementById('maxCutoff').value = maxCutoff;
-
-    updateMap();
-    updateElementTable();
-    updateElementAverages()
-});
 
     function createCOACheckboxes(coaValues) {
-    const sidebarContainer = document.querySelector('#sidebarCOACheckboxContainer');
-    const mapContainer = document.querySelector('#mapCOACheckboxContainer');
+        const sidebarContainer = document.querySelector('#sidebarCOACheckboxContainer');
+        
+        sidebarContainer.innerHTML = '';
     
-    sidebarContainer.innerHTML = '';
-    mapContainer.innerHTML = '';
-
-    coaValues.forEach(coa => {
-        const sidebarLabel = document.createElement('label');
-        const mapLabel = document.createElement('label');
-        
-        sidebarLabel.innerHTML = `<input type="checkbox" value="${coa}" checked> ${coa}`;
-        mapLabel.innerHTML = `<input type="checkbox" value="${coa}" checked> ${coa}`;
-        
-        sidebarContainer.appendChild(sidebarLabel);
-        mapContainer.appendChild(mapLabel);
-        
-        activeCOAs.add(coa);
-    });
-
-    document.querySelectorAll('#sidebarCOACheckboxContainer input[type="checkbox"], #mapCOACheckboxContainer input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            if (this.checked) {
-                activeCOAs.add(this.value);
-            } else {
-                activeCOAs.delete(this.value);
-            }
-            updateMap();
-            updateElementTable();
+        coaValues.forEach(coa => {
+            const label = document.createElement('label');
+            
+            label.innerHTML = `<input type="checkbox" value="${coa}" checked> ${coa}`;
+            
+            sidebarContainer.appendChild(label);
+            
+            activeCOAs.add(coa);
         });
-    });
-}
+    
+        document.querySelectorAll('#sidebarCOACheckboxContainer input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    activeCOAs.add(this.value);
+                } else {
+                    activeCOAs.delete(this.value);
+                }
+                updateMap();
+                updateElementTable();
+            });
+        });
+    }
 
 
 
@@ -1484,17 +1469,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.getElementById('filtersOnRightToggle').addEventListener('change', function() {
-        const filters = document.getElementById('filters');
-        const sidebar = document.getElementById('sidebar');
-        if (this.checked) {
-            filters.style.display = 'flex';
-            sidebar.style.display = 'none';
-        } else {
-            filters.style.display = 'none';
-            sidebar.style.display = 'block';
-        }
-    });
+
 
     document.querySelectorAll('.collapse').forEach(collapseElement => {
         collapseElement.addEventListener('show.bs.collapse', function () {
@@ -1504,17 +1479,6 @@ document.addEventListener('DOMContentLoaded', () => {
             this.previousElementSibling.querySelector('.filter-arrow').textContent = '↓';
         });
     });
-
-    const filtersOnRightToggle = document.getElementById('filtersOnRightToggle');
-    const filters = document.getElementById('filters');
-    const sidebar = document.getElementById('sidebar');
-    if (filtersOnRightToggle.checked) {
-        filters.style.display = 'flex';
-        sidebar.style.display = 'none';
-    } else {
-        filters.style.display = 'none';
-        sidebar.style.display = 'block';
-    }
 
     updateElementTable();
 });

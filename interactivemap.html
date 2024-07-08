@@ -13,6 +13,9 @@
     <div class="settings-button">
         <button class="btn btn-primary btn-style" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="fa-solid fa-gear"></i></button>
     </div>
+
+<!--Incursion Legend-->
+
     <div class="legend-wrapper">
         <h5>Map Legend</h5>
         <div class="legend-item">
@@ -36,204 +39,159 @@
             <span class="legend-text">Rock</span>
         </div>
     </div>
-<div class="sidebar" id="sidebar" style="display: block;">
-    <h5>Filters</h3>
-    <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#incursionFilters" aria-expanded="false" aria-controls="incursionFilters">
-        Incursion Type <span class="filter-arrow">&darr;</span>
-    </button>
-    <div class="collapse" id="incursionFilters">
-        <div class="checkbox-container">
-            <label><input type="checkbox" value="HY20" checked> 20-Foot</label>
-            <label><input type="checkbox" value="HN04"> 4-Foot</label>
-            <label><input type="checkbox" value="Shaft"> Shaft</label>
-            <label><input type="checkbox" value="Source Sample"> Source Sample</label>
-            <label><input type="checkbox" value="Rock"> Rock</label>
-        </div>
-    </div>
-    <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#assayFilters" aria-expanded="false" aria-controls="assayFilters">
-        Assay Type <span class="filter-arrow">&darr;</span>
-    </button>
-    <div class="collapse" id="assayFilters">
-        <div class="checkbox-container">
-            <label><input type="checkbox" value="4-Acid Dig"> 4-Acid</label>
-            <label><input type="checkbox" value="LMB Flux" checked> LMB Flux</label>
-            <label><input type="checkbox" value="LMB+" checked> LMB+</label>
-            <label><input type="checkbox" value="LMB+ (Metallurgical)"> LMB+ (Metallurgical)</label>
-        </div>
-    </div>
-    <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#zoneFilters" aria-expanded="false" aria-controls="zoneFilters">
-        Zone <span class="filter-arrow">&darr;</span>
-    </button>
-    <div class="collapse" id="zoneFilters">
-        <div class="checkbox-container">
-            <label><input type="checkbox" value="1" checked> Zone 1</label>
-            <label><input type="checkbox" value="2" checked> Zone 2</label>
-            <label><input type="checkbox" value="3" checked> Zone 3</label>
-            <label><input type="checkbox" value="4" checked> Zone 4</label>
-            <label><input type="checkbox" value="5" checked> Zone 5</label>
-            <label><input type="checkbox" value="6" checked> Zone 6</label>
-        </div>
-    </div>
-    <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCOAFilters" aria-expanded="false" aria-controls="sidebarCOAFilters">
-        COA <span class="filter-arrow">&darr;</span>
-    </button>
-    <div class="collapse mt-2" id="sidebarCOAFilters">
-        <div class="checkbox-container" id="sidebarCOACheckboxContainer">
 
-        </div>
-    </div>
-<button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#cutoffGradeFilter" aria-expanded="false" aria-controls="cutoffGradeFilter">
-    Cut-off Grade <span class="filter-arrow">&darr;</span>
-</button>
-<div class="collapse mt-2" id="cutoffGradeFilter">
-        <div class="checkbox-container">
-            <div class="form-group">
-                Minimum ppm:
-                <input type="number" class="form-control" id="minCutoff">
-            </div>
-            <div class="form-group">
-                Maximum ppm:
-                <input type="number" class="form-control" id="maxCutoff">
-            </div>
-            <button class="btn btn-primary mt-2" id="applyCutoff">Apply</button>
-    </div>
-</div>
 
-    <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#overlayFilters" aria-expanded="false" aria-controls="overlayFilters">
-        Overlays <span class="filter-arrow">&darr;</span>
-    </button>
-    <div class="collapse" id="overlayFilters">
-        <div class="overlay-checkbox-container">
-            <label><input type="checkbox" value="Zone" checked> Zone</label>
-            <label><input type="checkbox" value="Claims"> Claims</label>
-            <label><input type="checkbox" value="Sections"> Sections</label>
-        <div class="heatmap-controls">
-            <h6>Heatmap Controls</h6>
-            <button id="toggleHeatmapButton" class="btn btn-sm btn-outline-primary">Show Heatmap</button>
-            <button id="heatmapModeButton" class="btn btn-sm btn-outline-danger">Heatmap by Highest ppm</button>
-        </div>
-        </div>
-    </div>
-</div>
 
-    <div class="container mt-5">
-        <button id="elementPricesBtn" class="btn btn-primary mb-3">View Element Prices</button>
-        <h1 class="mb-4 map-title">Interactive Map</h1>
-        <h5 class="main-title">Cuddeback Lake Basin</h5>
-        <div id="map"></div>
-        <div id="elementAverageBox" class="fixed-box">
-            <div style="display: flex; justify-content: space-between;">
-                <h4>Elemental Data:</h4>
-            </div>
-            <div id="selectedElementContainer">
-                <span id="selectedElementName"></span>
-                <span id="selectedElement" data-bs-toggle="modal" data-bs-target="#periodicModal" data-tooltip="Expand Element Selection Menu"></span>
-            </div>
-            <div id="overallAverages" class="zone-item">
-                <div class="zone-title basin-title">Basin Statistics:</div>
-                <div class="zone-stat empty-space">
-                    <span>Assays Done:</span>
-                    <span id="overallAssayCount" style="font-weight: bold;"></span>
-                </div>
-                <div class="zone-stat">
-                    <span>Average:</span>
-                    <span id="averageValue" class="average-value"></span>
-                </div>
-                <div class="zone-stat">
-                    <span>Value/tonne:</span>
-                    <span id="averageValuePerTonne" class="price-value"></span>
-                </div>
-                <div class="zone-stat empty-space-top">
-                    <span>Highest:</span>
-                    <span id="highestValue" class="highest-value"></span>
-                </div>
-                <div class="zone-stat">
-                    <span>Value/tonne:</span>
-                    <span id="highestValuePerTonne" class="price-value"></span>
-                </div>
-            </div>
-            <div id="zoneAveragesBox" class="mt-2">
-                <div class="zone-stat-title">Zone Statistics:</div>
-                <div id="zoneAveragesList"></div>
-            </div>
-        </div>
-        <div class="filter-container" id="filters">
-            <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#incursionFilters" aria-expanded="false" aria-controls="incursionFilters">
-                Incursion Filters <span class="filter-arrow">&darr;</span>
-            </div>
-            <div class="collapse" id="incursionFilters">
-                <div class="checkbox-container">
-                    <label><input type="checkbox" value="HY20" checked> 20-Foot</label>
-                    <label><input type="checkbox" value="HN04"> 4-Foot</label>
-                    <label><input type="checkbox" value="Shaft"> Shaft</label>
-                    <label><input type="checkbox" value="Source Sample"> Source Sample</label>
-                    <label><input type="checkbox" value="Rock"> Rock</label>
-                </div>
-            </div>
-            <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#assayFilters" aria-expanded="false" aria-controls="assayFilters">
-                Assay Filters <span class="filter-arrow">&darr;</span>
-            </div>
-            <div class="collapse" id="assayFilters">
-                <div class="checkbox-container">
-                    <label><input type="checkbox" value="4-Acid Dig"> 4-Acid</label>
-                    <label><input type="checkbox" value="LMB Flux" checked> LMB Flux</label>
-                    <label><input type="checkbox" value="LMB+" checked> LMB+</label>
-                    <label><input type="checkbox" value="LMB+ (Metallurgical)"> LMB+ (Metallurgical)</label>
-                </div>
-            </div>
-            <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#zoneFilters" aria-expanded="false" aria-controls="zoneFilters">
-                Zone Filters <span class="filter-arrow">&darr;</span>
-            </div>
-            <div class="collapse" id="zoneFilters">
-                <div class="checkbox-container">
-                    <label><input type="checkbox" value="1" checked> Zone 1</label>
-                    <label><input type="checkbox" value="2" checked> Zone 2</label>
-                    <label><input type="checkbox" value="3" checked> Zone 3</label>
-                    <label><input type="checkbox" value="4" checked> Zone 4</label>
-                    <label><input type="checkbox" value="5" checked> Zone 5</label>
-                    <label><input type="checkbox" value="6" checked> Zone 6</label>
-                </div>
-            </div>
-            <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#mapCOAFilters" aria-expanded="false" aria-controls="mapCOAFilters">
-                COA Filters <span class="filter-arrow">&darr;</span>
-            </div>
-            <div class="collapse mt-2" id="mapCOAFilters">
-                <div class="checkbox-container" id="mapCOACheckboxContainer">
 
-                </div>
-            </div>
-            <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#cutoffGradeFilterUnderMap" aria-expanded="false" aria-controls="cutoffGradeFilterUnderMap">
-                Cut-off Grade Filter <span class="filter-arrow">&darr;</span>
-            </div>
-            <div class="collapse mt-2" id="cutoffGradeFilterUnderMap">
-                <div class="checkbox-container">
-                    <div class="form-group">
-                        Minimum ppm:
-                        <input type="number" class="form-control" id="minCutoffUnderMap">
+
+
+
+        
+
+        <div class="container-fluid mt-5">
+            <button id="elementPricesBtn" class="btn btn-primary mb-3">View Element Prices</button>
+            <h1 class="mb-4 map-title">Interactive Map</h1>
+            <h5 class="main-title">Cuddeback Lake Basin</h5>
+    
+            <div class="dashboard-container">
+                <div class="dashboard-column" id="averages-column">
+                    <div id="elementAverageBox">
+                        <div style="display: flex; justify-content: space-between;">
+                            <h4>Elemental Data:</h4>
+                        </div>
+                        <div id="selectedElementContainer">
+                            <span id="selectedElementName"></span>
+                            <span id="selectedElement" data-bs-toggle="modal" data-bs-target="#periodicModal" data-tooltip="Expand Element Selection Menu"></span>
+                        </div>
+                        <div id="overallAverages" class="zone-item">
+                            <div class="zone-title basin-title">Basin Statistics:</div>
+                            <div class="zone-stat empty-space">
+                                <span>Assays Done:</span>
+                                <span id="overallAssayCount" style="font-weight: bold;"></span>
+                            </div>
+                            <div class="zone-stat">
+                                <span>Average:</span>
+                                <span id="averageValue" class="average-value"></span>
+                            </div>
+                            <div class="zone-stat">
+                                <span>Value/tonne:</span>
+                                <span id="averageValuePerTonne" class="price-value"></span>
+                            </div>
+                            <div class="zone-stat empty-space-top">
+                                <span>Highest:</span>
+                                <span id="highestValue" class="highest-value"></span>
+                            </div>
+                            <div class="zone-stat">
+                                <span>Value/tonne:</span>
+                                <span id="highestValuePerTonne" class="price-value"></span>
+                            </div>
+                        </div>
+                        <div id="zoneAveragesBox" class="mt-2">
+                            <div class="zone-stat-title">Zone Statistics:</div>
+                            <div id="zoneAveragesList"></div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        Maximum ppm:
-                        <input type="number" class="form-control" id="maxCutoffUnderMap">
+                </div>
+                <div class="dashboard-column" id="map-column">
+                    <div id="map"></div>
+                </div>
+                <div class="dashboard-column" id="filters-column">
+                    <div id="sidebar">
+                            <h5>Filters</h3>
+                            <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#incursionFilters" aria-expanded="false" aria-controls="incursionFilters">
+                                Incursion Type <span class="filter-arrow">&darr;</span>
+                            </button>
+                            <div class="collapse" id="incursionFilters">
+                                <div class="checkbox-container">
+                                    <label><input type="checkbox" value="HY20" checked> 20-Foot</label>
+                                    <label><input type="checkbox" value="HN04"> 4-Foot</label>
+                                    <label><input type="checkbox" value="Shaft"> Shaft</label>
+                                    <label><input type="checkbox" value="Source Sample"> Source Sample</label>
+                                    <label><input type="checkbox" value="Rock"> Rock</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#assayFilters" aria-expanded="false" aria-controls="assayFilters">
+                                Assay Type <span class="filter-arrow">&darr;</span>
+                            </button>
+                            <div class="collapse" id="assayFilters">
+                                <div class="checkbox-container">
+                                    <label><input type="checkbox" value="4-Acid Dig"> 4-Acid</label>
+                                    <label><input type="checkbox" value="LMB Flux" checked> LMB Flux</label>
+                                    <label><input type="checkbox" value="LMB+" checked> LMB+</label>
+                                    <label><input type="checkbox" value="LMB+ (Metallurgical)"> LMB+ (Metallurgical)</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#zoneFilters" aria-expanded="false" aria-controls="zoneFilters">
+                                Zone <span class="filter-arrow">&darr;</span>
+                            </button>
+                            <div class="collapse" id="zoneFilters">
+                                <div class="checkbox-container">
+                                    <label><input type="checkbox" value="1" checked> Zone 1</label>
+                                    <label><input type="checkbox" value="2" checked> Zone 2</label>
+                                    <label><input type="checkbox" value="3" checked> Zone 3</label>
+                                    <label><input type="checkbox" value="4" checked> Zone 4</label>
+                                    <label><input type="checkbox" value="5" checked> Zone 5</label>
+                                    <label><input type="checkbox" value="6" checked> Zone 6</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCOAFilters" aria-expanded="false" aria-controls="sidebarCOAFilters">
+                                COA <span class="filter-arrow">&darr;</span>
+                            </button>
+                            <div class="collapse mt-2" id="sidebarCOAFilters">
+                                <div class="checkbox-container" id="sidebarCOACheckboxContainer">
+                        
+                                </div>
+                            </div>
+                        <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#cutoffGradeFilter" aria-expanded="false" aria-controls="cutoffGradeFilter">
+                            Cut-off Grade <span class="filter-arrow">&darr;</span>
+                        </button>
+                        <div class="collapse mt-2" id="cutoffGradeFilter">
+                                <div class="checkbox-container">
+                                    <div class="form-group">
+                                        Minimum ppm:
+                                        <input type="number" class="form-control" id="minCutoff">
+                                    </div>
+                                    <div class="form-group">
+                                        Maximum ppm:
+                                        <input type="number" class="form-control" id="maxCutoff">
+                                    </div>
+                                    <button class="btn btn-primary mt-2" id="applyCutoff">Apply</button>
+                            </div>
+                        </div>
+                        
+                            <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#overlayFilters" aria-expanded="false" aria-controls="overlayFilters">
+                                Overlays <span class="filter-arrow">&darr;</span>
+                            </button>
+                            <div class="collapse" id="overlayFilters">
+                                <div class="overlay-checkbox-container">
+                                    <label><input type="checkbox" value="Zone" checked> Zone</label>
+                                    <label><input type="checkbox" value="Claims"> Claims</label>
+                                    <label><input type="checkbox" value="Sections"> Sections</label>
+                                <div class="heatmap-controls">
+                                    <h6>Heatmap Controls</h6>
+                                    <button id="toggleHeatmapButton" class="btn btn-sm btn-outline-primary">Show Heatmap</button>
+                                    <button id="heatmapModeButton" class="btn btn-sm btn-outline-danger">Heatmap by Highest ppm</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <button class="btn btn-primary mt-2" id="applyCutoffUnderMap">Apply</button>
-                </div>
-            </div>
-            <div class="filter-toggle" data-bs-toggle="collapse" data-bs-target="#overlayFilters" aria-expanded="false" aria-controls="overlayFilters">
-                Overlays <span class="filter-arrow">&darr;</span>
-            </div>
-            <div class="collapse" id="overlayFilters">
-                <div class="overlay-checkbox-container">
-                    <label><input type="checkbox" value="Zone" checked> Zone</label>
-                    <label><input type="checkbox" value="Claims"> Claims</label>
-                    <label><input type="checkbox" value="Sections"> Sections</label>
-                </div>
-                <div class="heatmap-controls">
-                    <h6>Heatmap Controls</h6>
-                    <button id="toggleHeatmapButton" class="btn btn-sm btn-outline-primary">Show Heatmap</button>
-                    <button id="heatmapModeButton" class="btn btn-sm btn-outline-danger">Heatmap by Highest ppm</button>
-                </div>
-            </div>
         </div>
+  
+
+   
+
+
+
+
+
+
+
+
+
+
+
+<!--Modals-->
+
         <div class="modal fade" id="coaModal" tabindex="-1" aria-labelledby="coaModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" style="max-width: 1150px;">
                 <div class="modal-content">
@@ -283,11 +241,37 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                            <label class="form-check-label" for="darkModeToggle">
+                                Dark Mode
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+
+
+
+    <!--Table Element selection and heatmap Legend-->
         <div id="heatmapLegend" class="legend-wrapper" style="display: none;">
             <h5>Heatmap Legend</h5>
             <div id="legendColors"></div>
         </div>
-        <div class="mt-4">
+        <div class="mt-4" style="width: max-content; margin: auto;">
             <select id="elementSelect" class="form-select select-style mb-3">
                 <option value="Au">Gold (Au)</option>
                 <option value="Pt">Platinum (Pt)</option>
@@ -387,36 +371,6 @@
             </table>
         </div>
     </div>
-
-
-    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="darkModeToggle">
-                        <label class="form-check-label" for="darkModeToggle">
-                            Dark Mode
-                        </label>
-                    </div>
-                    <div class="form-check mt-3">
-                        <input class="form-check-input" type="checkbox" id="filtersOnRightToggle">
-                        <label class="form-check-label" for="filtersOnRightToggle">
-                            Move Filters Under the Map
-                        </label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>    
-</div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>

@@ -1,3 +1,8 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
 .tooltip {
     position: fixed;
     background-color: #333;
@@ -459,6 +464,14 @@
     border-color: #adb5bd;
 }
 
+.dark-mode .fixed-box {
+    background: #252525;
+}
+
+.dark-mode #selectedElement {
+    background: #4f4f4f;
+}
+
 .legend-wrapper {
     display: flex;
     flex-direction: column;
@@ -557,6 +570,7 @@
     margin-bottom: 15px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: transform 0.2s;
+    cursor: pointer;
 }
 
 .element-price-card:hover {
@@ -585,9 +599,15 @@
 }
 
 #elementPricesBtn {
-    position: absolute;
+    position: fixed;
     left: 10px;
     top: 70px;
+}
+
+#elementPricesContainer h4 {
+    margin-bottom: 15px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
 }
 
 .empty-space {

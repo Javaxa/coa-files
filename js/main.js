@@ -483,24 +483,73 @@ function updateElementPricesModal() {
     const container = document.getElementById('elementPricesContainer');
     container.innerHTML = '';
 
-    elementPricesData.forEach(({ symbol, name, price }) => {
-        const pricePerGram = price / 1000; // Convert $/kg to $/g
-        const card = document.createElement('div');
-        card.className = 'col-md-4 col-sm-6';
-        card.innerHTML = `
-            <div class="element-price-card">
-                <div class="element-symbol">${symbol}</div>
-                <div class="element-name">${name}</div>
-                <div class="element-price">$${pricePerGram.toFixed(2)}/g</div>
-            </div>
-        `;
-        container.appendChild(card);
+    const categories = [
+        {
+            name: "Primary (Au + PGM's)",
+            elements: ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru']
+        },
+        {
+            name: "Secondary (REE's)",
+            elements: ['Ce', 'La', 'Sc', 'Th', 'U', 'Y', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb']
+        },
+        {
+            name: "Tertiary (Other Targeted Elements)",
+            elements: elementPricesData.map(el => el.symbol).filter(symbol => 
+                !['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ce', 'La', 'Sc', 'Th', 'U', 'Y', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb'].includes(symbol)
+            )
+        }
+    ];
+
+    categories.forEach(category => {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'col-12 mb-4';
+        categoryDiv.innerHTML = `<h4>${category.name}</h4>`;
+        
+        const row = document.createElement('div');
+        row.className = 'row';
+
+        category.elements.forEach(symbol => {
+            const elementInfo = elementPricesData.find(el => el.symbol === symbol);
+            if (elementInfo) {
+                const pricePerGram = elementInfo.price / 1000; // Convert $/kg to $/g
+                const card = document.createElement('div');
+                card.className = 'col-md-4 col-sm-6 mb-3';
+                card.innerHTML = `
+                    <div class="element-price-card" data-element="${elementInfo.symbol}">
+                        <div class="element-symbol">${elementInfo.symbol}</div>
+                        <div class="element-name">${elementInfo.name}</div>
+                        <div class="element-price">$${pricePerGram.toFixed(2)}/g</div>
+                    </div>
+                `;
+                row.appendChild(card);
+            }
+        });
+
+        categoryDiv.appendChild(row);
+        container.appendChild(categoryDiv);
     });
 
     const timestampDiv = document.createElement('div');
     timestampDiv.className = 'col-12 text-center mt-3';
     timestampDiv.textContent = `Last updated: ${lastUpdated ? lastUpdated.toLocaleString() : 'Never'}`;
     container.appendChild(timestampDiv);
+
+    // Add click event listeners to element cards
+    container.querySelectorAll('.element-price-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const selectedElement = this.dataset.element;
+            const elementSelect = document.getElementById('elementSelect');
+            elementSelect.value = selectedElement;
+            
+            // Trigger the change event
+            const event = new Event('change');
+            elementSelect.dispatchEvent(event);
+
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('elementPricesModal'));
+            modal.hide();
+        });
+    });
 }
 
 document.getElementById('elementPricesBtn').addEventListener('click', () => {
@@ -1151,9 +1200,6 @@ function loadData() {
 
 
 
-
-
-
 function updateSelectedDHAverage() {
     if (selectedIndices.length > 0) {
         let totalElementPPM = 0;
@@ -1420,13 +1466,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
    
-
-
-
-
-
-
-
     document.querySelectorAll('.overlay-checkbox-container input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             if (this.checked) {

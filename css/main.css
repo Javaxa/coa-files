@@ -339,11 +339,8 @@ body {
 }
 
 #sidebar {
-    padding: 10px;
     z-index: 1000;
-    overflow-y: scroll;
     max-height: 800px;
-    right: 0px;
 }
 
 #sidebar .btn {

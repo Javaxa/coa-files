@@ -575,6 +575,7 @@ body {
 
 .element-price-card:hover {
     transform: translateY(-5px);
+    background-color: rgb(244, 244, 244);
 }
 
 .element-symbol {

@@ -292,7 +292,7 @@ document.getElementById('removeCutoff').addEventListener('click', removeCutoff);
 
 function removeCutoff() {
     // Array of input IDs to clear
-    const inputIds = ['minCutoff', 'maxCutoff', 'minCutoffUnderMap', 'maxCutoffUnderMap'];
+    const inputIds = ['minCutoff', 'maxCutoff'];
 
     // Clear all cutoff input fields if they exist
     inputIds.forEach(id => {

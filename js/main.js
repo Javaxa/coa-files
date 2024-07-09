@@ -288,6 +288,31 @@ document.querySelectorAll('[data-tooltip]').forEach(element => {
     });
 });
 
+document.getElementById('removeCutoff').addEventListener('click', removeCutoff);
+
+function removeCutoff() {
+    // Array of input IDs to clear
+    const inputIds = ['minCutoff', 'maxCutoff', 'minCutoffUnderMap', 'maxCutoffUnderMap'];
+
+    // Clear all cutoff input fields if they exist
+    inputIds.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.value = '';
+        } else {
+            console.warn(`Input element with id '${id}' not found.`);
+        }
+    });
+
+    // Delay the application of changes slightly to ensure DOM update
+    setTimeout(() => {
+        const applyCutoffButton = document.getElementById('applyCutoff');
+        if (applyCutoffButton) {
+            applyCutoffButton.click();
+        }
+    }, 50);
+}
+
 
 document.getElementById('applyCutoff').addEventListener('click', () => {
     updateMap();

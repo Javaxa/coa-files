@@ -75,7 +75,7 @@ const coaFiles = {
     { symbol: "Ni", name: "Nickel", price: 18.3 },
     { symbol: "P", name: "Phosphorus", price: 1.15 },
     { symbol: "Pb", name: "Lead", price: 2.01 },
-    { symbol: "Rb", name: "Rubidium", price: 36000 }, // Estimated price, not in original data
+    { symbol: "Rb", name: "Rubidium", price: 150000 }, 
     { symbol: "Re", name: "Rhenium", price: 4670 },
     { symbol: "S", name: "Sulfur", price: 0.6 },
     { symbol: "Sb", name: "Antimony", price: 11.7 },

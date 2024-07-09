@@ -474,13 +474,13 @@ function updateElementPricesModal() {
             elements: ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru']
         },
         {
-            name: "Secondary (REE's)",
-            elements: ['Ag', 'Rb', 'Cs', 'Sc', 'Ce', 'La', 'Th', 'U', 'Y', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb']
+            name: "Secondary (Targeted Elements)",
+            elements: ['Ag', 'Rb', 'Cs', 'Sc']
         },
         {
             name: "Tertiary (Other Targeted Elements)",
             elements: elementPricesData.map(el => el.symbol).filter(symbol => 
-                !['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag', 'Rb', 'Cs', 'Sc', 'Ce', 'La', 'Th', 'U', 'Y', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb'].includes(symbol)
+                !['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag', 'Rb', 'Cs', 'Sc'].includes(symbol)
             )
         }
     ];

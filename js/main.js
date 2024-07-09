@@ -475,12 +475,12 @@ function updateElementPricesModal() {
         },
         {
             name: "Secondary (REE's)",
-            elements: ['Ce', 'La', 'Sc', 'Th', 'U', 'Y', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb']
+            elements: ['Ag', 'Rb', 'Cs', 'Sc', 'Ce', 'La', 'Th', 'U', 'Y', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb']
         },
         {
             name: "Tertiary (Other Targeted Elements)",
             elements: elementPricesData.map(el => el.symbol).filter(symbol => 
-                !['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ce', 'La', 'Sc', 'Th', 'U', 'Y', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb'].includes(symbol)
+                !['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag', 'Rb', 'Cs', 'Sc', 'Ce', 'La', 'Th', 'U', 'Y', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb'].includes(symbol)
             )
         }
     ];
@@ -1311,7 +1311,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMap();
     loadData();
     fetchElementPrices();
-
+    const collapseElements = document.querySelectorAll('.collapse');
     const event = new Event('change');
     document.getElementById('elementSelect').dispatchEvent(event);
 
@@ -1471,14 +1471,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    document.querySelectorAll('.collapse').forEach(collapseElement => {
-        collapseElement.addEventListener('show.bs.collapse', function () {
-            this.previousElementSibling.querySelector('.filter-arrow').textContent = '↑';
+
+        
+        collapseElements.forEach(collapse => {
+            collapse.addEventListener('show.bs.collapse', function() {
+                // Close all other open collapses
+                collapseElements.forEach(otherCollapse => {
+                    if (otherCollapse !== collapse && otherCollapse.classList.contains('show')) {
+                        bootstrap.Collapse.getInstance(otherCollapse).hide();
+                    }
+                });
+    
+                // Update arrow direction for the opening collapse
+                const button = document.querySelector(`[data-bs-target="#${this.id}"]`);
+                if (button) {
+                    const arrow = button.querySelector('.filter-arrow');
+                    if (arrow) arrow.textContent = '↑';
+                }
+            });
+    
+            collapse.addEventListener('hide.bs.collapse', function() {
+                // Update arrow direction for the closing collapse
+                const button = document.querySelector(`[data-bs-target="#${this.id}"]`);
+                if (button) {
+                    const arrow = button.querySelector('.filter-arrow');
+                    if (arrow) arrow.textContent = '↓';
+                }
+            });
         });
-        collapseElement.addEventListener('hide.bs.collapse', function () {
-            this.previousElementSibling.querySelector('.filter-arrow').textContent = '↓';
-        });
-    });
 
     updateElementTable();
 });

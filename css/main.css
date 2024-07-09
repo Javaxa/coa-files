@@ -340,7 +340,7 @@ body {
 
 #sidebar {
     z-index: 1000;
-    max-height: 800px;
+    max-height: 650px;
 }
 
 #sidebar .btn {

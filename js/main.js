@@ -495,12 +495,12 @@ function updateElementPricesModal() {
 
     const categories = [
         {
-            name: "Primary (Au + PGM's)",
-            elements: ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru']
+            name: "Primary (PGM's + Others)",
+            elements: ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag']
         },
         {
             name: "Secondary (Targeted Elements)",
-            elements: ['Ag', 'Rb', 'Cs', 'Sc']
+            elements: ['Rb', 'Cs', 'Sc']
         },
         {
             name: "Tertiary (Other Targeted Elements)",

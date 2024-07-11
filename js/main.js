@@ -116,6 +116,7 @@ const coaFiles = {
     let heatmapMode = 'average'; // default mode
     let barChart = null;
     let pieChart = null;
+    let isSortedByValue = false;
     const metallurgicalTypes = ['LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', 'LMB+ (Mtlg-AqRg)'];
     const metallurgicalCheckboxes = document.querySelectorAll('input[value="LMB+ (Metallurgical)"]');
     let selectedIndices = [];
@@ -520,21 +521,24 @@ function updateElementPricesModal() {
         const row = document.createElement('div');
         row.className = 'row';
 
-        category.elements.forEach(symbol => {
-            const elementInfo = elementPricesData.find(el => el.symbol === symbol);
-            if (elementInfo) {
-                const pricePerGram = elementInfo.price / 1000; // Convert $/kg to $/g
-                const card = document.createElement('div');
-                card.className = 'col-md-4 col-sm-6 mb-3';
-                card.innerHTML = `
-                    <div class="element-price-card" data-element="${elementInfo.symbol}">
-                        <div class="element-symbol">${elementInfo.symbol}</div>
-                        <div class="element-name">${elementInfo.name}</div>
-                        <div class="element-price">$${pricePerGram.toFixed(2)}/g</div>
-                    </div>
-                `;
-                row.appendChild(card);
-            }
+        let elements = category.elements.map(symbol => elementPricesData.find(el => el.symbol === symbol)).filter(el => el);
+
+        if (isSortedByValue) {
+            elements.sort((a, b) => b.price - a.price);
+        }
+
+        elements.forEach(elementInfo => {
+            const pricePerGram = elementInfo.price / 1000; // Convert $/kg to $/g
+            const card = document.createElement('div');
+            card.className = 'col-md-4 col-sm-6 mb-3';
+            card.innerHTML = `
+                <div class="element-price-card" data-element="${elementInfo.symbol}">
+                    <div class="element-symbol">${elementInfo.symbol}</div>
+                    <div class="element-name">${elementInfo.name}</div>
+                    <div class="element-price">$${pricePerGram.toFixed(2)}/g</div>
+                </div>
+            `;
+            row.appendChild(card);
         });
 
         categoryDiv.appendChild(row);
@@ -564,10 +568,19 @@ function updateElementPricesModal() {
     });
 }
 
+document.getElementById('sortElementsBtn').addEventListener('click', function() {
+    isSortedByValue = !isSortedByValue;
+    this.textContent = isSortedByValue ? 'Return to default view' : 'Sort by Value';
+    updateElementPricesModal();
+});
+
+
 document.getElementById('elementPricesBtn').addEventListener('click', () => {
     if (Object.keys(elementPrices).length === 0) {
         fetchElementPrices();
     }
+    isSortedByValue = false;
+    document.getElementById('sortElementsBtn').textContent = 'Sort by Value';
     updateElementPricesModal();
     const modal = new bootstrap.Modal(document.getElementById('elementPricesModal'));
     modal.show();

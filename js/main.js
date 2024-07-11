@@ -1286,6 +1286,8 @@ document.getElementById('elementSelect').addEventListener('change', () => {
 });
 
 
+
+
 function openVisualizationModal() {
     const modal = new bootstrap.Modal(document.getElementById('visualizationModal'));
     modal.show();

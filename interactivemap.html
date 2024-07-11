@@ -89,6 +89,7 @@
                         <div id="zoneAveragesBox" class="mt-2">
                             <div class="zone-stat-title">Zone Statistics:</div>
                             <div id="zoneAveragesList"></div>
+                            <button id="visualizeButton" class="btn btn-sm btn-outline-primary" style="width: 100%;">Visualize as Charts</button>
                         </div>
                     </div>
                 </div>
@@ -192,7 +193,20 @@
 
 
 <!--Modals-->
-
+<div class="modal fade" id="visualizationModal" tabindex="-1" aria-labelledby="visualizationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="visualizationModalLabel">Zone Statistics Visualization</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <canvas id="barChart"></canvas>
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
         <div class="modal fade" id="coaModal" tabindex="-1" aria-labelledby="coaModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" style="max-width: 1150px;">
                 <div class="modal-content">
@@ -379,6 +393,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

@@ -36,14 +36,14 @@ const coaFiles = {
     let sampleData = [];
     let elementData = {};
     const elementPricesData = [
-    { symbol: "Au", name: "Gold", price: 108900 },
-    { symbol: "Pt", name: "Platinum", price: 30200 },
-    { symbol: "Pd", name: "Palladium", price: 52000 },
-    { symbol: "Rh", name: "Rhodium", price: 150000 },
-    { symbol: "Ir", name: "Iridium", price: 182000 },
+    { symbol: "Au", name: "Gold", price: 78000 },
+    { symbol: "Pt", name: "Platinum", price: 32000 },
+    { symbol: "Pd", name: "Palladium", price: 32000 },
+    { symbol: "Rh", name: "Rhodium", price: 140000 },
+    { symbol: "Ir", name: "Iridium", price: 151000 },
     { symbol: "Os", name: "Osmium", price: 400000 },
-    { symbol: "Ru", name: "Ruthenium", price: 46000 },
-    { symbol: "Ag", name: "Silver", price: 814 },
+    { symbol: "Ru", name: "Ruthenium", price: 13000 },
+    { symbol: "Ag", name: "Silver", price: 1000 },
     { symbol: "Al", name: "Aluminum", price: 2.4 },
     { symbol: "As", name: "Arsenic", price: 1.51 },
     { symbol: "B", name: "Boron", price: 2.03 },
@@ -75,7 +75,7 @@ const coaFiles = {
     { symbol: "Ni", name: "Nickel", price: 18.3 },
     { symbol: "P", name: "Phosphorus", price: 1.15 },
     { symbol: "Pb", name: "Lead", price: 2.01 },
-    { symbol: "Rb", name: "Rubidium", price: 120000 }, 
+    { symbol: "Rb", name: "Rubidium", price: 36000 }, 
     { symbol: "Re", name: "Rhenium", price: 4670 },
     { symbol: "S", name: "Sulfur", price: 0.6 },
     { symbol: "Sb", name: "Antimony", price: 11.7 },
@@ -114,6 +114,8 @@ const coaFiles = {
     let heatLayer;
     let heatmapEnabled = false;
     let heatmapMode = 'average'; // default mode
+    let barChart = null;
+    let pieChart = null;
     const metallurgicalTypes = ['LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', 'LMB+ (Mtlg-AqRg)'];
     const metallurgicalCheckboxes = document.querySelectorAll('input[value="LMB+ (Metallurgical)"]');
     let selectedIndices = [];
@@ -739,6 +741,7 @@ function hideModalBackdrop(modalId) {
 
         function viewExcelFile(filePath) {
             fetch(filePath)
+            
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -1279,14 +1282,145 @@ document.getElementById('elementSelect').addEventListener('change', () => {
     updateMap();
     updateSelectedDHAverage();
     updateElementAverages();
+    updateZoneAverages();
 });
 
 
+function openVisualizationModal() {
+    const modal = new bootstrap.Modal(document.getElementById('visualizationModal'));
+    modal.show();
+    
+    // Wait for the modal to be fully visible before rendering charts
+    document.getElementById('visualizationModal').addEventListener('shown.bs.modal', function () {
+        renderCharts();
+    }, { once: true }); // Use { once: true } to ensure the listener is removed after it's called
+}
 
-    function updateZoneAverages() {
+function renderCharts() {
+    renderBarChart();
+    renderPieChart();
+}
+
+function renderBarChart() {
+    const ctx = document.getElementById('barChart').getContext('2d');
+    
+    // Destroy existing chart if it exists
+    if (barChart) {
+        barChart.destroy();
+    }
+
+    barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: visualizationData.map(d => d.name),
+            datasets: [
+                {
+                    label: 'Average (ppm)',
+                    data: visualizationData.map(d => d.average),
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                },
+                {
+                    label: 'Highest (ppm)',
+                    data: visualizationData.map(d => d.highest),
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'PPM'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += formatNumberWithCommas(context.parsed.y.toFixed(2)) + ' ppm';
+                            }
+                            const data = visualizationData[context.dataIndex];
+                            if (context.datasetIndex === 0) {
+                                label += ` ($${formatNumberWithCommas(data.averagePrice.toFixed(2))}/tonne)`;
+                            } else {
+                                label += ` ($${formatNumberWithCommas(data.highestPrice.toFixed(2))}/tonne)`;
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function renderPieChart() {
+    const ctx = document.getElementById('pieChart').getContext('2d');
+    
+    // Destroy existing chart if it exists
+    if (pieChart) {
+        pieChart.destroy();
+    }
+
+    pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: visualizationData.map(d => d.name),
+            datasets: [{
+                data: visualizationData.map(d => d.count),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Assay Count Distribution'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed !== null) {
+                                label += context.parsed + ' assays';
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+document.getElementById('visualizeButton').addEventListener('click', () => {
+    openVisualizationModal();
+});
+
+function updateZoneAverages() {
     const selectedElement = document.getElementById('elementSelect').value;
-    const zoneAverages = {};
-    const zoneCounts = {};
+    const elementPrice = elementPricesData.find(el => el.symbol === selectedElement)?.price || 0;
+    const zoneData = {};
 
     sampleData.forEach((sample, index) => {
         if (activeIncursionTypes.has(sample['Incursion Type']) &&
@@ -1299,25 +1433,74 @@ document.getElementById('elementSelect').addEventListener('change', () => {
                                  parseFloat(elementData[index][selectedElement].replace(/["',]/g, '')) : NaN;
 
             if (!isNaN(elementValue)) {
-                if (!zoneAverages[zone]) {
-                    zoneAverages[zone] = 0;
-                    zoneCounts[zone] = 0;
+                if (!zoneData[zone]) {
+                    zoneData[zone] = { total: 0, count: 0, highest: -Infinity };
                 }
-                zoneAverages[zone] += elementValue;
-                zoneCounts[zone]++;
+                zoneData[zone].total += elementValue;
+                zoneData[zone].count++;
+                zoneData[zone].highest = Math.max(zoneData[zone].highest, elementValue);
+            } if (document.getElementById('visualizationModal').classList.contains('show')) {
+                renderCharts();
             }
         }
     });
 
+    visualizationData = Object.entries(zoneData).map(([zone, data]) => {
+        const average = data.count > 0 ? data.total / data.count : 0;
+        return {
+            name: `Zone ${zone}`,
+            average: average,
+            highest: data.highest,
+            count: data.count,
+            averagePrice: (average / 1000) * elementPrice,
+            highestPrice: (data.highest / 1000) * elementPrice
+        };
+    });
+
+    // Sort visualization data by zone number
+    visualizationData.sort((a, b) => {
+        const zoneA = parseInt(a.name.split(' ')[1]);
+        const zoneB = parseInt(b.name.split(' ')[1]);
+        return zoneA - zoneB;
+    });
+
+    // Update the DOM for zone averages list (if needed)
     const zoneAveragesList = document.getElementById('zoneAveragesList');
     zoneAveragesList.innerHTML = '';
 
-    for (const [zone, total] of Object.entries(zoneAverages)) {
-        const average = total / zoneCounts[zone];
-        const listItem = document.createElement('li');
-        listItem.textContent = `Zone ${zone}: ${formatNumberWithCommas(average.toFixed(2))} ppm`;
-        zoneAveragesList.appendChild(listItem);
-    }
+    Object.entries(zoneData).sort((a, b) => a[0].localeCompare(b[0])).forEach(([zone, data]) => {
+        const average = data.count > 0 ? data.total / data.count : 0;
+        const zoneItem = document.createElement('div');
+        zoneItem.className = 'zone-item';
+        
+        const pricePerTonneHighest = (data.highest / 1000) * elementPrice;
+        const pricePerTonneAverage = (average / 1000) * elementPrice;
+
+        zoneItem.innerHTML = `
+            <div class="zone-title">Zone ${zone}</div>
+            <div class="zone-stat empty-space">
+                <span>Assays Done:</span>
+                <span style="font-weight: bold;">${data.count}</span>
+            </div>
+            <div class="zone-stat">
+                <span>Average:</span>
+                <span class="average-value">${formatNumberWithCommas(average.toFixed(2))} ppm</span>
+            </div>
+            <div class="zone-stat">
+                <span>Value/tonne:</span>
+                <span class="price-value">$${formatNumberWithCommas(pricePerTonneAverage.toFixed(2))}</span>
+            </div>
+            <div class="zone-stat empty-space-top">
+                <span>Highest:</span>
+                <span class="highest-value">${formatNumberWithCommas(data.highest.toFixed(2))} ppm</span>
+            </div>
+            <div class="zone-stat">
+                <span>Value/tonne:</span>
+                <span class="price-value">$${formatNumberWithCommas(pricePerTonneHighest.toFixed(2))}</span>
+            </div>
+        `;
+        zoneAveragesList.appendChild(zoneItem);
+    });
 }
 
 
@@ -1382,15 +1565,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateMetallurgicalCheckbox(checkbox.checked);
     });
 
-        
-
-    function handleMetallurgicalCheckboxChange(e) {
-        updateMetallurgicalCheckbox(e.target);
-        updateMap();
-        updateElementTable();
-        updateElementAverages();
-    }
-
 
 
     document.querySelectorAll('#elementTable th.sortable').forEach(header => {
@@ -1409,22 +1583,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-// Update the existing COA cell click event handler
- // Function to open files from Google Drive
- function openFileFromGoogleDrive(fileId, fileType) {
-            let viewerUrl = '';
-
-            if (fileType === 'pdf') {
-                viewerUrl = `https://drive.google.com/file/d/${fileId}/preview`;
-            } else if (fileType === 'xlsx' || fileType === 'xls') {
-                viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=https://drive.google.com/uc?export=download&id=${fileId}`;
-            }
-
-            document.getElementById('coaIframe').src = viewerUrl;
-            document.getElementById('coaIframe').style.display = 'block';
-            document.getElementById('excelContainer').style.display = 'none';
-        }
 
         // Existing COA cell click event handler
         document.querySelector('#elementTable tbody').addEventListener('click', function(e) {

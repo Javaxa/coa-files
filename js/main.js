@@ -116,6 +116,9 @@ const coaFiles = {
     let heatmapMode = 'average';
     let barChart = null;
     let pieChart = null;
+    let top20Data = [];
+    let rawSampleData = [];
+    let rawElementData = {};
     let isSortedByValue = false;
     let selectedIndices = [];
     let currentSortColumn = 'Element (PPM)';
@@ -1594,7 +1597,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-
+ 
 
         // Existing COA cell click event handler
         document.querySelector('#elementTable tbody').addEventListener('click', function(e) {
@@ -1695,5 +1698,205 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+
+  
+
+
+
+
+
+        function loadTop20Data() {
+            const csvFileUrl = 'https://main--stellular-khapse-e51f2d.netlify.app/mapdata.csv';
+            const timestamp = new Date().getTime();
+            fetch(`${csvFileUrl}?t=${timestamp}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    parseTop20CSV(text);
+                    calculateTop20Elements();
+                })
+                .catch(error => {
+                    console.error('Error loading the CSV file for Top 20:', error);
+                });
+        }
+        
+        function parseTop20CSV(text) {
+            const lines = text.trim().split('\n');
+            rawSampleData = lines.slice(1).map(line => {
+                const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                return headers.reduce((object, header, index) => {
+                    let value = values[index] ? values[index].trim() : '';
+                    if (value.startsWith('"') && value.endsWith('"')) {
+                        value = value.slice(1, -1);
+                    }
+                    object[header.trim()] = value;
+                    return object;
+                }, {});
+            });
+        
+            lines.slice(1).forEach((line, rowIndex) => {
+                const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                elements.forEach((element, elementIndex) => {
+                    const elementColumnIndex = headers.length + elementIndex;
+                    let value = values[elementColumnIndex] ? values[elementColumnIndex].trim() : '';
+                    if (value.startsWith('"') && value.endsWith('"')) {
+                        value = value.slice(1, -1);
+                    }
+                    value = value.replace(/,/g, ''); 
+                    rawElementData[rowIndex] = rawElementData[rowIndex] || {};
+                    rawElementData[rowIndex][element] = value;
+                });
+            });
+        }
+        
+        
+function calculateTop20Elements() {
+    console.log('Calculating top 20 elements');
+    const selectedZone = document.querySelector('input[name="zoneFilter"]:checked').value;
+    top20Data = [];
+
+    elements.forEach(element => {
+        let highest = -Infinity;
+        let total = 0;
+        let count = 0;
+
+        rawSampleData.forEach((sample, index) => {
+            if (selectedZone === 'all' || sample.Zone === selectedZone) {
+                const elementValue = rawElementData[index] && rawElementData[index][element] ? 
+                                     parseFloat(rawElementData[index][element].replace(/["',]/g, '')) : NaN;
+
+                if (!isNaN(elementValue)) {
+                    highest = Math.max(highest, elementValue);
+                    total += elementValue;
+                    count++;
+                }
+            }
+        });
+        
+                const average = count > 0 ? total / count : 0;
+                const elementPrice = elementPricesData.find(el => el.symbol === element)?.price || 0;
+                const highestValuePerTonne = (highest / 1000) * elementPrice;
+                const averageValuePerTonne = (average / 1000) * elementPrice;
+        
+                top20Data.push({
+                    element,
+                    highest,
+                    highestValuePerTonne,
+                    average,
+                    averageValuePerTonne
+                });
+            });
+        
+            top20Data.sort((a, b) => b.highestValuePerTonne - a.highestValuePerTonne);
+            top20Data = top20Data.slice(0, 20);
+        
+            console.log('Top 20 data calculated:', top20Data);
+            updateTop20Table();
+            updateTop20Charts();
+        }
+        
+        function updateTop20Table() {
+            console.log('Updating top 20 table');
+            const tbody = document.querySelector('#top20Table tbody');
+            if (!tbody) {
+                console.error('Top 20 table body not found');
+                return;
+            }
+            tbody.innerHTML = '';
+        
+            top20Data.forEach(data => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${data.element}</td>
+                <td class="highest-value-2">${formatNumberWithCommas(data.highest.toFixed(2))} ppm</td>
+                <td class="dollar-value-2">$${formatNumberWithCommas(data.highestValuePerTonne.toFixed(2))}</td>
+                <td class="average-value-2">${formatNumberWithCommas(data.average.toFixed(2))} ppm</td>
+                <td class="dollar-value-2">$${formatNumberWithCommas(data.averageValuePerTonne.toFixed(2))}</td>
+            `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function updateTop20Charts() {
+            console.log('Updating top 20 charts');
+            updateBarChart('highestValueChart', 'Highest Value ($/tonne)', top20Data.map(d => d.highestValuePerTonne));
+            updateBarChart('averageValueChart', 'Average Value ($/tonne)', top20Data.map(d => d.averageValuePerTonne));
+        }
+        
+        function updateBarChart(canvasId, label, data) {
+            console.log(`Updating bar chart: ${canvasId}`);
+            const ctx = document.getElementById(canvasId);
+            if (!ctx) {
+                console.error(`Canvas with id ${canvasId} not found`);
+                return;
+            }
+            
+            if (window[canvasId] && typeof window[canvasId].destroy === 'function') {
+                window[canvasId].destroy();
+            }
+        
+            window[canvasId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: top20Data.map(d => d.element),
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '$/tonne'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: label
+                        }
+                    }
+                }
+            });
+            console.log(`Bar chart ${canvasId} updated successfully`);
+        }
+        
+        document.getElementById('viewTop20Button').addEventListener('click', () => {
+            console.log('View Top 20 button clicked');
+            if (rawSampleData.length === 0) {
+                loadTop20Data();
+            } else {
+                calculateTop20Elements();
+            }
+            const modal = new bootstrap.Modal(document.getElementById('top20Modal'));
+            modal.show();
+        });
+        
+        document.querySelectorAll('input[name="zoneFilter"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                console.log('Zone filter changed');
+                calculateTop20Elements();
+            });
+        });
+
+    
+
     updateElementTable();
+    loadTop20Data();
 });
+

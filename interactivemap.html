@@ -176,6 +176,9 @@
                                 </div>
                             </div>
                         </div>
+                        <button id="viewTop20Button" class="btn btn-secondary d-flex justify-content-between align-items-center">
+                            View Top 20 Valuable Elements
+                        </button>
                     </div>
         </div>
   
@@ -193,6 +196,71 @@
 
 
 <!--Modals-->
+<div class="modal fade" id="top20Modal" tabindex="-1" aria-labelledby="top20ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="top20ModalLabel">Top 20 Valuable Elements</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Filter by Zone:</label>
+                    <div class="zone-filter-container">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zoneAll" value="all" checked>
+                            <label class="form-check-label" for="zoneAll">All Zones</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zone1" value="1">
+                            <label class="form-check-label" for="zone1">Zone 1</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zone2" value="2">
+                            <label class="form-check-label" for="zone2">Zone 2</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zone3" value="3">
+                            <label class="form-check-label" for="zone3">Zone 3</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zone4" value="4">
+                            <label class="form-check-label" for="zone4">Zone 4</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zone5" value="5">
+                            <label class="form-check-label" for="zone5">Zone 5</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zone6" value="6">
+                            <label class="form-check-label" for="zone6">Zone 6</label>
+                        </div>
+                    </div>
+                </div>
+                <table id="top20Table" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Element</th>
+                            <th>Highest Value (ppm)</th>
+                            <th>Highest Value ($/tonne)</th>
+                            <th>Average Value (ppm)</th>
+                            <th>Average Value ($/tonne)</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <canvas id="highestValueChart"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="averageValueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="visualizationModal" tabindex="-1" aria-labelledby="visualizationModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

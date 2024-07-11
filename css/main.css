@@ -772,3 +772,12 @@ body {
         overflow-y: auto;
     }
 }
+
+.chart-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.chart-wrapper {
+    width: 48%;
+}

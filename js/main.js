@@ -1317,12 +1317,12 @@ function renderBarChart() {
                 {
                     label: 'Average (ppm)',
                     data: visualizationData.map(d => d.average),
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                    backgroundColor: '#ff0000'
                 },
                 {
                     label: 'Highest (ppm)',
                     data: visualizationData.map(d => d.highest),
-                    backgroundColor: 'rgba(255, 99, 132, 0.6)'
+                    backgroundColor: '#34b2ef'
                 }
             ]
         },
@@ -1371,20 +1371,28 @@ function renderPieChart() {
         pieChart.destroy();
     }
 
+    // Define color mapping for zones
+    const zoneColors = {
+        'Zone 1': '#e02a2c',
+        'Zone 2': '#44a0ff',
+        'Zone 3': '#5035d8',
+        'Zone 4': '#3cdf19',
+        'Zone 5': '#ffcd57',
+        'Zone 6': '#c61dde'
+    };
+
+    // Sort visualizationData to ensure consistent order
+    const sortedData = visualizationData.sort((a, b) => {
+        return parseInt(a.name.split(' ')[1]) - parseInt(b.name.split(' ')[1]);
+    });
+
     pieChart = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: visualizationData.map(d => d.name),
+            labels: sortedData.map(d => d.name),
             datasets: [{
-                data: visualizationData.map(d => d.count),
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 206, 86, 0.6)',
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(153, 102, 255, 0.6)',
-                    'rgba(255, 159, 64, 0.6)'
-                ]
+                data: sortedData.map(d => d.count),
+                backgroundColor: sortedData.map(d => zoneColors[d.name]),
             }]
         },
         options: {
@@ -1407,6 +1415,9 @@ function renderPieChart() {
                             return label;
                         }
                     }
+                },
+                legend: {
+                    position: 'right',
                 }
             }
         }
@@ -1462,44 +1473,6 @@ function updateZoneAverages() {
         const zoneA = parseInt(a.name.split(' ')[1]);
         const zoneB = parseInt(b.name.split(' ')[1]);
         return zoneA - zoneB;
-    });
-
-    // Update the DOM for zone averages list (if needed)
-    const zoneAveragesList = document.getElementById('zoneAveragesList');
-    zoneAveragesList.innerHTML = '';
-
-    Object.entries(zoneData).sort((a, b) => a[0].localeCompare(b[0])).forEach(([zone, data]) => {
-        const average = data.count > 0 ? data.total / data.count : 0;
-        const zoneItem = document.createElement('div');
-        zoneItem.className = 'zone-item';
-        
-        const pricePerTonneHighest = (data.highest / 1000) * elementPrice;
-        const pricePerTonneAverage = (average / 1000) * elementPrice;
-
-        zoneItem.innerHTML = `
-            <div class="zone-title">Zone ${zone}</div>
-            <div class="zone-stat empty-space">
-                <span>Assays Done:</span>
-                <span style="font-weight: bold;">${data.count}</span>
-            </div>
-            <div class="zone-stat">
-                <span>Average:</span>
-                <span class="average-value">${formatNumberWithCommas(average.toFixed(2))} ppm</span>
-            </div>
-            <div class="zone-stat">
-                <span>Value/tonne:</span>
-                <span class="price-value">$${formatNumberWithCommas(pricePerTonneAverage.toFixed(2))}</span>
-            </div>
-            <div class="zone-stat empty-space-top">
-                <span>Highest:</span>
-                <span class="highest-value">${formatNumberWithCommas(data.highest.toFixed(2))} ppm</span>
-            </div>
-            <div class="zone-stat">
-                <span>Value/tonne:</span>
-                <span class="price-value">$${formatNumberWithCommas(pricePerTonneHighest.toFixed(2))}</span>
-            </div>
-        `;
-        zoneAveragesList.appendChild(zoneItem);
     });
 }
 

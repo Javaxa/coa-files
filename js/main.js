@@ -113,18 +113,15 @@ const coaFiles = {
     let activeCOAs = new Set();
     let heatLayer;
     let heatmapEnabled = false;
-    let heatmapMode = 'average'; // default mode
+    let heatmapMode = 'average';
     let barChart = null;
     let pieChart = null;
     let isSortedByValue = false;
-    const metallurgicalTypes = ['LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', 'LMB+ (Mtlg-AqRg)'];
-    const metallurgicalCheckboxes = document.querySelectorAll('input[value="LMB+ (Metallurgical)"]');
     let selectedIndices = [];
     let currentSortColumn = 'Element (PPM)';
     let currentSortDirection = 'desc';
     let activeZones = new Set(['1', '2', '3', '4', '5', '6']);
-    let activeAssayTypes = new Set([
-    'LMB Flux', 'LMB+']);
+    let activeAssayTypes = new Set(['LMB Flux', 'LMB+']);
     let activeIncursionTypes = new Set(['HY20']);
     let overlayImages = {
         "Zone": {
@@ -152,7 +149,8 @@ const coaFiles = {
             layer: null
         }
     };
-
+    const metallurgicalTypes = ['LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', 'LMB+ (Mtlg-AqRg)'];
+    const metallurgicalCheckboxes = document.querySelectorAll('input[value="LMB+ (Metallurgical)"]');
     const headers = ['Description', 'Incursion Type', 'Lab', 'Stid', 'Zone', 'Northing', 'Easting', 'DH', 'Depth', 'Assay Type', 'COA', 'Weight'];
     const elements = ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag', 'Al', 'As', 'B', 'Ba', 'Be', 'Bi', 'Ca', 'Cd', 'Ce', 'Co', 'Cr', 'Cs', 'Cu', 'Cl', 'Fe', 'Ga', 'Ge', 'Hf', 'Hg', 'In', 'K', 'La', 'Li', 'Mg', 'Mn', 'Mo', 'Na', 'Nb', 'Ni', 'P', 'Pb', 'Rb', 'Re', 'S', 'Sb', 'Sc', 'Se', 'Sn', 'Sr', 'Ta', 'Te', 'Th', 'Ti', 'Tl', 'U', 'V', 'W', 'Y', 'Zn', 'Zr', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb'];
 
@@ -1224,7 +1222,28 @@ function loadData() {
     updateSelectedDHAverage(); 
 }
 
+function updateSelectedElementDisplay() {
+    const selectedElement = document.getElementById('elementSelect').value;
+    const elementInfo = elementPricesData.find(el => el.symbol === selectedElement);
+    
+    // Update main display
+    if (elementInfo) {
+        document.getElementById('selectedElementName').textContent = elementInfo.name;
+        document.getElementById('selectedElement').textContent = elementInfo.symbol;
+    } else {
+        document.getElementById('selectedElementName').textContent = '';
+        document.getElementById('selectedElement').textContent = selectedElement;
+    }
 
+    // Update modal display
+    if (elementInfo) {
+        document.getElementById('modalSelectedElementName').textContent = elementInfo.name;
+        document.getElementById('modalSelectedElement').textContent = elementInfo.symbol;
+    } else {
+        document.getElementById('modalSelectedElementName').textContent = '';
+        document.getElementById('modalSelectedElement').textContent = selectedElement;
+    }
+}
 
 function updateSelectedDHAverage() {
     if (selectedIndices.length > 0) {
@@ -1291,11 +1310,15 @@ document.getElementById('elementSelect').addEventListener('change', () => {
         document.getElementById('selectedElement').textContent = selectedElement;
     }
 
+    updateSelectedElementDisplay();
     updateElementTable();
     updateMap();
     updateSelectedDHAverage();
     updateElementAverages();
     updateZoneAverages();
+    if (document.getElementById('visualizationModal').classList.contains('show')) {
+        renderCharts();
+    }
 });
 
 
@@ -1507,6 +1530,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMap();
     loadData();
     fetchElementPrices();
+    updateSelectedElementDisplay();
     const collapseElements = document.querySelectorAll('.collapse');
     const event = new Event('change');
     document.getElementById('elementSelect').dispatchEvent(event);

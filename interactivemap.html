@@ -194,10 +194,14 @@
 
 <!--Modals-->
 <div class="modal fade" id="visualizationModal" tabindex="-1" aria-labelledby="visualizationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" style="max-width: 1100px;">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="visualizationModalLabel">Zone Statistics Visualization</h5>
+                <div id="modalSelectedElementContainer" class="ms-3">
+                    <span id="modalSelectedElementName"></span>
+                    <span id="modalSelectedElement"></span>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

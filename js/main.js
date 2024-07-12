@@ -682,70 +682,78 @@ function hideModalBackdrop(modalId) {
 
 
     function addPLSSOverlay() {
-        if (plssLayer) {
-            map.addLayer(plssLayer);
-            return;
-        }
+        console.log('addPLSSOverlay called');
+        return new Promise((resolve, reject) => {
+            if (plssLayer) {
+                console.log('PLSS layer already exists, adding to map');
+                map.addLayer(plssLayer);
+                plssLayerAdded = true;
+                resolve();
+            } else {
+                console.log('Fetching PLSS data');
+                fetch('/Public_Land_Survey_System_(PLSS)__Sections.geojson')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('PLSS data loaded');
+                        plssLayer = L.geoJSON(data, {
+                            style: function(feature) {
+                                return {
+                                    color: '#ff7800',
+                                    weight: 1,
+                                    opacity: 0.65,
+                                    fillOpacity: 0.1
+                                };
+                            },
+                            onEachFeature: function(feature, layer) {
+                                if (feature.properties) {
+                                    let townshipProp = Object.keys(feature.properties).find(key => key.toLowerCase().includes('town'));
+                                    let rangeProp = Object.keys(feature.properties).find(key => key.toLowerCase().includes('range'));
+                                    let sectionProp = Object.keys(feature.properties).find(key => key.toLowerCase().includes('section'));
+                                    
+                                    let township = feature.properties[townshipProp] || 'N/A';
+                                    let range = feature.properties[rangeProp] || 'N/A';
+                                    let section = feature.properties[sectionProp] || 'N/A';
+                                    
+                                    console.log('Township prop:', townshipProp, 'Range prop:', rangeProp, 'Section prop:', sectionProp);
+                                    console.log('Township:', township, 'Range:', range, 'Section:', section);
     
-        fetch('/Public_Land_Survey_System_(PLSS)__Sections.geojson')
-            .then(response => response.json())
-            .then(data => {
-                console.log('PLSS data loaded:', data);
-    
-                plssLayer = L.geoJSON(data, {
-                    style: function(feature) {
-                        return {
-                            color: '#ff7800',
-                            weight: 1,
-                            opacity: 0.65,
-                            fillOpacity: 0.1
-                        };
-                    },
-                    onEachFeature: function(feature, layer) {
-                        console.log('Feature properties:', feature.properties);
-                        
-                        if (feature.properties) {
-                            // Find the correct property names for township and range
-                            let townshipProp = Object.keys(feature.properties).find(key => key.toLowerCase().includes('town'));
-                            let rangeProp = Object.keys(feature.properties).find(key => key.toLowerCase().includes('range'));
-    
-                            console.log('Township property:', townshipProp);
-                            console.log('Range property:', rangeProp);
-    
-                            let township = feature.properties[townshipProp] || 'N/A';
-                            let range = feature.properties[rangeProp] || 'N/A';
-    
-                            // Tooltip content
-                            let tooltipContent = `<div class="custom-plss-tooltip">
-                                                    <strong>Township:</strong> ${township}<br>
-                                                    <strong>Range:</strong> ${range}
-                                                  </div>`;
-    
-                            // Bind the custom tooltip
-                            layer.bindTooltip(tooltipContent, {
-                                permanent: false,
-                                direction: 'top',
-                                className: 'plss-tooltip'
-                            });
-    
-                            // Popup content
-                            let popupContent = '<b>PLSS Info:</b><br>';
-                            for (let key in feature.properties) {
-                                popupContent += `<strong>${key}:</strong> ${feature.properties[key]}<br>`;
+                                    let tooltipContent = `<div class="custom-plss-tooltip">
+                                                            <strong>Township:</strong> ${township}<br>
+                                                            <strong>Range:</strong> ${range}<br>
+                                                            <strong>Section:</strong> ${section}
+                                                          </div>`;
+                                    
+                                    layer.bindTooltip(tooltipContent, {
+                                        permanent: false,
+                                        direction: 'top',
+                                        className: 'plss-tooltip'
+                                    });
+                                    
+                                    let popupContent = '<b>PLSS Info:</b><br>';
+                                    for (let key in feature.properties) {
+                                        popupContent += `<strong>${key}:</strong> ${feature.properties[key]}<br>`;
+                                    }
+                                    
+                                    layer.bindPopup(popupContent);
+                                }
                             }
-    
-                            // Bind popup
-                            layer.bindPopup(popupContent);
-                        }
-                    }
-                }).addTo(map);
-    
-                // Add PLSS layer to layer control
-                layerControl.addOverlay(plssLayer, 'PLSS Grid');
-            })
-            .catch(error => {
-                console.error('Error loading PLSS data:', error);
-            });
+                        });
+                        
+                        console.log('Adding PLSS layer to map');
+                        map.addLayer(plssLayer);
+                        plssLayerAdded = true;
+                        
+                        console.log('Adding PLSS layer to layer control');
+                        layerControl.addOverlay(plssLayer, 'PLSS Grid');
+                        
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error('Error loading PLSS data:', error);
+                        reject(error);
+                    });
+            }
+        });
     }
 
 

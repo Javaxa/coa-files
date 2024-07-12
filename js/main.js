@@ -648,10 +648,6 @@ function hideModalBackdrop(modalId) {
     
         const overlayLayers = {};
     
-        // Initialize layerControl
-        layerControl = L.control.layers(baseLayers, overlayLayers).addTo(map);
-    
-        // Add existing overlays
         for (let key in overlayImages) {
             overlayImages[key].layer = L.imageOverlay(overlayImages[key].url, overlayImages[key].bounds);
             if (key === "Zone") {
@@ -660,10 +656,27 @@ function hideModalBackdrop(modalId) {
             overlayLayers[key] = overlayImages[key].layer;
         }
     
-        // Update layerControl with overlay layers
-        layerControl.remove();
+        // Initialize the control layers with base and overlay layers
         layerControl = L.control.layers(baseLayers, overlayLayers).addTo(map);
+    
+        // Add event listeners to update sidebar checkboxes when layers are toggled
+        map.on('overlayadd', function(event) {
+            updateSidebarCheckbox(event.name, true);
+        });
+    
+        map.on('overlayremove', function(event) {
+            updateSidebarCheckbox(event.name, false);
+        });
     }
+    
+    
+
+    function updateSidebarCheckbox(layerName, isChecked) {
+        document.querySelectorAll(`.overlay-checkbox-container input[value="${layerName}"]`).forEach(checkbox => {
+            checkbox.checked = isChecked;
+        });
+    }
+    
 
     function convertUTMToLatLng(northing, easting) {
         const utm = "+proj=utm +zone=11 +datum=WGS84";
@@ -1917,49 +1930,29 @@ document.addEventListener('DOMContentLoaded', () => {
    
     document.querySelectorAll('.overlay-checkbox-container input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
-            if (this.value === "PLSS") {
-                if (this.checked) {
-                    if (!plssLayer) {
-                        addPLSSOverlay();
-                    } else {
-                        map.addLayer(plssLayer);
-                    }
+            const layerName = this.value;
+            if (this.checked) {
+                if (layerName === "PLSS") {
+                    addPLSSOverlay().then(() => map.addLayer(plssLayer));
+                } else if (layerName === "Ownership") {
+                    addOwnershipOverlay().then(() => map.addLayer(ownershipLayer));
+                } else if (layerName === "BLMClaims") {
+                    addBLMClaimsOverlay().then(() => map.addLayer(blmClaimsLayer));
                 } else {
-                    if (plssLayer) {
-                        map.removeLayer(plssLayer);
-                    }
-                }
-            } else if (this.value === "Ownership") {
-                if (this.checked) {
-                    if (!ownershipLayer) {
-                        addOwnershipOverlay();
-                    } else {
-                        map.addLayer(ownershipLayer);
-                    }
-                } else {
-                    if (ownershipLayer) {
-                        map.removeLayer(ownershipLayer);
-                    }
-                }
-            } else if (this.value === "BLMClaims") {
-                if (this.checked) {
-                    if (!blmClaimsLayer) {
-                        addBLMClaimsOverlay();
-                    } else {
-                        map.addLayer(blmClaimsLayer);
-                    }
-                } else {
-                    if (blmClaimsLayer) {
-                        map.removeLayer(blmClaimsLayer);
-                    }
+                    map.addLayer(overlayImages[layerName].layer);
                 }
             } else {
-                if (this.checked) {
-                    overlayImages[this.value].layer.addTo(map);
+                if (layerName === "PLSS") {
+                    map.removeLayer(plssLayer);
+                } else if (layerName === "Ownership") {
+                    map.removeLayer(ownershipLayer);
+                } else if (layerName === "BLMClaims") {
+                    map.removeLayer(blmClaimsLayer);
                 } else {
-                    map.removeLayer(overlayImages[this.value].layer);
+                    map.removeLayer(overlayImages[layerName].layer);
                 }
             }
+            layerControl._update();
         });
     });
 

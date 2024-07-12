@@ -7,6 +7,11 @@ body {
     padding: 0px;
 }
 
+.btn-primary {
+    background-color: #075496 !important;
+    border: 1px solid #465fb7 !important;
+}
+
 ::-webkit-scrollbar {
 	width: 5px;
 	height: 8px;
@@ -871,9 +876,9 @@ body {
 }
 
 .form-check-input[type="radio"]:checked + .form-check-label {
-    background-color: #007bff;
+    background-color: #075496;
     color: white;
-    border-color: #007bff;
+    border: solid 1px #ff9000;
 }
 
 .form-check-label:hover {

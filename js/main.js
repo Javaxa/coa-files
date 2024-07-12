@@ -296,10 +296,8 @@ document.querySelectorAll('[data-tooltip]').forEach(element => {
 document.getElementById('removeCutoff').addEventListener('click', removeCutoff);
 
 function removeCutoff() {
-    // Array of input IDs to clear
     const inputIds = ['minCutoff', 'maxCutoff'];
 
-    // Clear all cutoff input fields if they exist
     inputIds.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
@@ -309,7 +307,6 @@ function removeCutoff() {
         }
     });
 
-    // Delay the application of changes slightly to ensure DOM update
     setTimeout(() => {
         const applyCutoffButton = document.getElementById('applyCutoff');
         if (applyCutoffButton) {
@@ -325,7 +322,6 @@ document.getElementById('applyCutoff').addEventListener('click', () => {
     updateElementAverages()
 });
 
-// Function to export table data to CSV
 function exportTableToCSV(filename) {
     const table = document.getElementById('elementTable');
     const rows = table.querySelectorAll('tr');
@@ -1772,7 +1768,6 @@ function parseTop20CSV(text) {
 }
 
 function calculateTop20Elements() {
-    console.log('Calculating top 20 elements');
     const selectedZone = document.querySelector('input[name="zoneFilter"]:checked').value;
     let highestData = [];
     let averageData = [];
@@ -1819,13 +1814,11 @@ function calculateTop20Elements() {
     top20HighestData = highestData.sort((a, b) => b.highestValuePerTonne - a.highestValuePerTonne).slice(0, 20);
     top20AverageData = averageData.sort((a, b) => b.averageValuePerTonne - a.averageValuePerTonne).slice(0, 20);
 
-    console.log('Top 20 data calculated');
     updateTop20Tables();
     updateTop20Charts();
 }
         
 function updateTop20Tables() {
-    console.log('Updating top 20 tables');
     updateTop20Table('top20HighestTable', top20HighestData, 'highest');
     updateTop20Table('top20AverageTable', top20AverageData, 'average');
 }
@@ -1833,7 +1826,6 @@ function updateTop20Tables() {
 function updateTop20Table(tableId, data, type) {
     const tbody = document.querySelector(`#${tableId} tbody`);
     if (!tbody) {
-        console.error(`Table body not found for ${tableId}`);
         return;
     }
     tbody.innerHTML = '';
@@ -1858,13 +1850,11 @@ function updateTop20Table(tableId, data, type) {
 }
 
 function updateTop20Charts() {
-    console.log('Updating top 20 charts');
     updateBarChart('highestValueChart', 'Highest Value ($/tonne)', top20HighestData);
     updateBarChart('averageValueChart', 'Average Value ($/tonne)', top20AverageData);
 }
 
 function updateBarChart(canvasId, label, data) {
-    console.log(`Updating bar chart: ${canvasId}`);
     const ctx = document.getElementById(canvasId);
     if (!ctx) {
         console.error(`Canvas with id ${canvasId} not found`);
@@ -1925,11 +1915,9 @@ function updateBarChart(canvasId, label, data) {
             }
         }
     });
-    console.log(`Bar chart ${canvasId} updated successfully`);
 }
         
         document.getElementById('viewTop20Button').addEventListener('click', () => {
-            console.log('View Top 20 button clicked');
             if (rawSampleData.length === 0) {
                 loadTop20Data();
             } else {
@@ -1941,7 +1929,6 @@ function updateBarChart(canvasId, label, data) {
         
         document.querySelectorAll('input[name="zoneFilter"]').forEach(radio => {
             radio.addEventListener('change', () => {
-                console.log('Zone filter changed');
                 calculateTop20Elements();
             });
         });

@@ -116,9 +116,10 @@ const coaFiles = {
     let heatmapMode = 'average';
     let barChart = null;
     let pieChart = null;
-    let top20Data = [];
     let rawSampleData = [];
     let rawElementData = {};
+    let top20HighestData = [];
+    let top20AverageData = [];    
     let isSortedByValue = false;
     let selectedIndices = [];
     let currentSortColumn = 'Element (PPM)';
@@ -612,15 +613,15 @@ function hideModalBackdrop(modalId) {
 
     function initMap() {
         const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: '&copy; RRCM &mdash; BGS'
+            attribution: '&copy; BGS 2024'
         });
 
         const topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; RRCM &mdash; BGS'
+            attribution: '&copy; BGS 2024'
         });
 
         const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; RRCM &mdash; BGS'
+            attribution: '&copy; BGS 2024'
         });
 
         map = L.map('map', {
@@ -1580,6 +1581,21 @@ document.addEventListener('DOMContentLoaded', () => {
         updateMetallurgicalCheckbox(checkbox.checked);
     });
 
+    const infoPopup = document.getElementById('infoPopup');
+    infoPopup.style.display = 'block';
+
+    // Close the popup when the close button is clicked
+    const closeBtn = document.querySelector('.close-btn');
+    closeBtn.addEventListener('click', () => {
+        infoPopup.style.display = 'none';
+    });
+
+    // Close the popup when clicking outside of it
+    window.addEventListener('click', (event) => {
+        if (event.target === infoPopup) {
+            infoPopup.style.display = 'none';
+        }
+    });
 
 
     document.querySelectorAll('#elementTable th.sortable').forEach(header => {
@@ -1723,41 +1739,43 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Error loading the CSV file for Top 20:', error);
                 });
         }
+      
+function parseTop20CSV(text) {
+    const lines = text.trim().split('\n');
+    rawSampleData = lines.slice(1).map(line => {
+        const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+        return headers.reduce((object, header, index) => {
+            let value = values[index] ? values[index].trim() : '';
+            if (value.startsWith('"') && value.endsWith('"')) {
+                value = value.slice(1, -1);
+            }
+            object[header.trim()] = value;
+            return object;
+        }, {});
+    });
+
         
-        function parseTop20CSV(text) {
-            const lines = text.trim().split('\n');
-            rawSampleData = lines.slice(1).map(line => {
-                const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                return headers.reduce((object, header, index) => {
-                    let value = values[index] ? values[index].trim() : '';
-                    if (value.startsWith('"') && value.endsWith('"')) {
-                        value = value.slice(1, -1);
-                    }
-                    object[header.trim()] = value;
-                    return object;
-                }, {});
-            });
-        
-            lines.slice(1).forEach((line, rowIndex) => {
-                const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                elements.forEach((element, elementIndex) => {
-                    const elementColumnIndex = headers.length + elementIndex;
-                    let value = values[elementColumnIndex] ? values[elementColumnIndex].trim() : '';
-                    if (value.startsWith('"') && value.endsWith('"')) {
-                        value = value.slice(1, -1);
-                    }
-                    value = value.replace(/,/g, ''); 
-                    rawElementData[rowIndex] = rawElementData[rowIndex] || {};
-                    rawElementData[rowIndex][element] = value;
-                });
-            });
-        }
-        
-        
+          
+    lines.slice(1).forEach((line, rowIndex) => {
+        const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+        elements.forEach((element, elementIndex) => {
+            const elementColumnIndex = headers.length + elementIndex;
+            let value = values[elementColumnIndex] ? values[elementColumnIndex].trim() : '';
+            if (value.startsWith('"') && value.endsWith('"')) {
+                value = value.slice(1, -1);
+            }
+            value = value.replace(/,/g, ''); 
+            rawElementData[rowIndex] = rawElementData[rowIndex] || {};
+            rawElementData[rowIndex][element] = value;
+        });
+    });
+}
+
 function calculateTop20Elements() {
     console.log('Calculating top 20 elements');
     const selectedZone = document.querySelector('input[name="zoneFilter"]:checked').value;
-    top20Data = [];
+    let highestData = [];
+    let averageData = [];
 
     elements.forEach(element => {
         let highest = -Infinity;
@@ -1765,7 +1783,10 @@ function calculateTop20Elements() {
         let count = 0;
 
         rawSampleData.forEach((sample, index) => {
-            if (selectedZone === 'all' || sample.Zone === selectedZone) {
+            if ((selectedZone === 'all' || sample.Zone === selectedZone) &&
+                sample['Incursion Type'] === 'HY20' &&
+                (sample['Assay Type'] === 'LMB Flux' || sample['Assay Type'] === 'LMB+')) {
+                
                 const elementValue = rawElementData[index] && rawElementData[index][element] ? 
                                      parseFloat(rawElementData[index][element].replace(/["',]/g, '')) : NaN;
 
@@ -1776,105 +1797,136 @@ function calculateTop20Elements() {
                 }
             }
         });
+
+        const average = count > 0 ? total / count : 0;
+        const elementPrice = elementPricesData.find(el => el.symbol === element)?.price || 0;
+        const highestValuePerTonne = (highest / 1000) * elementPrice;
+        const averageValuePerTonne = (average / 1000) * elementPrice;
+
+        highestData.push({
+            element,
+            highest,
+            highestValuePerTonne
+        });
+
+        averageData.push({
+            element,
+            average,
+            averageValuePerTonne
+        });
+    });
+
+    top20HighestData = highestData.sort((a, b) => b.highestValuePerTonne - a.highestValuePerTonne).slice(0, 20);
+    top20AverageData = averageData.sort((a, b) => b.averageValuePerTonne - a.averageValuePerTonne).slice(0, 20);
+
+    console.log('Top 20 data calculated');
+    updateTop20Tables();
+    updateTop20Charts();
+}
         
-                const average = count > 0 ? total / count : 0;
-                const elementPrice = elementPricesData.find(el => el.symbol === element)?.price || 0;
-                const highestValuePerTonne = (highest / 1000) * elementPrice;
-                const averageValuePerTonne = (average / 1000) * elementPrice;
-        
-                top20Data.push({
-                    element,
-                    highest,
-                    highestValuePerTonne,
-                    average,
-                    averageValuePerTonne
-                });
-            });
-        
-            top20Data.sort((a, b) => b.highestValuePerTonne - a.highestValuePerTonne);
-            top20Data = top20Data.slice(0, 20);
-        
-            console.log('Top 20 data calculated:', top20Data);
-            updateTop20Table();
-            updateTop20Charts();
-        }
-        
-        function updateTop20Table() {
-            console.log('Updating top 20 table');
-            const tbody = document.querySelector('#top20Table tbody');
-            if (!tbody) {
-                console.error('Top 20 table body not found');
-                return;
-            }
-            tbody.innerHTML = '';
-        
-            top20Data.forEach(data => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                <td>${data.element}</td>
-                <td class="highest-value-2">${formatNumberWithCommas(data.highest.toFixed(2))} ppm</td>
-                <td class="dollar-value-2">$${formatNumberWithCommas(data.highestValuePerTonne.toFixed(2))}</td>
-                <td class="average-value-2">${formatNumberWithCommas(data.average.toFixed(2))} ppm</td>
-                <td class="dollar-value-2">$${formatNumberWithCommas(data.averageValuePerTonne.toFixed(2))}</td>
+function updateTop20Tables() {
+    console.log('Updating top 20 tables');
+    updateTop20Table('top20HighestTable', top20HighestData, 'highest');
+    updateTop20Table('top20AverageTable', top20AverageData, 'average');
+}
+
+function updateTop20Table(tableId, data, type) {
+    const tbody = document.querySelector(`#${tableId} tbody`);
+    if (!tbody) {
+        console.error(`Table body not found for ${tableId}`);
+        return;
+    }
+    tbody.innerHTML = '';
+
+    data.forEach(item => {
+        const row = document.createElement('tr');
+        if (type === 'highest') {
+            row.innerHTML = `
+                <td>${item.element}</td>
+                <td class="highest-value-2">${formatNumberWithCommas(item.highest.toFixed(2))} ppm</td>
+                <td class="dollar-value-2">$${formatNumberWithCommas(item.highestValuePerTonne.toFixed(2))}</td>
             `;
-                tbody.appendChild(row);
-            });
+        } else {
+            row.innerHTML = `
+                <td>${item.element}</td>
+                <td class="average-value-2">${formatNumberWithCommas(item.average.toFixed(2))} ppm</td>
+                <td class="dollar-value-2">$${formatNumberWithCommas(item.averageValuePerTonne.toFixed(2))}</td>
+            `;
         }
-        
-        function updateTop20Charts() {
-            console.log('Updating top 20 charts');
-            updateBarChart('highestValueChart', 'Highest Value ($/tonne)', top20Data.map(d => d.highestValuePerTonne));
-            updateBarChart('averageValueChart', 'Average Value ($/tonne)', top20Data.map(d => d.averageValuePerTonne));
-        }
-        
-        function updateBarChart(canvasId, label, data) {
-            console.log(`Updating bar chart: ${canvasId}`);
-            const ctx = document.getElementById(canvasId);
-            if (!ctx) {
-                console.error(`Canvas with id ${canvasId} not found`);
-                return;
-            }
-            
-            if (window[canvasId] && typeof window[canvasId].destroy === 'function') {
-                window[canvasId].destroy();
-            }
-        
-            window[canvasId] = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: top20Data.map(d => d.element),
-                    datasets: [{
-                        label: label,
-                        data: data,
-                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
+        tbody.appendChild(row);
+    });
+}
+
+function updateTop20Charts() {
+    console.log('Updating top 20 charts');
+    updateBarChart('highestValueChart', 'Highest Value ($/tonne)', top20HighestData);
+    updateBarChart('averageValueChart', 'Average Value ($/tonne)', top20AverageData);
+}
+
+function updateBarChart(canvasId, label, data) {
+    console.log(`Updating bar chart: ${canvasId}`);
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) {
+        console.error(`Canvas with id ${canvasId} not found`);
+        return;
+    }
+    
+    if (window[canvasId] && typeof window[canvasId].destroy === 'function') {
+        window[canvasId].destroy();
+    }
+
+    const isHighestChart = canvasId === 'highestValueChart';
+
+    window[canvasId] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.map(d => d.element),
+            datasets: [{
+                label: label,
+                data: isHighestChart ? data.map(d => d.highestValuePerTonne) : data.map(d => d.averageValuePerTonne),
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: '$/tonne'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
                 },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: '$/tonne'
+                title: {
+                    display: true,
+                    text: label
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
                             }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        title: {
-                            display: true,
-                            text: label
+                            if (context.parsed.y !== null) {
+                                label += '$' + formatNumberWithCommas(context.parsed.y.toFixed(2)) + '/tonne';
+                            }
+                            return label;
                         }
                     }
                 }
-            });
-            console.log(`Bar chart ${canvasId} updated successfully`);
+            }
         }
+    });
+    console.log(`Bar chart ${canvasId} updated successfully`);
+}
         
         document.getElementById('viewTop20Button').addEventListener('click', () => {
             console.log('View Top 20 button clicked');

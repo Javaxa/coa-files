@@ -270,12 +270,6 @@ body {
     font-size: 15px;
 }
 
-#zoneAveragesBox .zone-stat-title {
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 15px;
-}
-
 .stat-row {
     display: flex;
     justify-content: space-between;
@@ -372,6 +366,7 @@ body {
 
 #zoneAveragesList {
     padding-left: 0px;
+    padding-top: 10px;
 }
 
 .sortable {
@@ -739,7 +734,6 @@ body {
 
 #elementAverageBox, #sidebar {
     height: 100%;
-    overflow-y: auto;
 }
 
 #elementAverageBox {
@@ -748,7 +742,38 @@ body {
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     max-height: 650px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
+
+#zoneAveragesContainer {
+    position: relative;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.zone-stat-title {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    font-weight: bold;
+    font-size: 15px;
+    padding-bottom: 5px;
+}
+
+#zoneAveragesBox {
+    overflow-y: auto;
+    max-height: calc(100% - 30px); 
+    padding-right: 5px;
+}
+
+/* Dark mode styles */
+.dark-mode .zone-stat-title {
+    background: #121212;
+}
+
 
 @media (max-width: 1200px) {
     .dashboard-column {
@@ -856,3 +881,73 @@ body {
 .highest-value-2 { color: #34b2ef !important; }
 .average-value-2 { color: #ff0000 !important; }
 .dollar-value-2 { color: #28a745 !important; }
+
+.info-popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.info-popup-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.info-popup h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.info-popup ul {
+    padding-left: 20px;
+}
+
+.info-popup li {
+    margin-bottom: 5px;
+}
+
+/* Dark mode styles */
+.dark-mode .info-popup-content {
+    background-color: #333;
+    color: #fff;
+}
+
+.dark-mode .close-btn {
+    color: #fff;
+}
+
+.dark-mode .close-btn:hover,
+.dark-mode .close-btn:focus {
+    color: #aaa;
+}
+
+.dark-mode .info-popup h2 {
+    color: #fff;
+}

@@ -94,10 +94,6 @@ body {
     border-top-left-radius: 8px;
 }
 
-#elementTable th:last-child {
-    border-top-right-radius: 8px;
-}
-
 #elementTable {
     border-collapse: separate;
     border-spacing: 0;
@@ -995,4 +991,26 @@ body {
     padding: 15px 0;
     margin-bottom: 15px;
     border-bottom: 1px solid #dee2e6;
+}
+
+.top20button {
+    display: block;
+    margin: auto;
+    width: 248px;
+    height: 35px;
+    border: 2px solid #ff9500;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-bottom: none;
+    background: #008cff;
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    float: right;
+    margin-top: 19px;
+    margin-right: 1px;
+}
+
+.top20button:hover {
+    background: #017de2;
 }

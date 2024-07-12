@@ -996,19 +996,16 @@ body {
 .top20button {
     display: block;
     margin: auto;
-    width: 248px;
+    width: 260px;
     height: 35px;
     border: 1px solid #003f75;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    border-bottom: none;
+    border-radius: 5px;
     background-color: #1a6cb5;
     color: white;
     font-weight: bold;
-    font-size: 13px;
-    float: right;
-    margin-top: 19px;
-    margin-right: 1px;
+    font-size: 14px;
+    margin-top: -51px;
+    margin-bottom: 20px;
 }
 
 .top20button:hover {

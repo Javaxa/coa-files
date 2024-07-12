@@ -271,23 +271,43 @@ document.querySelectorAll('[data-tooltip]').forEach(element => {
 
 
 
-    $(document).ready(function() {
+$(document).ready(function() {
     $('#periodicModal').on('shown.bs.modal', function () {
         $(this).find('.modal-body').load('/periodic.html', function() {
+            // Create a set of allowed elements
+            const allowedElements = new Set(elementPricesData.map(el => el.symbol));
+
+            // Add 'not-allowed' class to elements not in our list and apply styles directly
+            $('.chip').each(function() {
+                const elementSymbol = $(this).find('.face.front strong').text();
+                if (!allowedElements.has(elementSymbol)) {
+                    $(this).addClass('not-allowed')
+                           .css({
+                               'cursor': 'not-allowed',
+                               'opacity': '0.5',
+                               'transform': 'none',
+                           });
+                    $(this).find('.face').css('cursor', 'not-allowed');
+                }
+            });
+
             $('.chip').click(function() {
-                var elementName = $(this).find('.face.front strong').text();
-                var $dropdown = $('#elementSelect');
-                
-                $dropdown.val(elementName);
-                
-                setTimeout(function() {
-                    $dropdown.trigger('change');
+                // Only proceed if the element is not in the 'not-allowed' class
+                if (!$(this).hasClass('not-allowed')) {
+                    var elementName = $(this).find('.face.front strong').text();
+                    var $dropdown = $('#elementSelect');
                     
-                    var event = new Event('change', { bubbles: true });
-                    $dropdown[0].dispatchEvent(event);
-                }, 10); 
-                
-                $('#periodicModal').modal('hide');
+                    $dropdown.val(elementName);
+                    
+                    setTimeout(function() {
+                        $dropdown.trigger('change');
+                        
+                        var event = new Event('change', { bubbles: true });
+                        $dropdown[0].dispatchEvent(event);
+                    }, 10); 
+                    
+                    $('#periodicModal').modal('hide');
+                }
             });
         });
     });

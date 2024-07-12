@@ -1636,12 +1636,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!map || !legendWrapper || !heatmapLegend) return;
     
         const mapRect = map.getBoundingClientRect();
-        const isMapInView = mapRect.bottom > 0 && mapRect.top < window.innerHeight;
+        const viewportHeight = window.innerHeight;
     
-        if (!isMapInView) {
+        // Calculate the percentage of the map that is visible
+        const visiblePercentage = (Math.min(mapRect.bottom, viewportHeight) - Math.max(mapRect.top, 0)) / mapRect.height;
+    
+        if (visiblePercentage < 0.5) {
+            // Less than 50% of the map is visible
             legendWrapper.classList.add('hidden');
             heatmapLegend.classList.add('hidden');
         } else {
+            // 50% or more of the map is visible
             legendWrapper.classList.remove('hidden');
             heatmapLegend.classList.remove('hidden');
         }

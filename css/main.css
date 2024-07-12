@@ -953,3 +953,21 @@ body {
 .dark-mode .info-popup h2 {
     color: #fff;
 }
+
+
+.modal-body {
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    padding-top: 0;
+}
+
+#zoneFilterContainer {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 1020;
+    padding: 15px 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #dee2e6;
+}

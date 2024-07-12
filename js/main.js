@@ -122,6 +122,8 @@ const coaFiles = {
     let top20AverageData = [];    
     let isSortedByValue = false;
     let selectedIndices = [];
+    let plssLayer;
+    let layerControl;
     let currentSortColumn = 'Element (PPM)';
     let currentSortDirection = 'desc';
     let activeZones = new Set(['1', '2', '3', '4', '5', '6']);
@@ -671,30 +673,16 @@ function hideModalBackdrop(modalId) {
 
 
 
-
-
-
-
-
-    let plssLayer;
-    let layerControl;
-
-
-
     function addPLSSOverlay() {
-        console.log('addPLSSOverlay called');
         return new Promise((resolve, reject) => {
             if (plssLayer) {
-                console.log('PLSS layer already exists, adding to map');
                 map.addLayer(plssLayer);
                 plssLayerAdded = true;
                 resolve();
             } else {
-                console.log('Fetching PLSS data');
-                fetch('/Public_Land_Survey_System_(PLSS)__Sections.geojson')
+                fetch('overlays/Public_Land_Survey_System_(PLSS)__Sections.geojson')
                     .then(response => response.json())
                     .then(data => {
-                        console.log('PLSS data loaded');
                         plssLayer = L.geoJSON(data, {
                             style: function(feature) {
                                 return {
@@ -714,8 +702,6 @@ function hideModalBackdrop(modalId) {
                                     let range = feature.properties[rangeProp] || 'N/A';
                                     let section = feature.properties[sectionProp] || 'N/A';
                                     
-                                    console.log('Township prop:', townshipProp, 'Range prop:', rangeProp, 'Section prop:', sectionProp);
-                                    console.log('Township:', township, 'Range:', range, 'Section:', section);
     
                                     let tooltipContent = `<div class="custom-plss-tooltip">
                                                             <strong>Township:</strong> ${township}<br>
@@ -739,11 +725,9 @@ function hideModalBackdrop(modalId) {
                             }
                         });
                         
-                        console.log('Adding PLSS layer to map');
                         map.addLayer(plssLayer);
                         plssLayerAdded = true;
                         
-                        console.log('Adding PLSS layer to layer control');
                         layerControl.addOverlay(plssLayer, 'PLSS Grid');
                         
                         resolve();
@@ -755,14 +739,6 @@ function hideModalBackdrop(modalId) {
             }
         });
     }
-
-
-
-
-
-
-
-
 
 
     function createPopupContent(indices) {

@@ -998,11 +998,11 @@ body {
     margin: auto;
     width: 248px;
     height: 35px;
-    border: 2px solid #ff9500;
+    border: 1px solid #003f75;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
     border-bottom: none;
-    background: #008cff;
+    background-color: #1a6cb5;
     color: white;
     font-weight: bold;
     font-size: 13px;
@@ -1012,5 +1012,5 @@ body {
 }
 
 .top20button:hover {
-    background: #017de2;
+    background-color: #1a7bcf;
 }

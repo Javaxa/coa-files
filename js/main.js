@@ -1628,7 +1628,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-
+    function handleScroll() {
+        const map = document.getElementById('map');
+        const legendWrapper = document.querySelector('.legend-wrapper');
+        const heatmapLegend = document.getElementById('heatmapLegend');
+    
+        if (!map || !legendWrapper || !heatmapLegend) return;
+    
+        const mapRect = map.getBoundingClientRect();
+        const isMapInView = mapRect.bottom > 0 && mapRect.top < window.innerHeight;
+    
+        if (!isMapInView) {
+            legendWrapper.classList.add('hidden');
+            heatmapLegend.classList.add('hidden');
+        } else {
+            legendWrapper.classList.remove('hidden');
+            heatmapLegend.classList.remove('hidden');
+        }
+    }
+    
+    // Attach the scroll event listener
+    window.addEventListener('scroll', function() {
+        requestAnimationFrame(handleScroll);
+    });
+    
+    // Initial check
+    handleScroll();
  
 
         // Existing COA cell click event handler
@@ -1936,6 +1961,13 @@ function updateBarChart(canvasId, label, data) {
         }
     });
 }
+
+window.addEventListener('scroll', function() {
+    requestAnimationFrame(handleScroll);
+});
+
+// Initial check
+handleScroll();
         
         document.getElementById('viewTop20Button').addEventListener('click', () => {
             if (rawSampleData.length === 0) {

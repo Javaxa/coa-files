@@ -495,7 +495,7 @@ body {
     background: #4f4f4f;
 }
 
-.legend-wrapper {
+.legend-wrapper, #heatmapLegend {
     display: flex;
     flex-direction: column;
     background-color: #fff;
@@ -504,9 +504,25 @@ body {
     padding: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     max-width: 200px;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform: translateX(0);
+    opacity: 1;
     position: fixed;
-    right: 12px;
+    right: 15px;
     bottom: 10px;
+}
+
+.legend-wrapper.hidden, #heatmapLegend.hidden {
+    transform: translateX(calc(100% + 10px));
+    opacity: 0;
+}
+
+.legend-wrapper {
+    z-index: 999;
+}
+
+#heatmapLegend {
+    z-index: 1000;
 }
 
 .legend-item {
@@ -794,7 +810,7 @@ body {
 
 /* Ensure other fixed elements don't overlap */
 .legend-wrapper, #elementPricesBtn, .settings-button {
-    z-index: 1001;
+    z-index: 1000;
 }
 
 /* Adjustments for smaller screens */

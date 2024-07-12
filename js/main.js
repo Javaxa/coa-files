@@ -124,6 +124,7 @@ const coaFiles = {
     let selectedIndices = [];
     let plssLayer;
     let ownershipLayer;
+    let blmClaimsLayer;
     let layerControl;
     let currentSortColumn = 'Element (PPM)';
     let currentSortDirection = 'desc';
@@ -670,6 +671,74 @@ function hideModalBackdrop(modalId) {
         const result = proj4(utm, wgs84, [parseFloat(easting), parseFloat(northing)]);
         return [result[1], result[0]];
     }
+
+    function addBLMClaimsOverlay() {
+        return new Promise((resolve, reject) => {
+            if (blmClaimsLayer) {
+                map.addLayer(blmClaimsLayer);
+                resolve();
+            } else {
+                fetch('overlays/BLM_Natl_MLRS_Mining_Claims_-_Not_Closed.geojson')
+                    .then(response => response.json())
+                    .then(data => {
+                        blmClaimsLayer = L.geoJSON(data, {
+                            style: function(feature) {
+                                return {
+                                    color: '#34eb62',
+                                    weight: 2,
+                                    opacity: 0.40,
+                                    fillOpacity: 0.2
+                                };
+                            },
+                            onEachFeature: function(feature, layer) {
+                                if (feature.properties) {
+                                    let blmProd = feature.properties.BLM_PROD || 'N/A';
+                                    let cseName = feature.properties.CSE_NAME || 'N/A';
+                                    let cseDisp = feature.properties.CSE_DISP || 'N/A';
+                                    let rcrdAcrs = feature.properties.RCRD_ACRS || 'N/A';
+                                    let created = feature.properties.Created || 'N/A';
+                                    let modified = feature.properties.Modified || 'N/A';
+    
+                                    let tooltipContent = `
+                                        <div class="blm-claims-tooltip">
+                                            <strong>BLM_PROD:</strong> ${blmProd}<br>
+                                            <strong>CSE_NAME:</strong> ${cseName}<br>
+                                            <strong>CSE_DISP:</strong> ${cseDisp}<br>
+                                            <strong>RCRD_ACRS:</strong> ${rcrdAcrs}<br>
+                                            <strong>Created:</strong> ${created}<br>
+                                            <strong>Modified:</strong> ${modified}
+                                        </div>`;
+                                    
+                                    layer.bindTooltip(tooltipContent, {
+                                        permanent: false,
+                                        direction: 'top',
+                                        className: 'blm-claims-tooltip',
+                                        sticky: true
+                                    });
+                                    
+                                    let popupContent = '<b>BLM Claim Info:</b><br>';
+                                    for (let key in feature.properties) {
+                                        popupContent += `<strong>${key}:</strong> ${feature.properties[key]}<br>`;
+                                    }
+                                    
+                                    layer.bindPopup(popupContent);
+                                }
+                            }
+                        });
+                        
+                        map.addLayer(blmClaimsLayer);
+                        layerControl.addOverlay(blmClaimsLayer, 'BLM Claims');
+                        
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error('Error loading BLM Claims data:', error);
+                        reject(error);
+                    });
+            }
+        });
+    }
+    
 
 
     function addOwnershipOverlay() {
@@ -1870,6 +1939,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     if (ownershipLayer) {
                         map.removeLayer(ownershipLayer);
+                    }
+                }
+            } else if (this.value === "BLMClaims") {
+                if (this.checked) {
+                    if (!blmClaimsLayer) {
+                        addBLMClaimsOverlay();
+                    } else {
+                        map.addLayer(blmClaimsLayer);
+                    }
+                } else {
+                    if (blmClaimsLayer) {
+                        map.removeLayer(blmClaimsLayer);
                     }
                 }
             } else {

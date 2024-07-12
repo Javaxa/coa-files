@@ -1036,3 +1036,11 @@ body {
 .ownership-tooltip strong {
     color: #4a83ec;
 }
+
+.blm-claims-tooltip {
+
+}
+
+.blm-claims-tooltip strong {
+    color: #009425;
+}

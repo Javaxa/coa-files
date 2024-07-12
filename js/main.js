@@ -123,6 +123,7 @@ const coaFiles = {
     let isSortedByValue = false;
     let selectedIndices = [];
     let plssLayer;
+    let ownershipLayer;
     let layerControl;
     let currentSortColumn = 'Element (PPM)';
     let currentSortDirection = 'desc';
@@ -671,7 +672,67 @@ function hideModalBackdrop(modalId) {
     }
 
 
-
+    function addOwnershipOverlay() {
+        return new Promise((resolve, reject) => {
+            if (ownershipLayer) {
+                map.addLayer(ownershipLayer);
+                resolve();
+            } else {
+                fetch('overlays/California_Land_Ownership.geojson')
+                    .then(response => response.json())
+                    .then(data => {
+                        ownershipLayer = L.geoJSON(data, {
+                            style: function(feature) {
+                                return {
+                                    color: '#4a83ec',
+                                    weight: 1,
+                                    opacity: 0.65,
+                                    fillOpacity: 0.1
+                                };
+                            },
+                            onEachFeature: function(feature, layer) {
+                                if (feature.properties) {
+                                    let ownLevel = feature.properties.OWN_LEVEL || 'Unknown';
+                                    let ownAgency = feature.properties.OWN_AGENCY || 'Unknown';
+                                    let ownGroup = feature.properties.OWN_GROUP || 'Unknown';
+    
+                                    let tooltipContent = `
+                                        <div class="ownership-tooltip">
+                                            <strong>OWN_LEVEL:</strong> ${ownLevel}<br>
+                                            <strong>OWN_AGENCY:</strong> ${ownAgency}<br>
+                                            <strong>OWN_GROUP:</strong> ${ownGroup}
+                                        </div>`;
+                                    
+                                    layer.bindTooltip(tooltipContent, {
+                                        permanent: false,
+                                        direction: 'top',
+                                        className: 'ownership-tooltip',
+                                        sticky: true // Makes the tooltip follow the cursor
+                                    });
+                                    
+                                    let popupContent = '<b>Ownership Info:</b><br>';
+                                    for (let key in feature.properties) {
+                                        popupContent += `<strong>${key}:</strong> ${feature.properties[key]}<br>`;
+                                    }
+                                    
+                                    layer.bindPopup(popupContent);
+                                }
+                            }
+                        });
+                        
+                        map.addLayer(ownershipLayer);
+                        layerControl.addOverlay(ownershipLayer, 'Land Ownership');
+                        
+                        resolve();
+                    })
+                    .catch(error => {
+                        console.error('Error loading Land Ownership data:', error);
+                        reject(error);
+                    });
+            }
+        });
+    }
+    
 
     function addPLSSOverlay() {
         return new Promise((resolve, reject) => {
@@ -1785,29 +1846,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
    
-   document.querySelectorAll('.overlay-checkbox-container input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        if (this.value === "PLSS") {
-            if (this.checked) {
-                if (!plssLayer) {
-                    addPLSSOverlay();
+    document.querySelectorAll('.overlay-checkbox-container input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.value === "PLSS") {
+                if (this.checked) {
+                    if (!plssLayer) {
+                        addPLSSOverlay();
+                    } else {
+                        map.addLayer(plssLayer);
+                    }
                 } else {
-                    map.addLayer(plssLayer);
+                    if (plssLayer) {
+                        map.removeLayer(plssLayer);
+                    }
+                }
+            } else if (this.value === "Ownership") {
+                if (this.checked) {
+                    if (!ownershipLayer) {
+                        addOwnershipOverlay();
+                    } else {
+                        map.addLayer(ownershipLayer);
+                    }
+                } else {
+                    if (ownershipLayer) {
+                        map.removeLayer(ownershipLayer);
+                    }
                 }
             } else {
-                if (plssLayer) {
-                    map.removeLayer(plssLayer);
+                if (this.checked) {
+                    overlayImages[this.value].layer.addTo(map);
+                } else {
+                    map.removeLayer(overlayImages[this.value].layer);
                 }
             }
-        } else {
-            if (this.checked) {
-                overlayImages[this.value].layer.addTo(map);
-            } else {
-                map.removeLayer(overlayImages[this.value].layer);
-            }
-        }
+        });
     });
-});
 
     document.getElementById('darkModeToggle').addEventListener('change', function() {
         if (this.checked) {

@@ -1028,3 +1028,11 @@ body {
 .custom-plss-tooltip strong {
     color: #ff7800;
 }
+
+.ownership-tooltip {
+    overflow: hidden;
+}
+
+.ownership-tooltip strong {
+    color: #4a83ec;
+}

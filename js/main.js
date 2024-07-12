@@ -143,14 +143,6 @@ const coaFiles = {
                 convertUTMToLatLng(3893000, 463668)
             ],
             layer: null
-        },
-        "Sections": {
-            url: '/overlays/sections.png',
-            bounds: [
-                convertUTMToLatLng(3913300, 443088),
-                convertUTMToLatLng(3893000, 463668)
-            ],
-            layer: null
         }
     };
     const metallurgicalTypes = ['LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', 'LMB+ (Mtlg-AqRg)'];
@@ -631,33 +623,42 @@ function hideModalBackdrop(modalId) {
         const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             attribution: '&copy; BGS 2024'
         });
-
+    
         const topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; BGS 2024'
         });
-
+    
         const streetLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; BGS 2024'
         });
-
+    
         map = L.map('map', {
             layers: [satelliteLayer]
         }).setView([0, 0], 2);
-
+    
         const baseLayers = {
             "Satellite": satelliteLayer,
             "Topographic": topoLayer,
             "Street": streetLayer,
         };
-
-        L.control.layers(baseLayers).addTo(map);
-
+    
+        const overlayLayers = {};
+    
+        // Initialize layerControl
+        layerControl = L.control.layers(baseLayers, overlayLayers).addTo(map);
+    
+        // Add existing overlays
         for (let key in overlayImages) {
             overlayImages[key].layer = L.imageOverlay(overlayImages[key].url, overlayImages[key].bounds);
             if (key === "Zone") {
                 overlayImages[key].layer.addTo(map);
             }
+            overlayLayers[key] = overlayImages[key].layer;
         }
+    
+        // Update layerControl with overlay layers
+        layerControl.remove();
+        layerControl = L.control.layers(baseLayers, overlayLayers).addTo(map);
     }
 
     function convertUTMToLatLng(northing, easting) {
@@ -666,6 +667,95 @@ function hideModalBackdrop(modalId) {
         const result = proj4(utm, wgs84, [parseFloat(easting), parseFloat(northing)]);
         return [result[1], result[0]];
     }
+
+
+
+
+
+
+
+
+
+    let plssLayer;
+    let layerControl;
+
+
+
+    function addPLSSOverlay() {
+        if (plssLayer) {
+            map.addLayer(plssLayer);
+            return;
+        }
+    
+        fetch('/Public_Land_Survey_System_(PLSS)__Sections.geojson')
+            .then(response => response.json())
+            .then(data => {
+                console.log('PLSS data loaded:', data);
+    
+                plssLayer = L.geoJSON(data, {
+                    style: function(feature) {
+                        return {
+                            color: '#ff7800',
+                            weight: 1,
+                            opacity: 0.65,
+                            fillOpacity: 0.1
+                        };
+                    },
+                    onEachFeature: function(feature, layer) {
+                        console.log('Feature properties:', feature.properties);
+                        
+                        if (feature.properties) {
+                            // Find the correct property names for township and range
+                            let townshipProp = Object.keys(feature.properties).find(key => key.toLowerCase().includes('town'));
+                            let rangeProp = Object.keys(feature.properties).find(key => key.toLowerCase().includes('range'));
+    
+                            console.log('Township property:', townshipProp);
+                            console.log('Range property:', rangeProp);
+    
+                            let township = feature.properties[townshipProp] || 'N/A';
+                            let range = feature.properties[rangeProp] || 'N/A';
+    
+                            // Tooltip content
+                            let tooltipContent = `<div class="custom-plss-tooltip">
+                                                    <strong>Township:</strong> ${township}<br>
+                                                    <strong>Range:</strong> ${range}
+                                                  </div>`;
+    
+                            // Bind the custom tooltip
+                            layer.bindTooltip(tooltipContent, {
+                                permanent: false,
+                                direction: 'top',
+                                className: 'plss-tooltip'
+                            });
+    
+                            // Popup content
+                            let popupContent = '<b>PLSS Info:</b><br>';
+                            for (let key in feature.properties) {
+                                popupContent += `<strong>${key}:</strong> ${feature.properties[key]}<br>`;
+                            }
+    
+                            // Bind popup
+                            layer.bindPopup(popupContent);
+                        }
+                    }
+                }).addTo(map);
+    
+                // Add PLSS layer to layer control
+                layerControl.addOverlay(plssLayer, 'PLSS Grid');
+            })
+            .catch(error => {
+                console.error('Error loading PLSS data:', error);
+            });
+    }
+
+
+
+
+
+
+
+
+
 
     function createPopupContent(indices) {
         let content = '<div class="scrollable-tooltip">';
@@ -1711,15 +1801,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
    
-    document.querySelectorAll('.overlay-checkbox-container input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
+   document.querySelectorAll('.overlay-checkbox-container input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        if (this.value === "PLSS") {
+            if (this.checked) {
+                if (!plssLayer) {
+                    addPLSSOverlay();
+                } else {
+                    map.addLayer(plssLayer);
+                }
+            } else {
+                if (plssLayer) {
+                    map.removeLayer(plssLayer);
+                }
+            }
+        } else {
             if (this.checked) {
                 overlayImages[this.value].layer.addTo(map);
             } else {
                 map.removeLayer(overlayImages[this.value].layer);
             }
-        });
+        }
     });
+});
 
     document.getElementById('darkModeToggle').addEventListener('change', function() {
         if (this.checked) {

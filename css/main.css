@@ -1011,3 +1011,20 @@ body {
 .top20button:hover {
     background-color: #1a7bcf;
 }
+
+.plss-tooltip {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ff7800;
+    border-radius: 4px;
+    padding: 5px;
+    font-size: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.custom-plss-tooltip {
+    text-align: left;
+}
+
+.custom-plss-tooltip strong {
+    color: #ff7800;
+}

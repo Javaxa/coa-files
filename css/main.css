@@ -347,6 +347,8 @@ body {
 #sidebar {
     z-index: 1000;
     max-height: 650px;
+    overflow: auto;
+    padding-right: 5px;
 }
 
 #sidebar .btn {

@@ -94,6 +94,10 @@ body {
     border-top-left-radius: 8px;
 }
 
+#elementTable th:last-child {
+    border-top-right-radius: 8px;
+}
+
 #elementTable {
     border-collapse: separate;
     border-spacing: 0;

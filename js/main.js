@@ -2341,8 +2341,8 @@ function updateTop20Table(tableId, data, type) {
         const tenKTonneProduction = (ppmValue * 10000) / 1000; // Convert to kg
         const annualFigure = tenKTonneProduction * 365;
 
-        const tenKTonnePrice = (valuePerTonne * 10000).toFixed(2);
-        const annualPrice = (valuePerTonne * 10000 * 365).toFixed(2);
+        const tenKTonnePrice = Math.round(valuePerTonne * 10000);
+        const annualPrice = Math.round(valuePerTonne * 10000 * 365);
 
         row.innerHTML = `
             <td>${item.element}</td>
@@ -2357,8 +2357,8 @@ function updateTop20Table(tableId, data, type) {
     // Add tooltips to kg-data cells
     const kgCells = tbody.querySelectorAll('.kg-data');
     kgCells.forEach(cell => {
-        const price = parseFloat(cell.dataset.price);
-        const formattedPrice = formatNumberWithCommas(price.toFixed(2));
+        const price = parseInt(cell.dataset.price);
+        const formattedPrice = formatNumberWithCommas(price);
         
         cell.style.position = 'relative';
         cell.style.cursor = 'pointer';

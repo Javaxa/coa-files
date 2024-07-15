@@ -1236,20 +1236,6 @@ body {
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #iconSizeMode label {
     align-items: center;
     background-color: #fff;
@@ -1289,3 +1275,11 @@ body {
     box-shadow: 0 0 0 3px rgba(7, 84, 150, 0.25);
 }
 
+.dark-mode #iconSizeMode label {
+    background: #282828;
+}
+
+.dark-mode #iconSizeMode label:hover {
+    background-color: #484848;
+    border-color: #adb5bd;
+}

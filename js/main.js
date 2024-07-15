@@ -2323,8 +2323,8 @@ function calculateTop20Elements() {
 }
         
 function updateTop20Tables() {
-    updateTop20Table('top20HighestTable', top20HighestData, 'highest');
     updateTop20Table('top20AverageTable', top20AverageData, 'average');
+    updateTop20Table('top20HighestTable', top20HighestData, 'highest');
 }
 
 function updateTop20Table(tableId, data, type) {
@@ -2336,20 +2336,61 @@ function updateTop20Table(tableId, data, type) {
 
     data.forEach(item => {
         const row = document.createElement('tr');
-        if (type === 'highest') {
-            row.innerHTML = `
-                <td>${item.element}</td>
-                <td class="highest-value-2">${formatNumberWithCommas(item.highest.toFixed(2))} ppm</td>
-                <td class="dollar-value-2">$${formatNumberWithCommas(item.highestValuePerTonne.toFixed(2))}</td>
-            `;
-        } else {
-            row.innerHTML = `
-                <td>${item.element}</td>
-                <td class="average-value-2">${formatNumberWithCommas(item.average.toFixed(2))} ppm</td>
-                <td class="dollar-value-2">$${formatNumberWithCommas(item.averageValuePerTonne.toFixed(2))}</td>
-            `;
-        }
+        const ppmValue = type === 'highest' ? item.highest : item.average;
+        const valuePerTonne = type === 'highest' ? item.highestValuePerTonne : item.averageValuePerTonne;
+        const tenKTonneProduction = (ppmValue * 10000) / 1000; // Convert to kg
+        const annualFigure = tenKTonneProduction * 365;
+
+        const tenKTonnePrice = (valuePerTonne * 10000).toFixed(2);
+        const annualPrice = (valuePerTonne * 10000 * 365).toFixed(2);
+
+        row.innerHTML = `
+            <td>${item.element}</td>
+            <td class="${type}-value-2">${formatNumberWithCommas(ppmValue.toFixed(2))} ppm</td>
+            <td class="dollar-value-2">$${formatNumberWithCommas(valuePerTonne.toFixed(2))}</td>
+            <td class="kg-data" data-price="${tenKTonnePrice}">${formatNumberWithCommas(tenKTonneProduction.toFixed(2))} kg</td>
+            <td class="kg-data" data-price="${annualPrice}">${formatNumberWithCommas(annualFigure.toFixed(2))} kg</td>
+        `;
         tbody.appendChild(row);
+    });
+
+    // Add tooltips to kg-data cells
+    const kgCells = tbody.querySelectorAll('.kg-data');
+    kgCells.forEach(cell => {
+        const price = parseFloat(cell.dataset.price);
+        const formattedPrice = formatNumberWithCommas(price.toFixed(2));
+        
+        cell.style.position = 'relative';
+        cell.style.cursor = 'pointer';
+
+        const tooltip = document.createElement('div');
+        tooltip.textContent = `Price: $${formattedPrice}`;
+        tooltip.style.cssText = `
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px;
+            background-color: #333;
+            color: #28a745;
+            border-radius: 3px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 1000;
+        `;
+
+        cell.appendChild(tooltip);
+
+        cell.addEventListener('mouseenter', () => {
+            tooltip.style.opacity = '1';
+        });
+
+        cell.addEventListener('mouseleave', () => {
+            tooltip.style.opacity = '0';
+        });
     });
 }
 

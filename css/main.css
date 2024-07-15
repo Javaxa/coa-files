@@ -1287,3 +1287,13 @@ body {
     background-color: #484848;
     border-color: #adb5bd;
 }
+
+#top20AverageTable th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+#top20HighestTable th {
+    text-align: center;
+    vertical-align: middle;
+}

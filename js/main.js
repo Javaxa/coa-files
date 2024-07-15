@@ -525,15 +525,15 @@ function updateElementPricesModal() {
 
     const categories = [
         {
-            name: "Primary (PGM's + Others)",
+            name: "Primary (Precious Metals)",
             elements: ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag']
         },
         {
-            name: "Secondary (Targeted Elements)",
+            name: "Secondary (Targeted High Value Elements)",
             elements: ['Rb', 'Cs', 'Sc']
         },
         {
-            name: "Tertiary (Other Targeted Elements)",
+            name: "Tertiary (Other Possible Targeted Elements)",
             elements: elementPricesData.map(el => el.symbol).filter(symbol => 
                 !['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag', 'Rb', 'Cs', 'Sc'].includes(symbol)
             )

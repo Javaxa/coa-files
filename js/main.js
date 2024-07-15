@@ -123,6 +123,8 @@ const coaFiles = {
     let isSortedByValue = false;
     let selectedIndices = [];
     let plssLayer;
+    let iconSizeMode = 'fixed';
+    let maxPPM = 0;
     let ownershipLayer;
     let blmClaimsLayer;
     let layerControl;
@@ -903,89 +905,93 @@ function hideModalBackdrop(modalId) {
         return content;
     }
 
-        function filterTableByPoint(indices) {
-            selectedIndices = indices;
-            const selectedElement = document.getElementById('elementSelect').value;
-            const tbody = document.querySelector('#elementTable tbody');
-            tbody.innerHTML = '';
-
-            const selectedDH = sampleData[indices[0]].DH;
-            document.getElementById('selectedDH').textContent = `Selected DH: ${selectedDH}`;
-            document.getElementById('selectedDH').style.display = 'inline-block';
-
-            let totalElementPPM = 0;
-            let countElementPPM = 0;
-            let highestElementPPM = -Infinity;
-
-            indices.sort((a, b) => {
-                const aValue = elementData[a] ? parseFloat(elementData[a][selectedElement].replace(/,/g, '')) : NaN;
-                const bValue = elementData[b] ? parseFloat(elementData[b][selectedElement].replace(/,/g, '')) : NaN;
-                return bValue - aValue;
-            });
-
-            indices.forEach(index => {
-                const sample = sampleData[index];
-                const row = document.createElement('tr');
-                headers.forEach(header => {
-                    const cell = document.createElement('td');
-                    cell.textContent = sample[header] || '';
-                    if (header === 'COA') {
-                        cell.classList.add('editable');
-                        cell.addEventListener('click', function() {
-                            const cellValue = this.textContent.trim();
-                            const fileExtension = cellValue.split('.').pop().toLowerCase();
-                            document.getElementById('coaModalLabel').textContent = cellValue;
-
-                            if (fileExtension === 'pdf') {
-                                document.getElementById('coaIframe').src = `/coas/${cellValue}`;
-                                document.getElementById('coaIframe').style.display = 'block';
-                                document.getElementById('excelContainer').style.display = 'none';
-                            } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
-                                const encodedUrl = encodeURIComponent(window.location.origin + '/coas/' + cellValue);
-                                document.getElementById('coaIframe').style.display = 'block';
-                                document.getElementById('excelContainer').style.display = 'none';
-                            } else {
-                                document.getElementById('coaIframe').src = '';
-                                document.getElementById('coaIframe').style.display = 'none';
-                                document.getElementById('excelContainer').textContent = 'Cannot display the file. Unsupported file format.';
-                                document.getElementById('excelContainer').style.display = 'block';
-                            }
-
-                            const modal = new bootstrap.Modal(document.getElementById('coaModal'));
-                            modal.show();
-                        });
-                    }
-                    row.appendChild(cell);
-                });
-                const elementCell = document.createElement('td');
-                const elementValue = elementData[index] ? elementData[index][selectedElement] : '';
-                elementCell.textContent = formatNumberWithCommas(elementValue);
-                row.appendChild(elementCell);
-                tbody.appendChild(row);
-
-                if (elementValue) {
-                    const value = parseFloat(elementValue.replace(/,/g, ''));
-                    if (!isNaN(value)) {
-                        totalElementPPM += value;
-                        countElementPPM++;
-                        if (value > highestElementPPM) {
-                            highestElementPPM = value;
+    function filterTableByPoint(indices) {
+        selectedIndices = indices;
+        const selectedElement = document.getElementById('elementSelect').value;
+        const tbody = document.querySelector('#elementTable tbody');
+        tbody.innerHTML = '';
+    
+        const selectedDH = sampleData[indices[0]].DH;
+        document.getElementById('selectedDH').textContent = `Selected DH: ${selectedDH}`;
+        document.getElementById('selectedDH').style.display = 'inline-block';
+    
+        let totalElementPPM = 0;
+        let countElementPPM = 0;
+        let highestElementPPM = -Infinity;
+    
+        indices.sort((a, b) => {
+            const aValue = elementData[a] ? parseFloat(elementData[a][selectedElement].replace(/,/g, '')) : NaN;
+            const bValue = elementData[b] ? parseFloat(elementData[b][selectedElement].replace(/,/g, '')) : NaN;
+            return bValue - aValue;
+        });
+    
+        indices.forEach(index => {
+            const sample = sampleData[index];
+            const row = document.createElement('tr');
+            headers.forEach(header => {
+                const cell = document.createElement('td');
+                cell.textContent = sample[header] || '';
+                if (header === 'COA') {
+                    cell.classList.add('editable');
+                    cell.addEventListener('click', function() {
+                        const cellValue = this.textContent.trim();
+                        const fileExtension = cellValue.split('.').pop().toLowerCase();
+                        document.getElementById('coaModalLabel').textContent = cellValue;
+    
+                        if (fileExtension === 'pdf') {
+                            document.getElementById('coaIframe').src = `/coas/${cellValue}`;
+                            document.getElementById('coaIframe').style.display = 'block';
+                            document.getElementById('excelContainer').style.display = 'none';
+                        } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+                            const encodedUrl = encodeURIComponent(window.location.origin + '/coas/' + cellValue);
+                            document.getElementById('coaIframe').style.display = 'block';
+                            document.getElementById('excelContainer').style.display = 'none';
+                        } else {
+                            document.getElementById('coaIframe').src = '';
+                            document.getElementById('coaIframe').style.display = 'none';
+                            document.getElementById('excelContainer').textContent = 'Cannot display the file. Unsupported file format.';
+                            document.getElementById('excelContainer').style.display = 'block';
                         }
+    
+                        const modal = new bootstrap.Modal(document.getElementById('coaModal'));
+                        modal.show();
+                    });
+                }
+                row.appendChild(cell);
+            });
+            const elementCell = document.createElement('td');
+            const elementValue = elementData[index] ? elementData[index][selectedElement] : '';
+            elementCell.textContent = formatNumberWithCommas(elementValue);
+            row.appendChild(elementCell);
+            tbody.appendChild(row);
+    
+            if (elementValue) {
+                const value = parseFloat(elementValue.replace(/,/g, ''));
+                if (!isNaN(value)) {
+                    totalElementPPM += value;
+                    countElementPPM++;
+                    if (value > highestElementPPM) {
+                        highestElementPPM = value;
                     }
                 }
-            });
-
-            const averageElementPPM = countElementPPM > 0 ? (totalElementPPM / countElementPPM).toFixed(2) : 'N/A';
-            const highestElementPPMFormatted = highestElementPPM > -Infinity ? formatNumberWithCommas(highestElementPPM.toFixed(2)) : 'N/A';
-
-            document.getElementById('selectedElementPPM').textContent = `Average Grade: ${formatNumberWithCommas(averageElementPPM)}`;
-            document.getElementById('selectedElementHighestPPM').textContent = `Highest Grade: ${highestElementPPMFormatted}`;
-
-            document.getElementById('selectedElementPPM').style.display = 'inline-block';
-            document.getElementById('selectedElementHighestPPM').style.display = 'inline-block';
-
-            document.getElementById('clearSelectionButton').style.display = 'inline-block';
-        }
+            }
+        });
+    
+        const averageElementPPM = countElementPPM > 0 ? (totalElementPPM / countElementPPM).toFixed(2) : 'N/A';
+        const highestElementPPMFormatted = highestElementPPM > -Infinity ? formatNumberWithCommas(highestElementPPM.toFixed(2)) : 'N/A';
+    
+        document.getElementById('selectedElementPPM').textContent = `Average Grade: ${formatNumberWithCommas(averageElementPPM)}`;
+        document.getElementById('selectedElementHighestPPM').textContent = `Highest Grade: ${highestElementPPMFormatted}`;
+    
+        document.getElementById('selectedElementPPM').style.display = 'inline-block';
+        document.getElementById('selectedElementHighestPPM').style.display = 'inline-block';
+    
+        document.getElementById('clearSelectionButton').style.display = 'inline-block';
+    
+        hideViewTop20Button(); // Add this line to hide the button when filtering
+    }
+    
+    
 
         function viewExcelFile(filePath) {
             fetch(filePath)
@@ -1019,40 +1025,131 @@ function hideModalBackdrop(modalId) {
             document.getElementById('selectedDH').style.display = 'none';
             document.getElementById('selectedElementPPM').style.display = 'none';
             document.getElementById('selectedElementHighestPPM').style.display = 'none';
+        
+            showViewTop20Button(); // Add this line to show the button when no point is filtered
         }
+        
 
 
-function createCustomIcon(dh, incursionType) {
-    if (incursionType === 'HN04') {
-        return L.divIcon({
-            className: 'red-dot-icon',
-            iconSize: [6, 6]
-        });
-    } if (incursionType === 'Rock') {
-        return L.divIcon({
-            className: 'purple-rectangle-icon',
-            iconSize: [12, 8]
-        });
-    } if (incursionType === 'Source Sample') {
-        return L.divIcon({
-            className: 'source-icon',
-            iconSize: [10, 7]
-        });
-    } if (incursionType === 'Shaft') {
-        return L.icon({
-            iconUrl: 'overlays/shafticon.png', 
-            iconSize: [20, 20],  
-            iconAnchor: [10, 10],  
-            popupAnchor: [0, -10]  
-        });
+      // Modify the createCustomIcon function
+      function createCustomIcon(dh, incursionType, avgPPM, highestPPM) {
+        const showDHLabels = document.getElementById('showDHLabels').checked;
+    
+        if (iconSizeMode === 'fixed') {
+            // Fixed size mode
+            if (incursionType === 'HN04') {
+                return L.divIcon({
+                    className: 'red-dot-icon',
+                    iconSize: [6, 6]
+                });
+            } if (incursionType === 'Rock') {
+                return L.divIcon({
+                    className: 'purple-rectangle-icon',
+                    iconSize: [12, 8]
+                });
+            } if (incursionType === 'Source Sample') {
+                return L.divIcon({
+                    className: 'source-icon',
+                    iconSize: [10, 7]
+                });
+            } if (incursionType === 'Shaft') {
+                return L.icon({
+                    iconUrl: 'overlays/shafticon.png', 
+                    iconSize: [20, 20],  
+                    iconAnchor: [10, 10],  
+                    popupAnchor: [0, -10]  
+                });
+            } else { // This will handle 'HY20' (20-foot incursion) and any other types
+                return L.divIcon({
+                    className: 'custom-div-icon',
+                    html: dh, // Always show label for HY20 in fixed size mode
+                    iconSize: [11, 11],
+                    iconAnchor: [5, 5],
+                    popupAnchor: [0, -11],
+                });
+            }
+        } else {
+            // Variable size mode (highest or average)
+            let size = 10; // Default size
+            const ppm = iconSizeMode === 'average' ? avgPPM : highestPPM;
+            size = Math.max(8, Math.min(30, 8 + (ppm / maxPPM) * 22)); // Scale size between 8 and 30
+    
+            let className;
+            switch (incursionType) {
+                case 'HY20':
+                    className = 'circle-icon white-circle';
+                    break;
+                case 'HN04':
+                    className = 'circle-icon red-circle';
+                    break;
+                case 'Rock':
+                    className = 'circle-icon purple-circle';
+                    break;
+                case 'Source Sample':
+                    className = 'circle-icon yellow-circle';
+                    break;
+                case 'Shaft':
+                    className = 'circle-icon green-circle';
+                    break;
+                default:
+                    className = 'circle-icon white-circle';
+            }
+    
+            // In variable size mode, show label only when checkbox is checked, regardless of incursion type
+            const labelHtml = showDHLabels ? `<span class="icon-label">${dh}</span>` : '';
+    
+            return L.divIcon({
+                className: className,
+                html: labelHtml,
+                iconSize: [size, size],
+                iconAnchor: [size/2, size/2],
+                popupAnchor: [0, -size/2],
+            });
+        }
+    }
+
+   // Remove the existing event listener
+document.getElementById('iconSizeMode').removeEventListener('change', function() {
+    iconSizeMode = this.value;
+    updateDHLabelsVisibility();
+    updateMap();
+    updateLegend();
+});
+
+// Add event listeners to individual radio buttons
+function smoothScrollToElement(element) {
+    element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'start'
+    });
+}
+
+// Modify the event listeners for the icon size mode radio buttons
+document.querySelectorAll('input[name="iconSizeMode"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        iconSizeMode = this.value;
+        updateDHLabelsVisibility();
+        updateMap();
+        updateLegend();
+
+        // Smooth scroll to the DH labels control
+        const dhLabelsControl = document.getElementById('dhLabelsControl');
+        if (dhLabelsControl) {
+            setTimeout(() => smoothScrollToElement(dhLabelsControl), 100);
+        }
+    });
+});
+
+// Update the updateDHLabelsVisibility function
+function updateDHLabelsVisibility() {
+    const dhLabelsControl = document.getElementById('dhLabelsControl');
+    if (iconSizeMode === 'fixed') {
+        dhLabelsControl.style.display = 'none';
     } else {
-        return L.divIcon({
-            className: 'custom-div-icon',
-            html: dh,
-            iconSize: [11, 11],
-            iconAnchor: [11, 11],
-            popupAnchor: [0, -11],
-        });
+        dhLabelsControl.style.display = 'block';
+        // Smooth scroll to the DH labels control when it becomes visible
+        setTimeout(() => smoothScrollToElement(dhLabelsControl), 100);
     }
 }
 
@@ -1082,6 +1179,58 @@ function toggleHeatmap(selectedElement) {
     }
 }
 
+function updateLegend() {
+    const legendWrapper = document.getElementById('legendWrapper');
+    if (iconSizeMode === 'fixed') {
+        legendWrapper.innerHTML = `
+            <h5>Map Legend</h5>
+            <div class="legend-item">
+                <div class="point-dot custom-div-icon" style="background: #fff; border: 1px solid #000; margin-left: 2px;">DH</div>
+                <span class="legend-text">20ft Incursion</span>
+            </div>
+            <div class="legend-item">
+                <div class="point-dot red-dot-icon" style="margin-left: 2px;"></div>
+                <span class="legend-text">4ft Incursion</span>
+            </div>
+            <div class="legend-item">
+                <img src="overlays/shafticon.png" alt="Shaft" style="width: 26px; height: 26px; margin-right: 8px">
+                <span class="legend-text">Shaft</span>
+            </div>
+            <div class="legend-item">
+                <div class="point-dot source-icon icon-width"></div>
+                <span class="legend-text">Source Sample</span>
+            </div>
+            <div class="legend-item">
+                <div class="point-dot purple-rectangle-icon icon-width"></div>
+                <span class="legend-text">Rock</span>
+            </div>
+        `;
+    } else {
+        legendWrapper.innerHTML = `
+            <h5>Map Legend</h5>
+            <div class="legend-item">
+                <div class="circle-icon white-circle" style="width: 15px; height: 15px;"></div>
+                <span class="legend-text">20ft Incursion</span>
+            </div>
+            <div class="legend-item">
+                <div class="circle-icon red-circle" style="width: 15px; height: 15px;"></div>
+                <span class="legend-text">4ft Incursion</span>
+            </div>
+            <div class="legend-item">
+                <div class="circle-icon green-circle" style="width: 15px; height: 15px;"></div>
+                <span class="legend-text">Shaft</span>
+            </div>
+            <div class="legend-item">
+                <div class="circle-icon yellow-circle" style="width: 15px; height: 15px;"></div>
+                <span class="legend-text">Source Sample</span>
+            </div>
+            <div class="legend-item">
+                <div class="circle-icon purple-circle" style="width: 15px; height: 15px;"></div>
+                <span class="legend-text">Rock</span>
+            </div>
+        `;
+    }
+}
 
 
 document.getElementById('heatmapModeButton').addEventListener('click', () => {
@@ -1181,6 +1330,9 @@ function updateHeatmapLegend(maxPPM) {
 }
 
 
+
+
+
 function updateMap() {
     const minCutoff = parseFloat(document.getElementById('minCutoff').value) || -Infinity;
     const maxCutoff = parseFloat(document.getElementById('maxCutoff').value) || Infinity;
@@ -1195,6 +1347,7 @@ function updateMap() {
     }
 
     const uniquePoints = new Map();
+    maxPPM = 0;
 
     sampleData.forEach((sample, index) => {
         if (sample.Northing && sample.Easting &&
@@ -1211,21 +1364,28 @@ function updateMap() {
                 const key = `${latLng[0]},${latLng[1]},${sample.DH}`;
 
                 if (!uniquePoints.has(key)) {
-                    uniquePoints.set(key, []);
+                    uniquePoints.set(key, { indices: [], totalPPM: 0, highestPPM: -Infinity });
                 }
-                uniquePoints.get(key).push(index);
+                const point = uniquePoints.get(key);
+                point.indices.push(index);
+                point.totalPPM += elementValue;
+                point.highestPPM = Math.max(point.highestPPM, elementValue);
+                maxPPM = Math.max(maxPPM, point.highestPPM);
             }
         }
     });
 
-    uniquePoints.forEach((indices, key) => {
-        const [lat, lng] = key.split(',').map(Number);
-        const marker = L.marker([lat, lng], { icon: createCustomIcon(sampleData[indices[0]].DH, sampleData[indices[0]]['Incursion Type']) }).addTo(map);
+    uniquePoints.forEach((point, key) => {
+        const [lat, lng, dh] = key.split(',');
+        const avgPPM = point.totalPPM / point.indices.length;
+        const marker = L.marker([parseFloat(lat), parseFloat(lng)], { 
+            icon: createCustomIcon(dh, sampleData[point.indices[0]]['Incursion Type'], avgPPM, point.highestPPM, iconSizeMode) 
+        }).addTo(map);
         
-        const tooltipContent = generateTooltipContent(indices);
+        const tooltipContent = generateTooltipContent(point.indices);
         marker.bindTooltip(tooltipContent, { className: 'custom-tooltip' });
-        marker.bindPopup(() => createPopupContent(indices));
-        marker.on('click', () => filterTableByPoint(indices));
+        marker.bindPopup(() => createPopupContent(point.indices));
+        marker.on('click', () => filterTableByPoint(point.indices));
         marker.on('popupclose', () => clearPointSelection());
         markers.push(marker);
     });
@@ -1235,18 +1395,17 @@ function updateMap() {
         map.fitBounds(group.getBounds());
     }
 
-    if (heatmapEnabled) {
-        const heatData = calculateHeatmapData(selectedElement);
-        heatLayer = L.heatLayer(heatData.data, { radius: 25, maxZoom: 12 }).addTo(map);
-        document.getElementById('toggleHeatmapButton').textContent = 'Hide Heatmap';
-        updateHeatmapLegend(heatData.maxPPM); 
-    } else {
-        document.getElementById('toggleHeatmapButton').textContent = 'Show Heatmap';
-    }
-
+    updateHeatmapIfEnabled(selectedElement);
     updateElementTable();
 }
 
+function updateHeatmapIfEnabled(selectedElement) {
+    if (heatmapEnabled) {
+        const heatData = calculateHeatmapData(selectedElement, heatmapMode);
+        heatLayer = L.heatLayer(heatData.data, { radius: 25, maxZoom: 12 }).addTo(map);
+        updateHeatmapLegend(heatData.maxPPM);
+    }
+}
 
 function generateTooltipContent(indices) {
     const selectedElement = document.getElementById('elementSelect').value;
@@ -1558,8 +1717,19 @@ document.getElementById('elementSelect').addEventListener('change', () => {
     }
 });
 
+function hideViewTop20Button() {
+    const viewTop20Button = document.getElementById('viewTop20Button');
+    if (viewTop20Button) {
+        viewTop20Button.style.display = 'none';
+    }
+}
 
-
+function showViewTop20Button() {
+    const viewTop20Button = document.getElementById('viewTop20Button');
+    if (viewTop20Button) {
+        viewTop20Button.style.display = 'block';
+    }
+}
 
 function openVisualizationModal() {
     const modal = new bootstrap.Modal(document.getElementById('visualizationModal'));
@@ -1751,6 +1921,11 @@ function updateZoneAverages() {
     });
 }
 
+document.getElementById('showDHLabels').addEventListener('change', function() {
+    if (iconSizeMode !== 'fixed') {
+        updateMap();
+    }
+});
 
   
 function updateMetallurgicalCheckbox(checked) {
@@ -1768,6 +1943,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadData();
     fetchElementPrices();
     updateSelectedElementDisplay();
+    updateDHLabelsVisibility();
     const collapseElements = document.querySelectorAll('.collapse');
     const event = new Event('change');
     document.getElementById('elementSelect').dispatchEvent(event);
@@ -1808,6 +1984,8 @@ document.addEventListener('DOMContentLoaded', () => {
             updateElementAverages();
         });
     });
+
+    
 
     metallurgicalCheckboxes.forEach(checkbox => {
         checkbox.checked = metallurgicalTypes.some(type => activeAssayTypes.has(type));

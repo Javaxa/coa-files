@@ -164,7 +164,7 @@
                         </div>
                         
                             <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#overlayFilters" aria-expanded="false" aria-controls="overlayFilters">
-                                Overlays <span class="filter-arrow">&darr;</span>
+                                Overlay & Icon Controls <span class="filter-arrow">&darr;</span>
                             </button>
                             <div class="collapse" id="overlayFilters">
                                 <div class="overlay-checkbox-container">
@@ -177,6 +177,26 @@
                                         <h6>Heatmap Controls</h6>
                                         <button id="toggleHeatmapButton" class="btn btn-sm btn-outline-primary">Show Heatmap</button>
                                         <button id="heatmapModeButton" class="btn btn-sm btn-outline-danger">Heatmap by Highest ppm</button>
+                                    </div>
+                                    <div class="icon-size-controls">
+                                        <h6>Incursion Icon Settings</h6>
+                                        <div id="iconSizeMode">
+                                            <label>
+                                                <input type="radio" name="iconSizeMode" value="fixed" checked> Fixed Icon Sizes
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="iconSizeMode" value="highest"> Size based on Highest Grade
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="iconSizeMode" value="average"> Size based on Average Grade
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div id="dhLabelsControl" style="display: none;">
+                                        <label for="showDHLabels" class="form-check-label">
+                                            <input type="checkbox" id="showDHLabels">
+                                            Show Incursion ID's
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -238,19 +258,6 @@
                 <div class="top20-content">
                     <div class="row" style="padding-left: 50px; padding-right: 50px;">
                 <div class="col-md-6">
-                    <h6 style="text-align: center; margin-bottom: 10px;">Top 20 by Highest Grade Value</h6>
-                    <table id="top20HighestTable" class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Element</th>
-                                <th>Highest Grade (ppm)</th>
-                                <th>Value ($/tonne)</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div class="col-md-6">
                     <h6 style="text-align: center; margin-bottom: 10px;">Top 20 by Average Grade Value</h6>
                     <table id="top20AverageTable" class="table table-striped table-bordered">
                         <thead>
@@ -263,15 +270,28 @@
                         <tbody></tbody>
                     </table>
                 </div>
+                <div class="col-md-6">
+                    <h6 style="text-align: center; margin-bottom: 10px;">Top 20 by Highest Grade Value</h6>
+                    <table id="top20HighestTable" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Element</th>
+                                <th>Highest Grade (ppm)</th>
+                                <th>Value ($/tonne)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="row mt-4">
             <div class="row mt-4">
                 <div class="col-md-6">
-                    <canvas id="highestValueChart"></canvas>
+                    <canvas id="averageValueChart"></canvas>
                 </div>
                 <div class="col-md-6">
-                    <canvas id="averageValueChart"></canvas>
+                    <canvas id="highestValueChart"></canvas>
                 </div>
             </div>
         </div>

@@ -1037,10 +1037,205 @@ body {
     color: #4a83ec;
 }
 
-.blm-claims-tooltip {
-
-}
-
 .blm-claims-tooltip strong {
     color: #009425;
 }
+
+.circle-icon {
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #000;
+    font-size: 10px;
+    margin-right: 5px;
+}
+
+.white-circle {
+    background-color: white;
+    border: 2px solid #000;
+}
+
+.red-circle {
+    background-color: red;
+    border: 1px solid #000;
+}
+
+.purple-circle {
+    background-color: rgb(221, 0, 255);
+    border: 1px solid #000;
+}
+
+.yellow-circle {
+    background-color: yellow;
+    border: 1px solid #000;
+}
+
+.green-circle {
+    background-color: #2ddf16;
+    border: 1px solid #000;
+}
+
+.icon-label {
+    font-size: 8px;
+    color: #000;
+    text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+}
+
+.circle-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible; /* Allows label to overflow circle boundary */
+    position: relative; /* For positioning the label */
+}
+
+.icon-label {
+    font-size: 8px;
+    color: #000;
+    text-shadow: 
+        -1px -1px 0 #fff,  
+         1px -1px 0 #fff,
+        -1px  1px 0 #fff,
+         1px  1px 0 #fff;
+    pointer-events: none; /* Ensures the label doesn't interfere with clicks */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap; /* Prevents label from wrapping */
+}
+
+.icon-label-controls {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.icon-controls-container {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .control-header {
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #075496;
+    border-bottom: 2px solid #075496;
+    padding-bottom: 5px;
+  }
+  
+  .control-group {
+    margin-bottom: 15px;
+  }
+  
+  .control-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+  
+  .radio-group {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .radio-group input[type="radio"] {
+    display: none;
+  }
+  
+  .radio-group label {
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .radio-group input[type="radio"]:checked + label {
+    background-color: #075496;
+    color: white;
+    border-color: #075496;
+  }
+  
+  #dhLabelsControl input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  
+  #dhLabelsControl label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .radio-group {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+  #iconSizeMode label {
+    border-radius: 5px;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#iconSizeMode label {
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+    width: 100%;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 11px;
+}
+
+#iconSizeMode label:hover {
+    background-color: #e9ecef;
+}
+
+#iconSizeMode input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #075496;
+    border-radius: 3px;
+    margin-right: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+#iconSizeMode input[type="radio"]:checked {
+    background-color: #ff872d;
+}
+
+#iconSizeMode input[type="radio"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(7, 84, 150, 0.25);
+}
+

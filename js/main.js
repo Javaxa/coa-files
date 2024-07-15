@@ -2346,10 +2346,10 @@ function updateTop20Table(tableId, data, type) {
 
         row.innerHTML = `
             <td>${item.element}</td>
-            <td class="${type}-value-2">${formatNumberWithCommas(ppmValue.toFixed(2))} ppm</td>
+            <td class="${type}-value-2">${formatNumberWithCommas(ppmValue.toFixed(2))}</td>
             <td class="dollar-value-2">$${formatNumberWithCommas(valuePerTonne.toFixed(2))}</td>
-            <td class="kg-data" data-price="${tenKTonnePrice}">${formatNumberWithCommas(tenKTonneProduction.toFixed(2))} kg</td>
-            <td class="kg-data" data-price="${annualPrice}">${formatNumberWithCommas(annualFigure.toFixed(2))} kg</td>
+            <td class="kg-data" data-price="${tenKTonnePrice}">${formatNumberWithCommas(tenKTonneProduction.toFixed(2))}</td>
+            <td class="kg-data" data-price="${annualPrice}">${formatNumberWithCommas(annualFigure.toFixed(2))}</td>
         `;
         tbody.appendChild(row);
     });

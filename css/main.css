@@ -1297,3 +1297,14 @@ body {
     text-align: center;
     vertical-align: middle;
 }
+
+.table th .header-main {
+    font-size: 1em; /* Default font size */
+    display: block;
+}
+
+.table th .header-sub {
+    font-size: 0.8em; /* Smaller font size */
+    display: block;
+    font-weight: normal; /* Optional: makes the smaller text less bold */
+}

@@ -652,7 +652,7 @@ body {
 .element-price-card label::after {
     content: '\2714';
     background-color: #ff872d;
-    color: white;
+    color: #464646;
     text-align: center;
     line-height: 20px;
     font-size: 12px;

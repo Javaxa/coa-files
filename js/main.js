@@ -125,6 +125,7 @@ const coaFiles = {
     let plssLayer;
     let iconSizeMode = 'fixed';
     let maxPPM = 0;
+    let selectedElements = new Set(['Au']);
     let ownershipLayer;
     let blmClaimsLayer;
     let layerControl;
@@ -508,6 +509,16 @@ function fetchElementPrices() {
     localStorage.setItem('lastUpdated', lastUpdated.toISOString());
 }
 
+document.getElementById('elementPricesModal').addEventListener('hidden.bs.modal', () => {
+    const checkboxes = document.querySelectorAll('.element-price-card input[type="checkbox"]');
+    selectedElements.clear();
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            selectedElements.add(checkbox.id.replace('checkbox-', ''));
+        }
+    });
+});
+
 function updateElementPricesModal() {
     const container = document.getElementById('elementPricesContainer');
     container.innerHTML = '';
@@ -544,14 +555,17 @@ function updateElementPricesModal() {
         }
 
         elements.forEach(elementInfo => {
-            const pricePerGram = elementInfo.price / 1000; // Convert $/kg to $/g
+            const pricePerGram = elementInfo.price / 1000;
             const card = document.createElement('div');
             card.className = 'col-md-4 col-sm-6 mb-3';
             card.innerHTML = `
                 <div class="element-price-card" data-element="${elementInfo.symbol}">
-                    <div class="element-symbol">${elementInfo.symbol}</div>
-                    <div class="element-name">${elementInfo.name}</div>
-                    <div class="element-price">$${pricePerGram.toFixed(2)}/g</div>
+                    <input type="checkbox" id="checkbox-${elementInfo.symbol}" ${elementInfo.symbol === selectedElement ? 'checked' : ''}>
+                    <label for="checkbox-${elementInfo.symbol}">
+                        <div class="element-symbol">${elementInfo.symbol}</div>
+                        <div class="element-name">${elementInfo.name}</div>
+                        <div class="element-price">$${pricePerGram.toFixed(2)}/g</div>
+                    </label>
                 </div>
             `;
             row.appendChild(card);
@@ -566,22 +580,42 @@ function updateElementPricesModal() {
     timestampDiv.textContent = `Last updated: ${lastUpdated ? lastUpdated.toLocaleString() : 'Never'}`;
     container.appendChild(timestampDiv);
 
-    // Add click event listeners to element cards
+    // Modify the click event listeners
     container.querySelectorAll('.element-price-card').forEach(card => {
-        card.addEventListener('click', function() {
-            const selectedElement = this.dataset.element;
-            const elementSelect = document.getElementById('elementSelect');
-            elementSelect.value = selectedElement;
-            
-            // Trigger the change event
-            const event = new Event('change');
-            elementSelect.dispatchEvent(event);
+        const checkbox = card.querySelector('input[type="checkbox"]');
+        const label = card.querySelector('label');
 
-            // Close the modal
+        checkbox.addEventListener('change', function(event) {
+            event.stopPropagation();
+            selectElement(this.id.replace('checkbox-', ''));
+        });
+
+        label.addEventListener('click', function(event) {
+            event.preventDefault();
+            const elementSymbol = this.closest('.element-price-card').dataset.element;
+            selectElement(elementSymbol);
+
             const modal = bootstrap.Modal.getInstance(document.getElementById('elementPricesModal'));
             modal.hide();
         });
     });
+}
+
+function selectElement(elementSymbol) {
+    selectedElement = elementSymbol;
+    
+    // Update all checkboxes
+    document.querySelectorAll('.element-price-card input[type="checkbox"]').forEach(cb => {
+        cb.checked = cb.id === `checkbox-${elementSymbol}`;
+    });
+
+    // Update the main element select dropdown
+    const elementSelect = document.getElementById('elementSelect');
+    elementSelect.value = elementSymbol;
+    
+    // Trigger the change event
+    const changeEvent = new Event('change');
+    elementSelect.dispatchEvent(changeEvent);
 }
 
 document.getElementById('sortElementsBtn').addEventListener('click', function() {
@@ -1694,17 +1728,24 @@ function formatNumberWithCommas(value) {
 }
 
 
+// Modify the elementSelect change event listener
 document.getElementById('elementSelect').addEventListener('change', () => {
-    const selectedElement = document.getElementById('elementSelect').value;
-    const elementInfo = elementPricesData.find(el => el.symbol === selectedElement);
+    const selectedElementSymbol = document.getElementById('elementSelect').value;
+    const elementInfo = elementPricesData.find(el => el.symbol === selectedElementSymbol);
     
     if (elementInfo) {
         document.getElementById('selectedElementName').textContent = elementInfo.name;
         document.getElementById('selectedElement').textContent = elementInfo.symbol;
+        selectedElement = selectedElementSymbol;
     } else {
         document.getElementById('selectedElementName').textContent = '';
-        document.getElementById('selectedElement').textContent = selectedElement;
+        document.getElementById('selectedElement').textContent = selectedElementSymbol;
     }
+
+    // Update the checkboxes in the modal if it's open
+    document.querySelectorAll('.element-price-card input[type="checkbox"]').forEach(cb => {
+        cb.checked = cb.id === `checkbox-${selectedElementSymbol}`;
+    });
 
     updateSelectedElementDisplay();
     updateElementTable();

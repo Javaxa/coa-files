@@ -608,15 +608,64 @@ body {
     padding: 10px;
     margin-bottom: 15px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
+    transition: all 0.3s ease;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
 
 .element-price-card:hover {
     transform: translateY(-5px);
-    background-color: rgb(244, 244, 244);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
+.element-price-card input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.element-price-card label {
+    display: block;
+    cursor: pointer;
+}
+
+.element-price-card label::before,
+.element-price-card label::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.element-price-card label::before {
+    border: 2px solid #ff872d;
+    background-color: transparent;
+}
+
+.element-price-card label::after {
+    content: '\2714';
+    background-color: #ff872d;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+    opacity: 0;
+}
+
+.element-price-card input[type="checkbox"]:checked + label::before {
+    background-color: #ff872d;
+}
+
+.element-price-card input[type="checkbox"]:checked + label::after {
+    opacity: 1;
+}
 .element-symbol {
     font-size: 24px;
     font-weight: bold;

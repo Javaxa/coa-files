@@ -774,6 +774,7 @@ body {
     position: relative;
     flex-grow: 1;
     overflow: hidden;
+    min-height: 340px;
 }
 
 .zone-stat-title {

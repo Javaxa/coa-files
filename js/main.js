@@ -2381,7 +2381,7 @@ function updateTop20Table(tableId, data, type) {
         cell.style.cursor = 'pointer';
 
         const tooltip = document.createElement('div');
-        tooltip.textContent = `Price: $${formattedPrice}`;
+        tooltip.textContent = `Value: $${formattedPrice}`;
         tooltip.style.cssText = `
             position: absolute;
             bottom: 100%;

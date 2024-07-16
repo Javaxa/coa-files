@@ -276,7 +276,6 @@ $(document).ready(function() {
             // Create a set of allowed elements
             const allowedElements = new Set(elementPricesData.map(el => el.symbol));
 
-            // Add 'not-allowed' class to elements not in our list and apply styles directly
             $('.chip').each(function() {
                 const elementSymbol = $(this).find('.face.front strong').text();
                 if (!allowedElements.has(elementSymbol)) {
@@ -291,7 +290,7 @@ $(document).ready(function() {
             });
 
             $('.chip').click(function() {
-                // Only proceed if the element is not in the 'not-allowed' class
+
                 if (!$(this).hasClass('not-allowed')) {
                     var elementName = $(this).find('.face.front strong').text();
                     var $dropdown = $('#elementSelect');
@@ -2343,7 +2342,7 @@ function updateTop20Table(tableId, data, type) {
     data.forEach(item => {
         const row = document.createElement('tr');
         const ppmValue = type === 'highest' ? item.highest : item.average;
-        const valuePerTonne = Math.round(type === 'highest' ? item.highestValuePerTonne : item.averageValuePerTonne);
+        const valuePerTonne = type === 'highest' ? item.highestValuePerTonne : item.averageValuePerTonne;
         
         // Special handling for Iridium (Ir)
         const isIridium = item.element === 'Ir';
@@ -2360,7 +2359,7 @@ function updateTop20Table(tableId, data, type) {
         row.innerHTML = `
             <td>${item.element}</td>
             <td class="${type}-value-2">${formatNumberWithCommas(ppmValue.toFixed(2))}</td>
-            <td class="dollar-value-2">$${formatNumberWithCommas(valuePerTonne)}</td>
+            <td class="dollar-value-2">$${formatNumberWithCommas(valuePerTonne.toFixed(2))}</td>
             <td class="kg-data" data-price="${tenKTonnePrice}">
                 ${isIridium ? formatNumberWithCommas(tenKTonneProduction.toFixed(2)) : formatNumberWithCommas(tenKTonneProduction)}
             </td>
@@ -2381,7 +2380,7 @@ function updateTop20Table(tableId, data, type) {
         cell.style.cursor = 'pointer';
 
         const tooltip = document.createElement('div');
-        tooltip.textContent = `Value: $${formattedPrice}`;
+        tooltip.textContent = `Price: $${formattedPrice}`;
         tooltip.style.cssText = `
             position: absolute;
             bottom: 100%;

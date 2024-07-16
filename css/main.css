@@ -1387,3 +1387,16 @@ body {
 .overlay-opacity-control label:hover {
     background: #fff;
 }
+
+#exportConfirmModal .modal-body {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+#exportConfirmModal .export-highlight {
+    font-weight: bold;
+    font-size: 18px;
+    color: #075496;
+}

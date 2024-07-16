@@ -388,8 +388,56 @@ function exportTableToCSV(filename) {
 // Add click event listener to the export button
 document.querySelector('.table-download').addEventListener('click', function() {
     const selectedElement = document.getElementById('elementSelect').value;
+    
+    // Get selected assay types
+    const selectedAssayTypes = Array.from(activeAssayTypes).map(type => {
+        switch(type) {
+            case 'LMB Flux': return 'LMB Flux';
+            case 'LMB+': return 'LMB+';
+            case '4-Acid Dig': return '4-Acid';
+            default: return type;
+        }
+    }).join(', ');
+    
+    // Get selected incursion types
+    const selectedIncursionTypes = Array.from(activeIncursionTypes).map(type => {
+        switch(type) {
+            case 'HY20': return '20-Foot';
+            case 'HN04': return '4-Foot';
+            default: return type;
+        }
+    }).join(', ');
+    
+    // Get cut-off grade values
+    const minCutoff = document.getElementById('minCutoff').value;
+    const maxCutoff = document.getElementById('maxCutoff').value;
+    
+    let confirmMessage = `You are about to export data for <span class="export-highlight">${selectedElement}</span> Assayed with <span class="export-highlight">${selectedAssayTypes}</span> for <span class="export-highlight">${selectedIncursionTypes}</span>.`;
+    
+    if (minCutoff || maxCutoff) {
+        confirmMessage += ` with Cut-off grade of `;
+        if (minCutoff) confirmMessage += `<span class="export-highlight">Minimum ${minCutoff} ppm</span>`;
+        if (minCutoff && maxCutoff) confirmMessage += ` and `;
+        if (maxCutoff) confirmMessage += `<span class="export-highlight">Maximum ${maxCutoff} ppm</span>`;
+    }
+    
+    // Set the message in the modal
+    document.getElementById('exportConfirmBody').innerHTML = confirmMessage;
+    
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById('exportConfirmModal'));
+    modal.show();
+});
+
+// Add click event for the confirm export button
+document.getElementById('confirmExportBtn').addEventListener('click', function() {
+    const selectedElement = document.getElementById('elementSelect').value;
     const filename = `RRCM_Table_Element_${selectedElement}_${new Date().toISOString().slice(0,10)}.csv`;
     exportTableToCSV(filename);
+    
+    // Hide the modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('exportConfirmModal'));
+    modal.hide();
 });
 
 

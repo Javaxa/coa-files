@@ -688,20 +688,17 @@ function hideModalBackdrop(modalId) {
             "Street": streetLayer,
         };
     
-        const overlayLayers = {};
-    
+        // Initialize the layers but don't add them to the control
         for (let key in overlayImages) {
             overlayImages[key].layer = L.imageOverlay(overlayImages[key].url, overlayImages[key].bounds);
             setInitialLayerOpacity(overlayImages[key].layer);
             if (key === "Zone") {
                 overlayImages[key].layer.addTo(map);
             }
-            overlayLayers[key] = overlayImages[key].layer;
         }
     
-    
-        // Initialize the control layers with base and overlay layers
-        layerControl = L.control.layers(baseLayers, overlayLayers).addTo(map);
+        // Only add base layers to the control
+        layerControl = L.control.layers(baseLayers).addTo(map);
     
         // Add event listeners to update sidebar checkboxes when layers are toggled
         map.on('overlayadd', function(event) {
@@ -785,7 +782,6 @@ function hideModalBackdrop(modalId) {
                         });
                         
                         map.addLayer(blmClaimsLayer);
-                        layerControl.addOverlay(blmClaimsLayer, 'BLM Claims');
                         
                         resolve();
                     })
@@ -849,7 +845,6 @@ function hideModalBackdrop(modalId) {
                         });
                         
                         map.addLayer(ownershipLayer);
-                        layerControl.addOverlay(ownershipLayer, 'Land Ownership');
                         
                         resolve();
                     })
@@ -918,7 +913,6 @@ function hideModalBackdrop(modalId) {
                         map.addLayer(plssLayer);
                         plssLayerAdded = true;
                         
-                        layerControl.addOverlay(plssLayer, 'PLSS Grid');
                         
                         resolve();
                     })
@@ -2208,21 +2202,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     addOwnershipOverlay().then(() => map.addLayer(ownershipLayer));
                 } else if (layerName === "BLMClaims") {
                     addBLMClaimsOverlay().then(() => map.addLayer(blmClaimsLayer));
-                } else {
+                } else if (overlayImages[layerName]) {
                     map.addLayer(overlayImages[layerName].layer);
                 }
             } else {
-                if (layerName === "PLSS") {
+                if (layerName === "PLSS" && plssLayer) {
                     map.removeLayer(plssLayer);
-                } else if (layerName === "Ownership") {
+                } else if (layerName === "Ownership" && ownershipLayer) {
                     map.removeLayer(ownershipLayer);
-                } else if (layerName === "BLMClaims") {
+                } else if (layerName === "BLMClaims" && blmClaimsLayer) {
                     map.removeLayer(blmClaimsLayer);
-                } else {
+                } else if (overlayImages[layerName]) {
                     map.removeLayer(overlayImages[layerName].layer);
                 }
             }
-            layerControl._update();
         });
     });
 

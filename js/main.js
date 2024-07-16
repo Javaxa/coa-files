@@ -2343,9 +2343,16 @@ function updateTop20Table(tableId, data, type) {
     data.forEach(item => {
         const row = document.createElement('tr');
         const ppmValue = type === 'highest' ? item.highest : item.average;
-        const valuePerTonne = type === 'highest' ? item.highestValuePerTonne : item.averageValuePerTonne;
-        const tenKTonneProduction = Math.round((ppmValue * 10000) / 1000); // Convert to kg and round
-        const annualFigure = Math.round(tenKTonneProduction * 365); // Round to whole number
+        const valuePerTonne = Math.round(type === 'highest' ? item.highestValuePerTonne : item.averageValuePerTonne);
+        
+        // Special handling for Iridium (Ir)
+        const isIridium = item.element === 'Ir';
+        const tenKTonneProduction = isIridium 
+            ? (ppmValue * 10000) / 1000 
+            : Math.round((ppmValue * 10000) / 1000);
+        const annualFigure = isIridium 
+            ? tenKTonneProduction * 365 
+            : Math.round(tenKTonneProduction * 365);
 
         const tenKTonnePrice = Math.round(valuePerTonne * 10000);
         const annualPrice = Math.round(valuePerTonne * 10000 * 365);
@@ -2353,14 +2360,18 @@ function updateTop20Table(tableId, data, type) {
         row.innerHTML = `
             <td>${item.element}</td>
             <td class="${type}-value-2">${formatNumberWithCommas(ppmValue.toFixed(2))}</td>
-            <td class="dollar-value-2">$${formatNumberWithCommas(valuePerTonne.toFixed(2))}</td>
-            <td class="kg-data" data-price="${tenKTonnePrice}">${formatNumberWithCommas(tenKTonneProduction)}</td>
-            <td class="kg-data" data-price="${annualPrice}">${formatNumberWithCommas(annualFigure)}</td>
+            <td class="dollar-value-2">$${formatNumberWithCommas(valuePerTonne)}</td>
+            <td class="kg-data" data-price="${tenKTonnePrice}">
+                ${isIridium ? formatNumberWithCommas(tenKTonneProduction.toFixed(2)) : formatNumberWithCommas(tenKTonneProduction)}
+            </td>
+            <td class="kg-data" data-price="${annualPrice}">
+                ${isIridium ? formatNumberWithCommas(annualFigure.toFixed(2)) : formatNumberWithCommas(annualFigure)}
+            </td>
         `;
         tbody.appendChild(row);
     });
 
-    // Add tooltips to kg-data cells
+    // Add tooltips to kg-data cells (unchanged)
     const kgCells = tbody.querySelectorAll('.kg-data');
     kgCells.forEach(cell => {
         const price = parseInt(cell.dataset.price);

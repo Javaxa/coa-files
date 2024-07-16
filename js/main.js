@@ -416,9 +416,9 @@ document.querySelector('.table-download').addEventListener('click', function() {
     
     if (minCutoff || maxCutoff) {
         confirmMessage += ` with Cut-off grade of `;
-        if (minCutoff) confirmMessage += `<span class="export-highlight">Minimum ${minCutoff} ppm</span>`;
+        if (minCutoff) confirmMessage += `<span class="export-highlight">Min ${minCutoff} ppm</span>`;
         if (minCutoff && maxCutoff) confirmMessage += ` and `;
-        if (maxCutoff) confirmMessage += `<span class="export-highlight">Maximum ${maxCutoff} ppm</span>`;
+        if (maxCutoff) confirmMessage += `<span class="export-highlight">Max ${maxCutoff} ppm</span>`;
     }
     
     // Set the message in the modal

@@ -2344,8 +2344,8 @@ function updateTop20Table(tableId, data, type) {
         const row = document.createElement('tr');
         const ppmValue = type === 'highest' ? item.highest : item.average;
         const valuePerTonne = type === 'highest' ? item.highestValuePerTonne : item.averageValuePerTonne;
-        const tenKTonneProduction = (ppmValue * 10000) / 1000; // Convert to kg
-        const annualFigure = tenKTonneProduction * 365;
+        const tenKTonneProduction = Math.round((ppmValue * 10000) / 1000); // Convert to kg and round
+        const annualFigure = Math.round(tenKTonneProduction * 365); // Round to whole number
 
         const tenKTonnePrice = Math.round(valuePerTonne * 10000);
         const annualPrice = Math.round(valuePerTonne * 10000 * 365);
@@ -2354,8 +2354,8 @@ function updateTop20Table(tableId, data, type) {
             <td>${item.element}</td>
             <td class="${type}-value-2">${formatNumberWithCommas(ppmValue.toFixed(2))}</td>
             <td class="dollar-value-2">$${formatNumberWithCommas(valuePerTonne.toFixed(2))}</td>
-            <td class="kg-data" data-price="${tenKTonnePrice}">${formatNumberWithCommas(tenKTonneProduction.toFixed(2))}</td>
-            <td class="kg-data" data-price="${annualPrice}">${formatNumberWithCommas(annualFigure.toFixed(2))}</td>
+            <td class="kg-data" data-price="${tenKTonnePrice}">${formatNumberWithCommas(tenKTonneProduction)}</td>
+            <td class="kg-data" data-price="${annualPrice}">${formatNumberWithCommas(annualFigure)}</td>
         `;
         tbody.appendChild(row);
     });

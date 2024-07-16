@@ -129,6 +129,7 @@ const coaFiles = {
     let ownershipLayer;
     let blmClaimsLayer;
     let layerControl;
+    let opacitySlider;
     let currentSortColumn = 'Element (PPM)';
     let currentSortDirection = 'desc';
     let activeZones = new Set(['1', '2', '3', '4', '5', '6']);
@@ -691,11 +692,13 @@ function hideModalBackdrop(modalId) {
     
         for (let key in overlayImages) {
             overlayImages[key].layer = L.imageOverlay(overlayImages[key].url, overlayImages[key].bounds);
+            setInitialLayerOpacity(overlayImages[key].layer);
             if (key === "Zone") {
                 overlayImages[key].layer.addTo(map);
             }
             overlayLayers[key] = overlayImages[key].layer;
         }
+    
     
         // Initialize the control layers with base and overlay layers
         layerControl = L.control.layers(baseLayers, overlayLayers).addTo(map);
@@ -777,7 +780,8 @@ function hideModalBackdrop(modalId) {
                                     
                                     layer.bindPopup(popupContent);
                                 }
-                            }
+                            
+                                setInitialLayerOpacity(blmClaimsLayer);}
                         });
                         
                         map.addLayer(blmClaimsLayer);
@@ -840,6 +844,7 @@ function hideModalBackdrop(modalId) {
                                     
                                     layer.bindPopup(popupContent);
                                 }
+                                setInitialLayerOpacity(ownershipLayer);
                             }
                         });
                         
@@ -906,6 +911,7 @@ function hideModalBackdrop(modalId) {
                                     
                                     layer.bindPopup(popupContent);
                                 }
+                                setInitialLayerOpacity(plssLayer);
                             }
                         });
                         
@@ -1984,15 +1990,55 @@ function updateMetallurgicalCheckbox(checked) {
     });
 }
 
+     // Function to set initial opacity for layers when they are added
+     function setInitialLayerOpacity(layer) {
+        const opacity = opacitySlider ? opacitySlider.value / 100 : 1; // Default to 1 if slider not initialized
+        if (layer instanceof L.ImageOverlay) {
+            layer.setOpacity(opacity);
+        } else if (layer instanceof L.GeoJSON) {
+            layer.setStyle({
+                fillOpacity: opacity * (layer === blmClaimsLayer ? 0.2 : 0.1),
+                opacity: opacity * (layer === blmClaimsLayer ? 0.4 : 0.65)
+            });
+        }
+    }
+
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
     loadData();
     fetchElementPrices();
     updateSelectedElementDisplay();
     updateDHLabelsVisibility();
+    opacitySlider = document.getElementById('overlayOpacitySlider');
+    const opacityValue = document.getElementById('opacityValue');
     const collapseElements = document.querySelectorAll('.collapse');
     const event = new Event('change');
     document.getElementById('elementSelect').dispatchEvent(event);
+
+    opacitySlider.addEventListener('input', function() {
+        const opacity = this.value / 100;
+        opacityValue.textContent = this.value + '%';
+
+        // Update opacity for all relevant overlays
+        if (overlayImages['Zone'].layer) {
+            overlayImages['Zone'].layer.setOpacity(opacity);
+        }
+        if (overlayImages['Claims'].layer) {
+            overlayImages['Claims'].layer.setOpacity(opacity);
+        }
+        if (blmClaimsLayer) {
+            blmClaimsLayer.setStyle({ fillOpacity: opacity * 0.2, opacity: opacity * 0.4 });
+        }
+        if (plssLayer) {
+            plssLayer.setStyle({ fillOpacity: opacity * 0.1, opacity: opacity * 0.65 });
+        }
+        if (ownershipLayer) {
+            ownershipLayer.setStyle({ fillOpacity: opacity * 0.1, opacity: opacity * 0.65 });
+        }
+    });
+
+
+
 
     document.querySelectorAll('.checkbox-container input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', function() {

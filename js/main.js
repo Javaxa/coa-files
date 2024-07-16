@@ -735,6 +735,7 @@ function hideModalBackdrop(modalId) {
                 fetch('overlays/BLM_Natl_MLRS_Mining_Claims_-_Not_Closed.geojson')
                     .then(response => response.json())
                     .then(data => {
+                        const currentOpacity = getCurrentOpacity();
                         blmClaimsLayer = L.geoJSON(data, {
                             style: function(feature) {
                                 return {
@@ -804,6 +805,7 @@ function hideModalBackdrop(modalId) {
                 fetch('overlays/California_Land_Ownership.geojson')
                     .then(response => response.json())
                     .then(data => {
+                        const currentOpacity = getCurrentOpacity();
                         ownershipLayer = L.geoJSON(data, {
                             style: function(feature) {
                                 return {
@@ -867,6 +869,7 @@ function hideModalBackdrop(modalId) {
                 fetch('overlays/Public_Land_Survey_System_(PLSS)__Sections.geojson')
                     .then(response => response.json())
                     .then(data => {
+                        const currentOpacity = getCurrentOpacity();
                         plssLayer = L.geoJSON(data, {
                             style: function(feature) {
                                 return {
@@ -1997,6 +2000,10 @@ function updateMetallurgicalCheckbox(checked) {
         }
     }
 
+    function getCurrentOpacity() {
+        return opacitySlider ? opacitySlider.value / 100 : 1;
+    }
+
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
     loadData();
@@ -2195,14 +2202,35 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.overlay-checkbox-container input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             const layerName = this.value;
+            const currentOpacity = getCurrentOpacity();
+    
             if (this.checked) {
                 if (layerName === "PLSS") {
-                    addPLSSOverlay().then(() => map.addLayer(plssLayer));
+                    addPLSSOverlay().then(() => {
+                        map.addLayer(plssLayer);
+                        plssLayer.setStyle({
+                            fillOpacity: currentOpacity * 0.1,
+                            opacity: currentOpacity * 0.65
+                        });
+                    });
                 } else if (layerName === "Ownership") {
-                    addOwnershipOverlay().then(() => map.addLayer(ownershipLayer));
+                    addOwnershipOverlay().then(() => {
+                        map.addLayer(ownershipLayer);
+                        ownershipLayer.setStyle({
+                            fillOpacity: currentOpacity * 0.1,
+                            opacity: currentOpacity * 0.65
+                        });
+                    });
                 } else if (layerName === "BLMClaims") {
-                    addBLMClaimsOverlay().then(() => map.addLayer(blmClaimsLayer));
+                    addBLMClaimsOverlay().then(() => {
+                        map.addLayer(blmClaimsLayer);
+                        blmClaimsLayer.setStyle({
+                            fillOpacity: currentOpacity * 0.2,
+                            opacity: currentOpacity * 0.4
+                        });
+                    });
                 } else if (overlayImages[layerName]) {
+                    overlayImages[layerName].layer.setOpacity(currentOpacity);
                     map.addLayer(overlayImages[layerName].layer);
                 }
             } else {
@@ -2218,7 +2246,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
+    
     document.getElementById('darkModeToggle').addEventListener('change', function() {
         if (this.checked) {
             document.body.classList.add('dark-mode');

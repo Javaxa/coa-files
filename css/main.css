@@ -1308,3 +1308,14 @@ body {
     display: block;
     font-weight: normal; /* Optional: makes the smaller text less bold */
 }
+
+.element-prices-category-header {
+    margin-bottom: 5px;
+}
+
+.element-prices-category-subtext {
+    font-size: 0.8em;
+    color: #6c757d;
+    margin-top: -5px;
+    margin-bottom: 15px;
+}

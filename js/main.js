@@ -525,15 +525,18 @@ function updateElementPricesModal() {
 
     const categories = [
         {
-            name: "Primary (Precious Metals)",
+            name: "Primary",
+            subtext: "Precious Metals",
             elements: ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag']
         },
         {
-            name: "Secondary (Targeted High Value Elements)",
+            name: "Secondary",
+            subtext: "Targeted High Value Elements",
             elements: ['Rb', 'Cs', 'Sc']
         },
         {
-            name: "Tertiary (Other Possible Targeted Elements)",
+            name: "Tertiary",
+            subtext: "Other Possible Targeted Elements",
             elements: elementPricesData.map(el => el.symbol).filter(symbol => 
                 !['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag', 'Rb', 'Cs', 'Sc'].includes(symbol)
             )
@@ -543,7 +546,10 @@ function updateElementPricesModal() {
     categories.forEach(category => {
         const categoryDiv = document.createElement('div');
         categoryDiv.className = 'col-12 mb-4';
-        categoryDiv.innerHTML = `<h4>${category.name}</h4>`;
+        categoryDiv.innerHTML = `
+            <h4>${category.name}</h4>
+            <p class="text-muted" style="font-size: 0.8em; margin-top: -10px; text-align: center;">${category.subtext}</p>
+        `;
         
         const row = document.createElement('div');
         row.className = 'row';
@@ -580,7 +586,7 @@ function updateElementPricesModal() {
     timestampDiv.textContent = `Last updated: ${lastUpdated ? lastUpdated.toLocaleString() : 'Never'}`;
     container.appendChild(timestampDiv);
 
-    // Modify the click event listeners
+    // Add event listeners for checkboxes and labels (unchanged)
     container.querySelectorAll('.element-price-card').forEach(card => {
         const checkbox = card.querySelector('input[type="checkbox"]');
         const label = card.querySelector('label');
@@ -2338,8 +2344,8 @@ function updateTop20Table(tableId, data, type) {
         const row = document.createElement('tr');
         const ppmValue = type === 'highest' ? item.highest : item.average;
         const valuePerTonne = type === 'highest' ? item.highestValuePerTonne : item.averageValuePerTonne;
-        const tenKTonneProduction = Math.round((ppmValue * 10000) / 1000); // Convert to kg and round
-        const annualFigure = Math.round(tenKTonneProduction * 365); // Round to whole number
+        const tenKTonneProduction = (ppmValue * 10000) / 1000; // Convert to kg
+        const annualFigure = tenKTonneProduction * 365;
 
         const tenKTonnePrice = Math.round(valuePerTonne * 10000);
         const annualPrice = Math.round(valuePerTonne * 10000 * 365);
@@ -2348,8 +2354,8 @@ function updateTop20Table(tableId, data, type) {
             <td>${item.element}</td>
             <td class="${type}-value-2">${formatNumberWithCommas(ppmValue.toFixed(2))}</td>
             <td class="dollar-value-2">$${formatNumberWithCommas(valuePerTonne.toFixed(2))}</td>
-            <td class="kg-data" data-price="${tenKTonnePrice}">${formatNumberWithCommas(tenKTonneProduction)}</td>
-            <td class="kg-data" data-price="${annualPrice}">${formatNumberWithCommas(annualFigure)}</td>
+            <td class="kg-data" data-price="${tenKTonnePrice}">${formatNumberWithCommas(tenKTonneProduction.toFixed(2))}</td>
+            <td class="kg-data" data-price="${annualPrice}">${formatNumberWithCommas(annualFigure.toFixed(2))}</td>
         `;
         tbody.appendChild(row);
     });

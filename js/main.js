@@ -341,6 +341,29 @@ document.getElementById('applyCutoff').addEventListener('click', () => {
     updateElementAverages()
 });
 
+function getElementCategory(symbol) {
+    const primaryElements = ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag'];
+    const secondaryElements = ['Rb', 'Cs', 'Sc'];
+    
+    if (primaryElements.includes(symbol)) return 'primary';
+    if (secondaryElements.includes(symbol)) return 'secondary';
+    return 'tertiary';
+}
+
+// Add this function to get the background color based on the category
+function getElementBackgroundColor(symbol) {
+    const category = getElementCategory(symbol);
+    switch (category) {
+        case 'primary':
+            return '#ffeb7e'; // Gold color
+        case 'secondary':
+            return '#c3ebff'; // Dark green
+        default:
+            return '#e0e0e0'; // Default gray
+    }
+}
+
+
 function exportTableToCSV(filename) {
     const table = document.getElementById('elementTable');
     const rows = table.querySelectorAll('tr');
@@ -385,16 +408,42 @@ function exportTableToCSV(filename) {
     }
 }
 
-// Add click event listener to the export button
 document.querySelector('.table-download').addEventListener('click', function() {
     const selectedElement = document.getElementById('elementSelect').value;
+    const elementInfo = elementPricesData.find(el => el.symbol === selectedElement);
+    const backgroundColor = getElementBackgroundColor(selectedElement);
     
     // Get selected assay types
-    const selectedAssayTypes = Array.from(activeAssayTypes).map(type => {
+    const selectedAssayTypes = Array.from(activeAssayTypes);
+
+    // Determine the data type being exported
+    let dataType = '';
+    const hasMetallurgical = selectedAssayTypes.some(type => 
+        type.includes('Metallurgical') || 
+        type.includes('Mtlg') || 
+        metallurgicalTypes.includes(type)
+    );
+    const hasSediment = selectedAssayTypes.some(type => 
+        !type.includes('Metallurgical') && 
+        !type.includes('Mtlg') && 
+        !metallurgicalTypes.includes(type)
+    );
+
+    if (hasSediment && hasMetallurgical) {
+        dataType = 'Sediment & Metallurgical';
+    } else if (hasMetallurgical) {
+        dataType = 'Metallurgical';
+    } else {
+        dataType = 'Sediment';
+    }
+
+    // Format assay types for display
+    const assayTypesString = selectedAssayTypes.map(type => {
         switch(type) {
             case 'LMB Flux': return 'LMB Flux';
             case 'LMB+': return 'LMB+';
             case '4-Acid Dig': return '4-Acid';
+            case 'LMB+ (Metallurgical)': return 'LMB+ (Metallurgical)';
             default: return type;
         }
     }).join(', ');
@@ -412,7 +461,10 @@ document.querySelector('.table-download').addEventListener('click', function() {
     const minCutoff = document.getElementById('minCutoff').value;
     const maxCutoff = document.getElementById('maxCutoff').value;
     
-    let confirmMessage = `You are about to export data for <span class="export-highlight">${selectedElement}</span> Assayed with <span class="export-highlight">${selectedAssayTypes}</span> for <span class="export-highlight">${selectedIncursionTypes}</span>.`;
+    let confirmMessage = `You are about to export <span class="export-highlight">${dataType}</span> data for <div class="export-highlight modalSelectedElementContainer">
+        <span class="modalSelectedElementName">${elementInfo ? elementInfo.name : ''}</span>
+        <span class="modalSelectedElement" style="background-color: ${backgroundColor};">${selectedElement}</span>
+    </div> Assayed with <span class="export-highlight">${assayTypesString}</span> for <span class="export-highlight">${selectedIncursionTypes}</span> Incursion(s).`;
     
     if (minCutoff || maxCutoff) {
         confirmMessage += ` with Cut-off grade of `;
@@ -1711,25 +1763,31 @@ function loadData() {
 function updateSelectedElementDisplay() {
     const selectedElement = document.getElementById('elementSelect').value;
     const elementInfo = elementPricesData.find(el => el.symbol === selectedElement);
+    const backgroundColor = getElementBackgroundColor(selectedElement);
     
     // Update main display
     if (elementInfo) {
         document.getElementById('selectedElementName').textContent = elementInfo.name;
         document.getElementById('selectedElement').textContent = elementInfo.symbol;
+        document.getElementById('selectedElement').style.backgroundColor = backgroundColor;
     } else {
         document.getElementById('selectedElementName').textContent = '';
         document.getElementById('selectedElement').textContent = selectedElement;
+        document.getElementById('selectedElement').style.backgroundColor = backgroundColor;
     }
 
     // Update modal display
     if (elementInfo) {
         document.getElementById('modalSelectedElementName').textContent = elementInfo.name;
         document.getElementById('modalSelectedElement').textContent = elementInfo.symbol;
+        document.getElementById('modalSelectedElement').style.backgroundColor = backgroundColor;
     } else {
         document.getElementById('modalSelectedElementName').textContent = '';
         document.getElementById('modalSelectedElement').textContent = selectedElement;
+        document.getElementById('modalSelectedElement').style.backgroundColor = backgroundColor;
     }
 }
+
 
 function updateSelectedDHAverage() {
     if (selectedIndices.length > 0) {

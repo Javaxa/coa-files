@@ -355,11 +355,11 @@ function getElementBackgroundColor(symbol) {
     const category = getElementCategory(symbol);
     switch (category) {
         case 'primary':
-            return '#ffeb7e'; // Gold color
+            return '#ffeb7e'; 
         case 'secondary':
-            return '#c3ebff'; // Dark green
+            return '#d3f6b7'; 
         default:
-            return '#e0e0e0'; // Default gray
+            return '#e0e0e0'; 
     }
 }
 

@@ -497,6 +497,7 @@ body {
 
 .dark-mode #selectedElement {
     background: #4f4f4f;
+    color: black !important;
 }
 
 .legend-wrapper, #heatmapLegend {

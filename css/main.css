@@ -1424,6 +1424,7 @@ body {
 #exportConfirmModal .modalSelectedElementName {
     font-size: 18px;
     margin-right: 5px;
+    text-decoration: underline;
 }
 
 #exportConfirmModal .modalSelectedElement {

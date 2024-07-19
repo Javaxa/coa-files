@@ -786,29 +786,49 @@ function hideModalBackdrop(modalId) {
             attribution: '&copy; BGS 2024'
         });
     
+        // Stadia Terrain with fallback
         const terrainLayer = L.tileLayer.provider('Stadia.StamenTerrain', {
             attribution: '&copy; BGS 2024'
+        }).on('tileerror', function(e) {
+            console.log('Stadia Terrain failed, falling back to OpenTopoMap');
+            map.removeLayer(terrainLayer);
+            map.addLayer(openTopoMap);
+            baseLayers["Terrain"] = openTopoMap;
+            layerControl.remove();
+            layerControl = L.control.layers(baseLayers).addTo(map);
         });
     
         const esriWorldStreetMap = L.tileLayer.provider('Esri.WorldStreetMap', {
             attribution: '&copy; BGS 2024'
         });
     
+        // Stadia Alidade Satellite with fallback
         const stadiaAlidadeSatellite = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg', {
             maxZoom: 20,
             attribution: '&copy; BGS 2024'
+        }).on('tileerror', function(e) {
+            console.log('Stadia Alidade Satellite failed, falling back to USGS USImageryTopo');
+            map.removeLayer(stadiaAlidadeSatellite);
+            map.addLayer(usgsUSImageryTopo);
+            baseLayers["Sat w Road Names"] = usgsUSImageryTopo;
+            layerControl.remove();
+            layerControl = L.control.layers(baseLayers).addTo(map);
         });
     
-        // USGS USTopo layer
         const usgsUSTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}', {
             maxZoom: 20,
             attribution: '&copy; BGS 2024'
         });
     
-        // Add USGS USImageryTopo layer
         const usgsUSImageryTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}', {
             maxZoom: 20,
             attribution: '&copy; BGS 2024'
+        });
+    
+        // OpenTopoMap as a fallback for Terrain
+        const openTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            maxZoom: 17,
+            attribution: '&copy; BGS 2024 | Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
         });
     
         map = L.map('map', {

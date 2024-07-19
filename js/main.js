@@ -774,6 +774,7 @@ function hideModalBackdrop(modalId) {
     });
 
     function initMap() {
+        
         const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             attribution: '&copy; BGS 2024'
         });
@@ -794,7 +795,10 @@ function hideModalBackdrop(modalId) {
             "Satellite": satelliteLayer,
             "Topographic": topoLayer,
             "Street": streetLayer,
+            "Terrain": L.tileLayer.provider('Stadia.StamenTerrain'),
         };
+
+
     
         // Initialize the layers but don't add them to the control
         for (let key in overlayImages) {

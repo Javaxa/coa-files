@@ -135,24 +135,32 @@ const coaFiles = {
     let activeZones = new Set(['1', '2', '3', '4', '5', '6']);
     let activeAssayTypes = new Set(['LMB Flux', 'LMB+']);
     let activeIncursionTypes = new Set(['HY20']);
-    let overlayImages = {
-        "Zone": {
-            url: '/overlays/zone.png', 
-            bounds: [
-                convertUTMToLatLng(3913300, 443088),
-                convertUTMToLatLng(3893000, 463668)
-            ],
-            layer: null
-        },
-        "Claims": {
-            url: '/overlays/claims.png',
-            bounds: [
-                convertUTMToLatLng(3913300, 443088),
-                convertUTMToLatLng(3893000, 463668)
-            ],
-            layer: null
-        }
-    };
+        const overlayImages = {
+            "Zone": {
+                url: '/overlays/zone.png', 
+                bounds: [
+                    convertUTMToLatLng(3913300, 443088),
+                    convertUTMToLatLng(3893000, 463668)
+                ],
+                layer: null
+            },
+            "Claims": {
+                url: '/overlays/claims.png',
+                bounds: [
+                    convertUTMToLatLng(3913300, 443088),
+                    convertUTMToLatLng(3893000, 463668)
+                ],
+                layer: null
+            },
+            "Magnetic": {
+                url: '/overlays/magnetic.png',
+                bounds: [
+                    convertUTMToLatLng(3913300, 443088),
+                    convertUTMToLatLng(3893000, 463668)
+                ],
+                layer: null
+            }
+        };
     const metallurgicalTypes = ['LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', 'LMB+ (Mtlg-AqRg)'];
     const metallurgicalCheckboxes = document.querySelectorAll('input[value="LMB+ (Metallurgical)"]');
     const headers = ['Description', 'Incursion Type', 'Lab', 'Stid', 'Zone', 'Northing', 'Easting', 'DH', 'Depth', 'Assay Type', 'COA', 'Weight'];
@@ -795,7 +803,7 @@ function hideModalBackdrop(modalId) {
             if (key === "Zone") {
                 overlayImages[key].layer.addTo(map);
             }
-        }
+        }    
     
         // Only add base layers to the control
         layerControl = L.control.layers(baseLayers).addTo(map);
@@ -2113,23 +2121,22 @@ document.addEventListener('DOMContentLoaded', () => {
         opacityValue.textContent = this.value + '%';
 
         // Update opacity for all relevant overlays
-        if (overlayImages['Zone'].layer) {
-            overlayImages['Zone'].layer.setOpacity(opacity);
+        for (let key in overlayImages) {
+            if (overlayImages[key].layer && map.hasLayer(overlayImages[key].layer)) {
+                overlayImages[key].layer.setOpacity(opacity);
+            }
         }
-        if (overlayImages['Claims'].layer) {
-            overlayImages['Claims'].layer.setOpacity(opacity);
-        }
-        if (blmClaimsLayer) {
+
+        if (blmClaimsLayer && map.hasLayer(blmClaimsLayer)) {
             blmClaimsLayer.setStyle({ fillOpacity: opacity * 0.2, opacity: opacity * 0.4 });
         }
-        if (plssLayer) {
+        if (plssLayer && map.hasLayer(plssLayer)) {
             plssLayer.setStyle({ fillOpacity: opacity * 0.1, opacity: opacity * 0.65 });
         }
-        if (ownershipLayer) {
+        if (ownershipLayer && map.hasLayer(ownershipLayer)) {
             ownershipLayer.setStyle({ fillOpacity: opacity * 0.1, opacity: opacity * 0.65 });
         }
     });
-
 
 
 

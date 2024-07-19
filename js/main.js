@@ -794,8 +794,19 @@ function hideModalBackdrop(modalId) {
             attribution: '&copy; BGS 2024'
         });
     
-        // Manually create the Stadia AlidadeSatellite layer
         const stadiaAlidadeSatellite = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg', {
+            maxZoom: 20,
+            attribution: '&copy; BGS 2024'
+        });
+    
+        // USGS USTopo layer
+        const usgsUSTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 20,
+            attribution: '&copy; BGS 2024'
+        });
+    
+        // Add USGS USImageryTopo layer
+        const usgsUSImageryTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}', {
             maxZoom: 20,
             attribution: '&copy; BGS 2024'
         });
@@ -807,11 +818,14 @@ function hideModalBackdrop(modalId) {
         const baseLayers = {
             "Satellite": satelliteLayer,
             "Sat w Road Names": stadiaAlidadeSatellite,
+            "Sat + Topo": usgsUSImageryTopo,
             "Topographic": topoLayer,
+            "USGS Topo": usgsUSTopo,
             "Terrain": terrainLayer,
             "Street": streetLayer,
             "Esri Street": esriWorldStreetMap
         };
+    
     
     
         // Initialize the layers but don't add them to the control

@@ -165,14 +165,15 @@
                                         <input type="range" id="overlayOpacitySlider" min="0" max="100" value="100" class="opacity-slider">
                                     </div>
                                     <label><input type="checkbox" value="Zone" checked> Zone</label>
-                                    <label><input type="checkbox" value="Claims"> Claims</label>
+                                    <label><input type="checkbox" value="Claims">Claims</label>
+                                    <label><input type="checkbox" value="Magnetic">Seismic + Magnetic</label>
                                     <label><input type="checkbox" value="BLMClaims">BLM Claims</label>
                                     <label><input type="checkbox" value="PLSS">PLSS Grid</label>
                                     <label><input type="checkbox" value="Ownership">Land Ownership</label>
                                     <div class="heatmap-controls">
-                                        <h6>Heat map Controls</h6>
-                                        <button id="toggleHeatmapButton" class="btn btn-sm btn-outline-primary">Show Heatmap</button>
-                                        <button id="heatmapModeButton" class="btn btn-sm btn-outline-danger">Heatmap by Highest ppm</button>
+                                        <h6>Heat Map Controls</h6>
+                                        <button id="toggleHeatmapButton" class="btn btn-sm btn-outline-primary">Show Heat Map</button>
+                                        <button id="heatmapModeButton" class="btn btn-sm btn-outline-danger">Heat Map by Highest ppm</button>
                                     </div>
                                 </div>
                             </div>
@@ -498,7 +499,7 @@
 
     <!--Table Element selection and heatmap Legend-->
         <div id="heatmapLegend" class="legend-wrapper" style="display: none;">
-            <h5>Heatmap Legend</h5>
+            <h5>Heat Map Legend</h5>
             <div id="legendColors"></div>
         </div>
         <div class="mt-4" style="max-width: 1200px; margin: auto;">

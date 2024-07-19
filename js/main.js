@@ -1258,14 +1258,6 @@ document.getElementById('iconSizeMode').removeEventListener('change', function()
     updateLegend();
 });
 
-// Add event listeners to individual radio buttons
-function smoothScrollToElement(element) {
-    element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'start'
-    });
-}
 
 // Modify the event listeners for the icon size mode radio buttons
 document.querySelectorAll('input[name="iconSizeMode"]').forEach(radio => {
@@ -1274,12 +1266,6 @@ document.querySelectorAll('input[name="iconSizeMode"]').forEach(radio => {
         updateDHLabelsVisibility();
         updateMap();
         updateLegend();
-
-        // Smooth scroll to the DH labels control
-        const dhLabelsControl = document.getElementById('dhLabelsControl');
-        if (dhLabelsControl) {
-            setTimeout(() => smoothScrollToElement(dhLabelsControl), 100);
-        }
     });
 });
 

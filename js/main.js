@@ -774,7 +774,6 @@ function hideModalBackdrop(modalId) {
     });
 
     function initMap() {
-        
         const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             attribution: '&copy; BGS 2024'
         });
@@ -787,18 +786,33 @@ function hideModalBackdrop(modalId) {
             attribution: '&copy; BGS 2024'
         });
     
+        const terrainLayer = L.tileLayer.provider('Stadia.StamenTerrain', {
+            attribution: '&copy; BGS 2024'
+        });
+    
+        const esriWorldStreetMap = L.tileLayer.provider('Esri.WorldStreetMap', {
+            attribution: '&copy; BGS 2024'
+        });
+    
+        // Manually create the Stadia AlidadeSatellite layer
+        const stadiaAlidadeSatellite = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg', {
+            maxZoom: 20,
+            attribution: '&copy; BGS 2024'
+        });
+    
         map = L.map('map', {
             layers: [satelliteLayer]
         }).setView([0, 0], 2);
     
         const baseLayers = {
             "Satellite": satelliteLayer,
+            "Sat w Road Names": stadiaAlidadeSatellite,
             "Topographic": topoLayer,
+            "Terrain": terrainLayer,
             "Street": streetLayer,
-            "Terrain": L.tileLayer.provider('Stadia.StamenTerrain'),
+            "Esri Street": esriWorldStreetMap
         };
-
-
+    
     
         // Initialize the layers but don't add them to the control
         for (let key in overlayImages) {

@@ -786,16 +786,8 @@ function hideModalBackdrop(modalId) {
             attribution: '&copy; BGS 2024'
         });
     
-        const terrainLayer = L.tileLayer.provider('Stadia.StamenTerrain', {
-            attribution: '&copy; BGS 2024'
-        });
     
         const esriWorldStreetMap = L.tileLayer.provider('Esri.WorldStreetMap', {
-            attribution: '&copy; BGS 2024'
-        });
-    
-        const stadiaAlidadeSatellite = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg', {
-            maxZoom: 20,
             attribution: '&copy; BGS 2024'
         });
     
@@ -823,9 +815,7 @@ function hideModalBackdrop(modalId) {
             "Topographic": topoLayer,
             "USGS Topo": usgsUSTopo,
             "Street": streetLayer,
-            "Esri Street": esriWorldStreetMap,
-            "Terrain": terrainLayer,
-            "Sat w Roads": stadiaAlidadeSatellite,
+            "Esri Street": esriWorldStreetMap
         };
     
     

@@ -810,6 +810,8 @@ function hideModalBackdrop(modalId) {
             maxZoom: 20,
             attribution: '&copy; BGS 2024'
         });
+
+
     
         map = L.map('map', {
             layers: [satelliteLayer]
@@ -821,7 +823,9 @@ function hideModalBackdrop(modalId) {
             "Topographic": topoLayer,
             "USGS Topo": usgsUSTopo,
             "Street": streetLayer,
-            "Esri Street": esriWorldStreetMap
+            "Esri Street": esriWorldStreetMap,
+            "Terrain": terrainLayer,
+            "Sat w Roads": stadiaAlidadeSatellite,
         };
     
     

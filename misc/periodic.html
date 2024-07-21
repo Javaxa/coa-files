@@ -1,0 +1,1862 @@
+    <style>
+      
+ol, ul {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+q, blockquote {
+  quotes: none;
+}
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+a img {
+  border: none;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+span.swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background: #eee;
+  margin-right: 10px;
+}
+
+#key {
+  position: absolute;
+  left: 130px;
+  z-index: 100;
+  margin-top: 55px;
+}
+#key ul {
+  float: left;
+  text-align: left;
+}
+#key ul li {
+  line-height: 1.5em;
+  font-size: .8em;
+  color: #B6B6B6;
+}
+
+#wrapper {
+  width: 990px;
+  margin: 0 auto;
+  margin-top: 30px;
+  height: 600px;
+  position: relative;
+  font-family: sans-serif;
+  font-size: 100%;
+}
+
+.chip.active {
+    box-shadow: #ff5050 0px 1px 4px, #ff5050 0px 0px 0px 2px;
+    transform: scale(1.05) !important;
+    -moz-transform: scale(1.05) !important;
+    -ms-transform: scale(1.05) !important;
+    -webkit-transform: scale(1.05) !important;
+    -o-transform: scale(1.05) !important;
+}
+
+div .indexfix {
+    z-index: 10000;
+}
+
+[class^="elements-"] {
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  color: #333;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 55px;
+  height: 55px;
+  font-size: 12px;
+  display: block;
+  float: left;
+  -moz-perspective: 1000;
+  -webkit-perspective: 1000;
+  perspective: 1000;
+}
+[class^="elements-"] .chip {
+  width: 100%;
+  height: 100%;
+  -moz-transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  -webkit-transition-property: all;
+  transition-property: all;
+  -moz-transition-duration: 0.3s;
+  -o-transition-duration: 0.3s;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -moz-transition-timing-function: ease-out;
+  -o-transition-timing-function: ease-out;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+[class^="elements-"] .chip.long .front strong {
+  margin-top: 8px;
+  font-size: 1.38em;
+}
+[class^="elements-"] .chip.long .back p {
+  margin-top: 20px;
+}
+[class^="elements-"]:hover .chip {
+  -moz-transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+[class^="elements-"] .face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+[class^="elements-"] .face.front, [class^="elements-"] .face.back {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+[class^="elements-"] .face.front {
+  padding: 4px;
+  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.3), inset 1px 0 0 rgba(255, 255, 255, 0.2), inset -1px 0 0 rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.3), inset 1px 0 0 rgba(255, 255, 255, 0.2), inset -1px 0 0 rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.3), inset 1px 0 0 rgba(255, 255, 255, 0.2), inset -1px 0 0 rgba(0, 0, 0, 0.15);
+}
+[class^="elements-"] .face.front i {
+  display: block;
+  font-size: .8em;
+  pointer-events: none;
+}
+    [class^="elements-"] .face.front strong {
+        font-size: 20px;
+        display: block;
+        font-weight: bold;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+        text-align: center;
+        margin-top: 4px;
+        background: rgba(0, 0, 0, 0.1);
+        pointer-events: none;
+        border-radius: 5px;
+    }
+[class^="elements-"] .face.back {
+  display: block;
+  -moz-transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background: #eee;
+  color: #111;
+}
+[class^="elements-"] .face.back p {
+  margin-top: 16px;
+  line-height: 1.2;
+  text-align: center;
+  font-size: .7em;
+  font-weight: 600;
+}
+[class^="elements-"] .face.back p span {
+  display: block;
+}
+
+.modal-style {
+    margin-bottom: 40px;
+}
+
+/* -------------------
+	Elements
+-------------------- */
+span.swatch.elements-metal {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M2YzZjNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzg2ODY4NiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #c6c6c6), color-stop(100%, #868686));
+  background-image: -moz-linear-gradient(left top, #c6c6c6, #868686);
+  background-image: -webkit-linear-gradient(left top, #c6c6c6, #868686);
+  background-image: linear-gradient(to right bottom, #c6c6c6, #868686);
+}
+span.swatch.elements-non-metal {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2E1YjNiOCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzYyNzU3YyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #a5b3b8), color-stop(100%, #62757c));
+  background-image: -moz-linear-gradient(left top, #a5b3b8, #62757c);
+  background-image: -webkit-linear-gradient(left top, #a5b3b8, #62757c);
+  background-image: linear-gradient(to right bottom, #a5b3b8, #62757c);
+}
+span.swatch.elements-alkali-metal {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M2ZDg2NyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzg2OTkyNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #c6d867), color-stop(100%, #869927));
+  background-image: -moz-linear-gradient(left top, #c6d867, #869927);
+  background-image: -webkit-linear-gradient(left top, #c6d867, #869927);
+  background-image: linear-gradient(to right bottom, #c6d867, #869927);
+}
+span.swatch.elements-alkali-earth-metal {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzhlZDViMyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNkYTY3NCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #8ed5b3), color-stop(100%, #3da674));
+  background-image: -moz-linear-gradient(left top, #8ed5b3, #3da674);
+  background-image: -webkit-linear-gradient(left top, #8ed5b3, #3da674);
+  background-image: linear-gradient(to right bottom, #8ed5b3, #3da674);
+}
+span.swatch.elements-transition-metal {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2IwZGNmZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzMyYTVmZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #b0dcfe), color-stop(100%, #32a5fd));
+  background-image: -moz-linear-gradient(left top, #b0dcfe, #32a5fd);
+  background-image: -webkit-linear-gradient(left top, #b0dcfe, #32a5fd);
+  background-image: linear-gradient(to right bottom, #b0dcfe, #32a5fd);
+}
+span.swatch.elements-lanthoid {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZWUzYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2JhYWEwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #ffee3a), color-stop(100%, #baaa00));
+  background-image: -moz-linear-gradient(left top, #ffee3a, #baaa00);
+  background-image: -webkit-linear-gradient(left top, #ffee3a, #baaa00);
+  background-image: linear-gradient(to right bottom, #ffee3a, #baaa00);
+}
+span.swatch.elements-actinoid {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmYzg0NyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M3OGIwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #ffc847), color-stop(100%, #c78b00));
+  background-image: -moz-linear-gradient(left top, #ffc847, #c78b00);
+  background-image: -webkit-linear-gradient(left top, #ffc847, #c78b00);
+  background-image: linear-gradient(to right bottom, #ffc847, #c78b00);
+}
+span.swatch.elements-metalloid {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U1OGE4YSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M0MmIyYiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #e58a8a), color-stop(100%, #c42b2b));
+  background-image: -moz-linear-gradient(left top, #e58a8a, #c42b2b);
+  background-image: -webkit-linear-gradient(left top, #e58a8a, #c42b2b);
+  background-image: linear-gradient(to right bottom, #e58a8a, #c42b2b);
+}
+span.swatch.elements-halogen {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2NkYjI3NSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzhlNzMzNCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #cdb275), color-stop(100%, #8e7334));
+  background-image: -moz-linear-gradient(left top, #cdb275, #8e7334);
+  background-image: -webkit-linear-gradient(left top, #cdb275, #8e7334);
+  background-image: linear-gradient(to right bottom, #cdb275, #8e7334);
+}
+span.swatch.elements-noble-gas {
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2FkYWRkYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzU1NTViMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #adadda), color-stop(100%, #5555b2));
+  background-image: -moz-linear-gradient(left top, #adadda, #5555b2);
+  background-image: -webkit-linear-gradient(left top, #adadda, #5555b2);
+  background-image: linear-gradient(to right bottom, #adadda, #5555b2);
+}
+
+.elements-metal .front {
+  color: #2d2d2d;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M2YzZjNiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzg2ODY4NiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #c6c6c6), color-stop(100%, #868686));
+  background-image: -moz-linear-gradient(left top, #c6c6c6, #868686);
+  background-image: -webkit-linear-gradient(left top, #c6c6c6, #868686);
+  background-image: linear-gradient(to right bottom, #c6c6c6, #868686);
+}
+.elements-metal .face.back {
+  background-color: #c6c6c6;
+}
+
+.elements-alkali-metal .front {
+  color: #3b4311;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M2ZDg2NyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzg2OTkyNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #c6d867), color-stop(100%, #869927));
+  background-image: -moz-linear-gradient(left top, #c6d867, #869927);
+  background-image: -webkit-linear-gradient(left top, #c6d867, #869927);
+  background-image: linear-gradient(to right bottom, #c6d867, #869927);
+}
+.elements-alkali-metal .face.back {
+  background-color: #d5e38f;
+}
+
+.elements-alkali-earth-metal .front {
+  color: #133323;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzhlZDViMyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNkYTY3NCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #8ed5b3), color-stop(100%, #3da674));
+  background-image: -moz-linear-gradient(left top, #8ed5b3, #3da674);
+  background-image: -webkit-linear-gradient(left top, #8ed5b3, #3da674);
+  background-image: linear-gradient(to right bottom, #8ed5b3, #3da674);
+}
+.elements-alkali-earth-metal .face.back {
+  background-color: #b3e3cc;
+}
+
+.elements-transition-metal .front {
+  color: #012948;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2IwZGNmZSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzMyYTVmZCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #b0dcfe), color-stop(100%, #32a5fd));
+  background-image: -moz-linear-gradient(left top, #b0dcfe, #32a5fd);
+  background-image: -webkit-linear-gradient(left top, #b0dcfe, #32a5fd);
+  background-image: linear-gradient(to right bottom, #b0dcfe, #32a5fd);
+}
+.elements-transition-metal .face.back {
+  background-color: #b0dcfe;
+}
+
+.elements-lanthoid .front {
+  color: #443e00;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZWUzYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2JhYWEwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #ffee3a), color-stop(100%, #baaa00));
+  background-image: -moz-linear-gradient(left top, #ffee3a, #baaa00);
+  background-image: -webkit-linear-gradient(left top, #ffee3a, #baaa00);
+  background-image: linear-gradient(to right bottom, #ffee3a, #baaa00);
+}
+.elements-lanthoid .face.back {
+  background-color: #ffee3a;
+}
+
+.elements-actinoid .front {
+  color: #140e00;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmYzg0NyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M3OGIwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #ffc847), color-stop(100%, #c78b00));
+  background-image: -moz-linear-gradient(left top, #ffc847, #c78b00);
+  background-image: -webkit-linear-gradient(left top, #ffc847, #c78b00);
+  background-image: linear-gradient(to right bottom, #ffc847, #c78b00);
+}
+.elements-actinoid .face.back {
+  background-color: #ffc847;
+}
+
+.elements-metalloid .front {
+  color: #320b0b;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2U1OGE4YSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2M0MmIyYiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #e58a8a), color-stop(100%, #c42b2b));
+  background-image: -moz-linear-gradient(left top, #e58a8a, #c42b2b);
+  background-image: -webkit-linear-gradient(left top, #e58a8a, #c42b2b);
+  background-image: linear-gradient(to right bottom, #e58a8a, #c42b2b);
+}
+.elements-metalloid .face.back {
+  background-color: #e58a8a;
+}
+
+.elements-non-metal .front {
+  color: #131718;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2E1YjNiOCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzYyNzU3YyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #a5b3b8), color-stop(100%, #62757c));
+  background-image: -moz-linear-gradient(left top, #a5b3b8, #62757c);
+  background-image: -webkit-linear-gradient(left top, #a5b3b8, #62757c);
+  background-image: linear-gradient(to right bottom, #a5b3b8, #62757c);
+}
+.elements-non-metal .face.back {
+  background-color: #b9c4c8;
+}
+
+.elements-halogen .front {
+  color: #0c0904;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2NkYjI3NSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzhlNzMzNCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #cdb275), color-stop(100%, #8e7334));
+  background-image: -moz-linear-gradient(left top, #cdb275, #8e7334);
+  background-image: -webkit-linear-gradient(left top, #cdb275, #8e7334);
+  background-image: linear-gradient(to right bottom, #cdb275, #8e7334);
+}
+.elements-halogen .face.back {
+  background-color: #d6c190;
+}
+
+.elements-noble-gas .front {
+  color: #1b1b3a;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2FkYWRkYSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzU1NTViMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #adadda), color-stop(100%, #5555b2));
+  background-image: -moz-linear-gradient(left top, #adadda, #5555b2);
+  background-image: -webkit-linear-gradient(left top, #adadda, #5555b2);
+  background-image: linear-gradient(to right bottom, #adadda, #5555b2);
+}
+.elements-noble-gas .face.back {
+  background-color: #adadda;
+}
+
+.elements-lanthanoid-transitional-metal .front {
+  color: #1b1b3a;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzRiYjBmZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2QzYzEwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #4bb0fd), color-stop(100%, #d3c100));
+  background-image: -moz-linear-gradient(left top, #4bb0fd, #d3c100);
+  background-image: -webkit-linear-gradient(left top, #4bb0fd, #d3c100);
+  background-image: linear-gradient(to right bottom, #4bb0fd, #d3c100);
+}
+.elements-lanthanoid-transitional-metal .face.back {
+  background-color: #b0dcfe;
+}
+
+.elements-actinoid-transitional-metal .front {
+  color: #1b1b3a;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuMCIgeTE9IjAuMCIgeDI9IjEuMCIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzRiYjBmZCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2UwOWQwMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #4bb0fd), color-stop(100%, #e09d00));
+  background-image: -moz-linear-gradient(left top, #4bb0fd, #e09d00);
+  background-image: -webkit-linear-gradient(left top, #4bb0fd, #e09d00);
+  background-image: linear-gradient(to right bottom, #4bb0fd, #e09d00);
+}
+.elements-actinoid-transitional-metal .face.back {
+  background-color: #b0dcfe;
+}
+
+.elements-blank {
+  background: transparent;
+  cursor: auto;
+}
+.elements-blank.full {
+  height: 27.5px;
+  clear: both;
+  width: 100%;
+}
+
+/* -------------------
+	Media Queries
+-------------------- */
+
+    @media screen and (max-width: 1200px) {
+        #wrapper {
+            width: 90%;
+        }
+
+            #wrapper .elements-blank {
+                display: none;
+            }
+
+        #key {
+            position: static;
+            width: 100%;
+            left: 165px;
+            z-index: 100;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+            #key:after {
+                content: '';
+                content: ".";
+                display: block;
+                clear: both;
+                visibility: hidden;
+                line-height: 0;
+                height: 0;
+            }
+
+            #key ul {
+                width: 28%;
+                min-width: 180px;
+                margin-right: 5%;
+            }
+
+                #key ul:nth-of-type(3) {
+                    margin-right: 0;
+                }
+
+        .modal-style {
+            width: 900px !important;
+            margin-left: -200px !important;
+        }
+    }
+
+@media screen and (max-width: 1070px) {
+    .modal-style {
+        width: 820px !important;
+        margin-left: -155px !important;
+    }
+}
+
+@media screen and (max-width: 865px) {
+    .modal-style {
+        width: 749px !important;
+        margin-left: -120px !important;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .modal-style {
+        width: 600px !important;
+        margin-left: -53px !important;
+        margin-top: 10px !important;
+    }
+}
+
+@media screen and (max-width: 630px) {
+    .modal-style {
+        width: 500px !important;
+        margin-left: 0px !important;
+    }
+}
+
+@media screen and (max-width: 577px) {
+    .modal-style {
+        width: 450px !important;
+        margin-left: 20px !important;
+    }
+}
+
+
+
+    </style>
+</head>
+<body>
+
+    <div class="modal-body">
+        <div id='wrapper'>
+            <div id='key'>
+                <ul>
+                    <li><span class='swatch elements-metal'></span>Metals</li>
+                    <li><span class='swatch elements-non-metal'></span>Non-Metals</li>
+                    <li><span class='swatch elements-alkali-metal'></span>Alkali Metals</li>
+                    <li><span class='swatch elements-alkali-earth-metal'></span>Alkali Earth Metals</li>
+                </ul>
+                <ul>
+                    <li><span class='swatch elements-transition-metal'></span>Transitional Metals</li>
+                    <li><span class='swatch elements-lanthoid'></span>Lanthoids</li>
+                    <li><span class='swatch elements-actinoid'></span>Actinoids</li>
+                </ul>
+                <ul>
+                    <li><span class='swatch elements-metalloid'></span>Metaloids</li>
+                    <li><span class='swatch elements-halogen'></span>Halogens</li>
+                    <li><span class='swatch elements-noble-gas'></span>Noble Gas</li>
+                </ul>
+            </div>
+            <div id='elements'>
+                <!-- Row One -->
+                <div class='elements-non-metal elements-main'>
+                    <div class='chip'>
+                        <div class="face front">
+                            <i>1</i>
+                            <strong>H</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Hydrogen<span>1400</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-noble-gas elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>2</i>
+                            <strong>He</strong>
+                        </div>
+
+                        <div class='face back'>
+                            <p>Helium<span>0.008</span><p>
+                        </div>
+                    </div>
+                </div><!-- //Row One -->
+                <!-- Row Two -->
+                <div class='elements-alkali-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>3</i>
+                            <strong>Li</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Lithium<span>20</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-alkali-earth-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>4</i>
+                            <strong>Be</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Beryllium<span>4</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-metalloid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>5</i>
+                            <strong>B</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Boron<span>10</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-non-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>6</i>
+                            <strong>C</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Carbon<span>200</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-non-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>7</i>
+                            <strong>N</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Nitrogen<span>7</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-non-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>8</i>
+                            <strong>O</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Oxygen<span>461</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-halogen elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>9</i>
+                            <strong>F</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Fluorine<span>9</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-noble-gas elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>10</i>
+                            <strong>Ne</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Neon<span>0.005</span><p>
+                        </div>
+                    </div>
+                </div><!-- //Row Two -->
+                <!-- Row Three -->
+                <div class='elements-alkali-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>11</i>
+                            <strong>Na</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Sodium<span>23.6</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-alkali-earth-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>12</i>
+                            <strong>Mg</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Magnesium<span>23.3</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>13</i>
+                            <strong>Al</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Aluminum<span>82.3</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metalloid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>14</i>
+                            <strong>Si</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Silicon<span>282</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-non-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>15</i>
+                            <strong>P</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Phosphorus<span>1050</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-non-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>16</i>
+                            <strong>S</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Sulfur<span>350</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-halogen elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>17</i>
+                            <strong>Cl</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Chlorine<span>145</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-noble-gas elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>18</i>
+                            <strong>Ar</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Argon<span>3.5</span><p>
+                        </div>
+                    </div>
+                </div><!-- //Row Three -->
+                <!-- Row Four -->
+                <div class='elements-alkali-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>19</i>
+                            <strong>K</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Potassium<span>20.9</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-alkali-earth-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>20</i>
+                            <strong>Ca</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Calcium<span>41.5</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>21</i>
+                            <strong>Sc</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Scandium<span>22</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>22</i>
+                            <strong>Ti</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Titanium<span>5.65</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>23</i>
+                            <strong>V</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Vanadium<span>120</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>24</i>
+                            <strong>Cr</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Chromium<span>102</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>25</i>
+                            <strong>Mn</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Manganese<span>950</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>26</i>
+                            <strong>Fe</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Iron<span>56.3</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>27</i>
+                            <strong>Co</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Cobalt<span>25</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>28</i>
+                            <strong>Ni</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Nickel<span>84</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>29</i>
+                            <strong>Cu</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Copper<span>60</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>30</i>
+                            <strong>Zn</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Zinc<span>461</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>31</i>
+                            <strong>Ga</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Gallium<span>19</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metalloid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>32</i>
+                            <strong>Ge</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Germanium<span>1.5</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metalloid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>33</i>
+                            <strong>As</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Arsenic<span>1.8</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-non-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>34</i>
+                            <strong>Se</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Selenium<span>0.05</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-halogen elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>35</i>
+                            <strong>Br</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Bromine<span>35</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-noble-gas elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>36</i>
+                            <strong>Kr</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Krypton<p>
+                        </div>
+                    </div>
+                </div><!-- //Row Four -->
+                <!-- Row Five -->
+                <div class='elements-alkali-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>37</i>
+                            <strong>Rb</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Rubidium<span>90</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-alkali-earth-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>38</i>
+                            <strong>Sr</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Strontuim<span>370</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>39</i>
+                            <strong>Y</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Yttrium<span>33</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>40</i>
+                            <strong>Zr</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Zirconium<span>165</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>41</i>
+                            <strong>Nb</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Niobium<span>20</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>42</i>
+                            <strong>Mo</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Molybdenum<span>1.2</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>43</i>
+                            <strong>Tc</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Technetium<span></span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>44</i>
+                            <strong>Ru</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Ruthenium<span>0.001</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>45</i>
+                            <strong style="margin-top: -1px;">Rh</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Rhodium<span>0.001</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>46</i>
+                            <strong style="margin-top: -1px;">Pd</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Palladlum<span>0.015</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>47</i>
+                            <strong style="margin-top: -1px;">Ag</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Silver<span>0.75</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>48</i>
+                            <strong>Cd</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Cadmium<span>0.159</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>49</i>
+                            <strong>In</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Indium<span>0.25</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>50</i>
+                            <strong>Sn</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Tin<span>2.3</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metalloid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>51</i>
+                            <strong>Sb</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Antimony<span>0.2</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metalloid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>52</i>
+                            <strong>Te</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Tellurium<span>.001</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-halogen elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>53</i>
+                            <strong>I</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Iodine<span>0.45</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-noble-gas elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>54</i>
+                            <strong>Xe</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Xenon<p>
+                        </div>
+                    </div>
+                </div><!-- //Row Five -->
+                <!-- Row Six -->
+                <div class='elements-alkali-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>55</i>
+                            <strong>Cs</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Caesium<span>3</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-alkali-earth-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>56</i>
+                            <strong>Ba</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Barium<span>425</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthanoid-transitional-metal elements-main'>
+                    <div class='chip long'>
+                        <div class='face front'>
+                            <i>57-71</i>
+                            <strong>La-Lu</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Lanthanoids<span></span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>72</i>
+                            <strong>Hf</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Hafnium<span>3</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>73</i>
+                            <strong>Ta</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Tantalum<span>2</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>74</i>
+                            <strong>W</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Tungsten<span>1.3</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>75</i>
+                            <strong>Re</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Rhenium<span>?</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>76</i>
+                            <strong style="margin-top: -1px;">Os</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Osmium<span>0.002</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>77</i>
+                            <strong style="margin-top: -1px;">Ir</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Iridium<span>0.001</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>78</i>
+                            <strong style="margin-top: -1px;">Pt</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Platinum<span>.005</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main' style="border: 2px solid #ffc800;">
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>79</i>
+                            <strong style="margin-top: -1px;">Au</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Gold<span>.004</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>80</i>
+                            <strong>Hg</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Mercury<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>81</i>
+                            <strong>Tl</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Thallium<span>0.85</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>82</i>
+                            <strong>Pb</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Lead<span>14</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metalloid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>83</i>
+                            <strong>Bi</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Bismuth<span>0.009</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-metalloid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>84</i>
+                            <strong>Po</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Polonium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-halogen elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>85</i>
+                            <strong>At</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Astatine<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-noble-gas elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>86</i>
+                            <strong>Rn</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Radon<p>
+                        </div>
+                    </div>
+                </div><!-- //Row Six -->
+                <!-- Row Seven -->
+                <div class='elements-alkali-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>87</i>
+                            <strong>Fr</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Francium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-alkali-earth-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>88</i>
+                            <strong>Ra</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Radium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid-transitional-metal elements-main'>
+                    <div class='chip long'>
+                        <div class='face front'>
+                            <i>89-103</i>
+                            <strong>Ac-Lr</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Actinoids<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>104</i>
+                            <strong>Rf</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Rutherfordium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>105</i>
+                            <strong>Db</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Dubnium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>106</i>
+                            <strong>Sg</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Seaborgium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>107</i>
+                            <strong>Bh</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Bohrium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>108</i>
+                            <strong>Hs</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Hassium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>109</i>
+                            <strong>Mt</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Meltnerium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>110</i>
+                            <strong>Ds</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Darmstadtium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>111</i>
+                            <strong>Rg</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Roentgenium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-transition-metal elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>112</i>
+                            <strong>Cn</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Copernicium<p>
+                        </div>
+                    </div>
+                </div><!-- //Row Seven -->
+
+                <div class='elements-blank full'></div>
+
+                <!-- Row Eight -->
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>57</i>
+                            <strong>La</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Lanthanum<span>39</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>58</i>
+                            <strong>Ce</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Cerium<span>66.5</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>59</i>
+                            <strong>Pr</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Praseodymium<span>9.2</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>60</i>
+                            <strong>Nd</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Neodymium<span>41.5</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>61</i>
+                            <strong>Pm</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Promethium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>62</i>
+                            <strong>Sm</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Samarium<span>7.05</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>63</i>
+                            <strong>Eu</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Europium<span>2</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>64</i>
+                            <strong>Gd</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Gadolinium<span>6.2</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>65</i>
+                            <strong>Tb</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Terbium<span>1.2</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>66</i>
+                            <strong>Dy</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Dysprosium<span>5.2</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>67</i>
+                            <strong>Ho</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Holmium<span>1.3</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>68</i>
+                            <strong>Er</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Erbium<span>3.5</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>69</i>
+                            <strong>Tm</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Thulium<span>0.52</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>70</i>
+                            <strong>Yb</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Ytterbium<span>3.2</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-lanthoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>71</i>
+                            <strong>Lu</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Lutetium<span>0.8</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-blank'></div>
+                <!-- //Row Eight -->
+                <!-- Row Nine -->
+                <div class='elements-blank'></div>
+                <div class='elements-blank'></div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>89</i>
+                            <strong>Ac</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Actinium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>90</i>
+                            <strong>Th</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Thorium<span>0.6</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>91</i>
+                            <strong>Pa</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Protactinium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>92</i>
+                            <strong>U</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Uranium<span>2.7</span><p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>93</i>
+                            <strong>Np</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Neptunium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>94</i>
+                            <strong>Pu</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Plutonium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>95</i>
+                            <strong>Am</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Americium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>96</i>
+                            <strong>Cm</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Curium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>97</i>
+                            <strong>Bk</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Berkelium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>98</i>
+                            <strong>Cf</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Californium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>99</i>
+                            <strong>Es</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Einsteinium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>100</i>
+                            <strong>Fm</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Fermium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>101</i>
+                            <strong>Md</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Mendelevium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>102</i>
+                            <strong>No</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Nobelium<p>
+                        </div>
+                    </div>
+                </div>
+                <div class='elements-actinoid elements-main'>
+                    <div class='chip'>
+                        <div class='face front'>
+                            <i>103</i>
+                            <strong>Lr</strong>
+                        </div>
+                        <div class='face back'>
+                            <p>Lawrencium<p>
+                        </div>
+                    </div>
+                </div>
+</div>
+</div>
+

@@ -271,7 +271,7 @@ document.querySelectorAll('[data-tooltip]').forEach(element => {
 
 $(document).ready(function() {
     $('#periodicModal').on('shown.bs.modal', function () {
-        $(this).find('.modal-body').load('/misc/periodic.html', function() {
+        $(this).find('.modal-body').load('misc/periodic.html', function() {
             // Create a set of allowed elements
             const allowedElements = new Set(elementPricesData.map(el => el.symbol));
 

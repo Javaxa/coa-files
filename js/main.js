@@ -1611,7 +1611,7 @@ document.head.appendChild(style);
 
 
 function loadData() {
-    const csvFileUrl = 'https://main--stellular-khapse-e51f2d.netlify.app/data/mapdata.csv';
+    const csvFileUrl = 'https://main--stellular-khapse-e51f2d.netlify.app/mapdata.csv';
     const timestamp = new Date().getTime();
     fetch(`${csvFileUrl}?t=${timestamp}`)
         .then(response => {
@@ -2348,14 +2348,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
 
-  
-
-
-
-
-
         function loadTop20Data() {
-            const csvFileUrl = 'https://main--stellular-khapse-e51f2d.netlify.app/data/mapdata.csv';
+            const csvFileUrl = 'https://main--stellular-khapse-e51f2d.netlify.app/mapdata.csv';
             const timestamp = new Date().getTime();
             fetch(`${csvFileUrl}?t=${timestamp}`)
                 .then(response => {

@@ -1330,14 +1330,14 @@ function toggleHeatmap(selectedElement) {
     if (heatLayer) {
         map.removeLayer(heatLayer);
         heatLayer = null;
-        document.getElementById('toggleHeatmapButton').textContent = 'Show Heatmap';
+        document.getElementById('toggleHeatmapButton').textContent = 'Show Heat Map';
         heatmapLegend.style.display = 'none';
         mapLegend.classList.remove('hidden');
         heatmapEnabled = false;
     } else {
         const heatData = calculateHeatmapData(selectedElement, heatmapMode);
         heatLayer = L.heatLayer(heatData.data, { radius: 25, maxZoom: 12 }).addTo(map);
-        document.getElementById('toggleHeatmapButton').textContent = 'Hide Heatmap';
+        document.getElementById('toggleHeatmapButton').textContent = 'Hide Heat Map';
         heatmapLegend.style.display = 'block';
         mapLegend.classList.add('hidden');
         updateHeatmapLegend(heatData.maxPPM);

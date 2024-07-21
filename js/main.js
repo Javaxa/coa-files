@@ -1322,20 +1322,40 @@ function updateDHLabelsVisibility() {
     }
 });
 
+// Update the toggleHeatmap function
 function toggleHeatmap(selectedElement) {
+    const mapLegend = document.querySelector('.legend-wrapper');
+    const heatmapLegend = document.getElementById('heatmapLegend');
+
     if (heatLayer) {
         map.removeLayer(heatLayer);
         heatLayer = null;
         document.getElementById('toggleHeatmapButton').textContent = 'Show Heatmap';
-        document.getElementById('heatmapLegend').style.display = 'none';
+        heatmapLegend.style.display = 'none';
+        mapLegend.classList.remove('hidden');
         heatmapEnabled = false;
     } else {
         const heatData = calculateHeatmapData(selectedElement, heatmapMode);
         heatLayer = L.heatLayer(heatData.data, { radius: 25, maxZoom: 12 }).addTo(map);
         document.getElementById('toggleHeatmapButton').textContent = 'Hide Heatmap';
-        document.getElementById('heatmapLegend').style.display = 'block';
+        heatmapLegend.style.display = 'block';
+        mapLegend.classList.add('hidden');
         updateHeatmapLegend(heatData.maxPPM);
         heatmapEnabled = true;
+    }
+}
+
+// Make sure to call this function when initializing the map
+function initializeLegends() {
+    const mapLegend = document.querySelector('.legend-wrapper');
+    const heatmapLegend = document.getElementById('heatmapLegend');
+
+    if (heatmapEnabled) {
+        mapLegend.classList.add('hidden');
+        heatmapLegend.style.display = 'block';
+    } else {
+        mapLegend.classList.remove('hidden');
+        heatmapLegend.style.display = 'none';
     }
 }
 
@@ -2134,6 +2154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchElementPrices();
     updateSelectedElementDisplay();
     updateDHLabelsVisibility();
+    initializeLegends();
     opacitySlider = document.getElementById('overlayOpacitySlider');
     const opacityValue = document.getElementById('opacityValue');
     const collapseElements = document.querySelectorAll('.collapse');
@@ -2239,37 +2260,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    function handleScroll() {
-        const map = document.getElementById('map');
-        const legendWrapper = document.querySelector('.legend-wrapper');
-        const heatmapLegend = document.getElementById('heatmapLegend');
-    
-        if (!map || !legendWrapper || !heatmapLegend) return;
-    
-        const mapRect = map.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-    
-        // Calculate the percentage of the map that is visible
-        const visiblePercentage = (Math.min(mapRect.bottom, viewportHeight) - Math.max(mapRect.top, 0)) / mapRect.height;
-    
-        if (visiblePercentage < 0.5) {
-            // Less than 50% of the map is visible
-            legendWrapper.classList.add('hidden');
-            heatmapLegend.classList.add('hidden');
-        } else {
-            // 50% or more of the map is visible
-            legendWrapper.classList.remove('hidden');
-            heatmapLegend.classList.remove('hidden');
-        }
-    }
-    
-    // Attach the scroll event listener
-    window.addEventListener('scroll', function() {
-        requestAnimationFrame(handleScroll);
-    });
-    
-    // Initial check
-    handleScroll();
  
 
         // Existing COA cell click event handler
@@ -2667,13 +2657,6 @@ function updateBarChart(canvasId, label, data) {
         }
     });
 }
-
-window.addEventListener('scroll', function() {
-    requestAnimationFrame(handleScroll);
-});
-
-// Initial check
-handleScroll();
         
         document.getElementById('viewTop20Button').addEventListener('click', () => {
             if (rawSampleData.length === 0) {

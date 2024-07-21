@@ -16,29 +16,7 @@
 
 <!--Incursion Legend-->
 
-    <div id="legendWrapper" class="legend-wrapper">
-        <h5>Map Legend</h5>
-        <div class="legend-item">
-            <div class="point-dot custom-div-icon" style="background: #fff; border: 1px solid #000; margin-left: 2px;">DH</div>
-            <span class="legend-text">20ft Incursion</span>
-        </div>
-        <div class="legend-item">
-            <div class="point-dot red-dot-icon" style="margin-left: 2px;"></div>
-            <span class="legend-text">4ft Incursion</span>
-        </div>
-        <div class="legend-item">
-            <img src="overlays/shafticon.png" alt="Shaft" style="width: 26px; height: 26px; margin-right: 8px">
-            <span class="legend-text">Shaft</span>
-        </div>
-        <div class="legend-item">
-            <div class="point-dot source-icon icon-width"></div>
-            <span class="legend-text">Source Sample</span>
-        </div>
-        <div class="legend-item">
-            <div class="point-dot purple-rectangle-icon icon-width"></div>
-            <span class="legend-text">Rock</span>
-        </div>
-    </div>
+   
         
 
         <div class="container-fluid mt-5">
@@ -89,7 +67,36 @@
                     </div>
                 </div>
                 <div class="dashboard-column" id="map-column">
-                    <div id="map"></div>
+                    <div id="map">
+                        <div id="legendWrapper" class="legend-wrapper">
+                            <h5>Map Legend</h5>
+                            <div class="legend-item">
+                                <div class="point-dot custom-div-icon" style="background: #fff; border: 1px solid #000; margin-left: 2px;">DH</div>
+                                <span class="legend-text">20ft Incursion</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="point-dot red-dot-icon" style="margin-left: 2px;"></div>
+                                <span class="legend-text">4ft Incursion</span>
+                            </div>
+                            <div class="legend-item">
+                                <img src="overlays/shafticon.png" alt="Shaft" style="width: 26px; height: 26px; margin-right: 8px">
+                                <span class="legend-text">Shaft</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="point-dot source-icon icon-width"></div>
+                                <span class="legend-text">Source Sample</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="point-dot purple-rectangle-icon icon-width"></div>
+                                <span class="legend-text">Rock</span>
+                            </div>
+                        </div>
+                        <div id="heatmapLegend" class="legend-wrapper" style="display: none;">
+                            <h5>Heat Map Legend</h5>
+                            <div id="legendColors"></div>
+                        </div>
+
+                    </div>
                 </div>
                 <div class="dashboard-column" id="filters-column">
                     <div id="sidebar">
@@ -494,14 +501,7 @@
             </div>
         </div>    
     </div>
-
-
-
-    <!--Table Element selection and heatmap Legend-->
-        <div id="heatmapLegend" class="legend-wrapper" style="display: none;">
-            <h5>Heat Map Legend</h5>
-            <div id="legendColors"></div>
-        </div>
+        
         <div class="mt-4" style="max-width: 1200px; margin: auto;">
             <button class="table-download btn btn-outline-primary mb-3">Export Data to Excel</button>
             <button id="clearSelectionButton" class="btn btn-outline-danger mb-3" style="display:none;" onclick="clearPointSelection()">Remove Drill Hole Selection</button>

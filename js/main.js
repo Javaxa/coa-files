@@ -62,7 +62,7 @@ const coaFiles = {
     { symbol: "Ga", name: "Gallium", price: 409 },
     { symbol: "Ge", name: "Germanium", price: 3650 },
     { symbol: "Hf", name: "Hafnium", price: 4000 },
-    { symbol: "Hg", name: "Mercury", price: 38 }, // Estimated price, not in original data
+    { symbol: "Hg", name: "Mercury", price: 1210 }, 
     { symbol: "In", name: "Indium", price: 381 },
     { symbol: "K", name: "Potassium", price: 16.8 },
     { symbol: "La", name: "Lanthanum", price: 1.97 },
@@ -85,23 +85,23 @@ const coaFiles = {
     { symbol: "Sr", name: "Strontium", price: 6.08 },
     { symbol: "Ta", name: "Tantalum", price: 264 },
     { symbol: "Te", name: "Tellurium", price: 62.9 },
-    { symbol: "Th", name: "Thorium", price: 300 }, // Estimated price, not in original data
+    { symbol: "Th", name: "Thorium", price: 287 }, 
     { symbol: "Ti", name: "Titanium", price: 9.58 },
     { symbol: "Tl", name: "Thallium", price: 6080 },
-    { symbol: "U", name: "Uranium", price: 124 }, // Estimated price, not in original data
+    { symbol: "U", name: "Uranium", price: 124 },
     { symbol: "V", name: "Vanadium", price: 22.9 },
     { symbol: "W", name: "Tungsten", price: 37.8 },
     { symbol: "Y", name: "Yttrium", price: 45 },
     { symbol: "Zn", name: "Zinc", price: 2.78 },
     { symbol: "Zr", name: "Zirconium", price: 37.4 },
-    { symbol: "Dy", name: "Dysprosium", price: 460 },
+    { symbol: "Dy", name: "Dysprosium", price: 307 },
     { symbol: "Er", name: "Erbium", price: 43.9 },
     { symbol: "Eu", name: "Europium", price: 263 },
-    { symbol: "Gd", name: "Gadolinium", price: 20.7 },
+    { symbol: "Gd", name: "Gadolinium", price: 28.6 },
     { symbol: "Ho", name: "Holmium", price: 60.3 },
     { symbol: "Lu", name: "Lutetium", price: 6900 },
     { symbol: "Nd", name: "Neodymium", price: 116 },
-    { symbol: "Pr", name: "Praseodymium", price: 114 },
+    { symbol: "Pr", name: "Praseodymium", price: 103 },
     { symbol: "Sm", name: "Samarium", price: 1.97 },
     { symbol: "Tb", name: "Terbium", price: 1260 },
     { symbol: "Tm", name: "Thulium", price: 12800 },
@@ -236,32 +236,25 @@ const coaFiles = {
     }
 
 
-
-// Create a tooltip element
 const tooltip = document.createElement('div');
 tooltip.className = 'tooltip';
 document.body.appendChild(tooltip);
 
-// Function to show tooltip
+
 function showTooltip(event) {
     const target = event.currentTarget;
     const tooltipText = target.getAttribute('data-tooltip');
     tooltip.textContent = tooltipText;
     tooltip.style.display = 'block';
-
-    // Position the tooltip
     const rect = target.getBoundingClientRect();
     tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
     tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
-
-    // Animate the tooltip
     setTimeout(() => {
         tooltip.style.opacity = '1';
         tooltip.style.transform = 'translateY(0)';
     }, 10);
 }
 
-// Function to hide tooltip
 function hideTooltip() {
     tooltip.style.opacity = '0';
     tooltip.style.transform = 'translateY(10px)';
@@ -270,13 +263,10 @@ function hideTooltip() {
     }, 300);
 }
 
-// Add event listeners to elements with data-tooltip attribute
 document.querySelectorAll('[data-tooltip]').forEach(element => {
     element.addEventListener('mouseenter', showTooltip);
     element.addEventListener('mouseleave', hideTooltip);
 });
-
-
 
 
 $(document).ready(function() {
@@ -358,7 +348,6 @@ function getElementCategory(symbol) {
     return 'tertiary';
 }
 
-// Add this function to get the background color based on the category
 function getElementBackgroundColor(symbol) {
     const category = getElementCategory(symbol);
     switch (category) {
@@ -481,21 +470,15 @@ document.querySelector('.table-download').addEventListener('click', function() {
         if (maxCutoff) confirmMessage += `<span class="export-highlight">Max ${maxCutoff} ppm</span>`;
     }
     
-    // Set the message in the modal
     document.getElementById('exportConfirmBody').innerHTML = confirmMessage;
-    
-    // Show the modal
     const modal = new bootstrap.Modal(document.getElementById('exportConfirmModal'));
     modal.show();
 });
 
-// Add click event for the confirm export button
 document.getElementById('confirmExportBtn').addEventListener('click', function() {
     const selectedElement = document.getElementById('elementSelect').value;
     const filename = `RRCM_Table_Element_${selectedElement}_${new Date().toISOString().slice(0,10)}.csv`;
     exportTableToCSV(filename);
-    
-    // Hide the modal
     const modal = bootstrap.Modal.getInstance(document.getElementById('exportConfirmModal'));
     modal.hide();
 });
@@ -693,8 +676,6 @@ function updateElementPricesModal() {
     timestampDiv.className = 'col-12 text-center mt-3';
     timestampDiv.textContent = `Last updated: ${lastUpdated ? lastUpdated.toLocaleString() : 'Never'}`;
     container.appendChild(timestampDiv);
-
-    // Add event listeners for checkboxes and labels (unchanged)
     container.querySelectorAll('.element-price-card').forEach(card => {
         const checkbox = card.querySelector('input[type="checkbox"]');
         const label = card.querySelector('label');
@@ -718,16 +699,13 @@ function updateElementPricesModal() {
 function selectElement(elementSymbol) {
     selectedElement = elementSymbol;
     
-    // Update all checkboxes
     document.querySelectorAll('.element-price-card input[type="checkbox"]').forEach(cb => {
         cb.checked = cb.id === `checkbox-${elementSymbol}`;
     });
 
-    // Update the main element select dropdown
     const elementSelect = document.getElementById('elementSelect');
     elementSelect.value = elementSymbol;
     
-    // Trigger the change event
     const changeEvent = new Event('change');
     elementSelect.dispatchEvent(changeEvent);
 }
@@ -791,13 +769,11 @@ function hideModalBackdrop(modalId) {
             attribution: '&copy; BGS 2024'
         });
     
-        // USGS USTopo layer
         const usgsUSTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}', {
             maxZoom: 20,
             attribution: '&copy; BGS 2024'
         });
     
-        // Add USGS USImageryTopo layer
         const usgsUSImageryTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}', {
             maxZoom: 20,
             attribution: '&copy; BGS 2024'
@@ -818,9 +794,6 @@ function hideModalBackdrop(modalId) {
             "Esri Street": esriWorldStreetMap
         };
     
-    
-    
-        // Initialize the layers but don't add them to the control
         for (let key in overlayImages) {
             overlayImages[key].layer = L.imageOverlay(overlayImages[key].url, overlayImages[key].bounds);
             setInitialLayerOpacity(overlayImages[key].layer);
@@ -829,10 +802,8 @@ function hideModalBackdrop(modalId) {
             }
         }    
     
-        // Only add base layers to the control
         layerControl = L.control.layers(baseLayers).addTo(map);
     
-        // Add event listeners to update sidebar checkboxes when layers are toggled
         map.on('overlayadd', function(event) {
             updateSidebarCheckbox(event.name, true);
         });
@@ -1161,8 +1132,7 @@ function hideModalBackdrop(modalId) {
         document.getElementById('selectedElementHighestPPM').style.display = 'inline-block';
     
         document.getElementById('clearSelectionButton').style.display = 'inline-block';
-    
-        hideViewTop20Button(); // Add this line to hide the button when filtering
+        hideViewTop20Button();
     }
     
     
@@ -1199,13 +1169,9 @@ function hideModalBackdrop(modalId) {
             document.getElementById('selectedDH').style.display = 'none';
             document.getElementById('selectedElementPPM').style.display = 'none';
             document.getElementById('selectedElementHighestPPM').style.display = 'none';
-        
-            showViewTop20Button(); // Add this line to show the button when no point is filtered
+            showViewTop20Button();
         }
         
-
-
-      // Modify the createCustomIcon function
       function createCustomIcon(dh, incursionType, avgPPM, highestPPM) {
         const showDHLabels = document.getElementById('showDHLabels').checked;
     
@@ -1269,7 +1235,6 @@ function hideModalBackdrop(modalId) {
                     className = 'circle-icon white-circle';
             }
     
-            // In variable size mode, show label only when checkbox is checked, regardless of incursion type
             const labelHtml = showDHLabels ? `<span class="icon-label">${dh}</span>` : '';
     
             return L.divIcon({
@@ -1282,7 +1247,6 @@ function hideModalBackdrop(modalId) {
         }
     }
 
-   // Remove the existing event listener
 document.getElementById('iconSizeMode').removeEventListener('change', function() {
     iconSizeMode = this.value;
     updateDHLabelsVisibility();
@@ -1290,8 +1254,6 @@ document.getElementById('iconSizeMode').removeEventListener('change', function()
     updateLegend();
 });
 
-
-// Modify the event listeners for the icon size mode radio buttons
 document.querySelectorAll('input[name="iconSizeMode"]').forEach(radio => {
     radio.addEventListener('change', function() {
         iconSizeMode = this.value;
@@ -1301,15 +1263,13 @@ document.querySelectorAll('input[name="iconSizeMode"]').forEach(radio => {
     });
 });
 
-// Update the updateDHLabelsVisibility function
+
 function updateDHLabelsVisibility() {
     const dhLabelsControl = document.getElementById('dhLabelsControl');
     if (iconSizeMode === 'fixed') {
         dhLabelsControl.style.display = 'none';
     } else {
         dhLabelsControl.style.display = 'block';
-        // Smooth scroll to the DH labels control when it becomes visible
-        setTimeout(() => smoothScrollToElement(dhLabelsControl), 100);
     }
 }
 
@@ -1322,7 +1282,7 @@ function updateDHLabelsVisibility() {
     }
 });
 
-// Update the toggleHeatmap function
+
 function toggleHeatmap(selectedElement) {
     const mapLegend = document.querySelector('.legend-wrapper');
     const heatmapLegend = document.getElementById('heatmapLegend');
@@ -1345,7 +1305,6 @@ function toggleHeatmap(selectedElement) {
     }
 }
 
-// Make sure to call this function when initializing the map
 function initializeLegends() {
     const mapLegend = document.querySelector('.legend-wrapper');
     const heatmapLegend = document.getElementById('heatmapLegend');
@@ -1424,9 +1383,6 @@ document.getElementById('heatmapModeButton').addEventListener('click', () => {
         toggleHeatmap(selectedElement);
     }
 });
-
-
-
 
 function calculateHeatmapData(selectedElement, mode) {
     const minCutoff = parseFloat(document.getElementById('minCutoff').value) || -Infinity;
@@ -1655,7 +1611,7 @@ document.head.appendChild(style);
 
 
 function loadData() {
-    const csvFileUrl = 'https://main--stellular-khapse-e51f2d.netlify.app/mapdata.csv'; // 
+    const csvFileUrl = 'https://main--stellular-khapse-e51f2d.netlify.app/mapdata.csv';
     const timestamp = new Date().getTime();
     fetch(`${csvFileUrl}?t=${timestamp}`)
         .then(response => {
@@ -1803,7 +1759,7 @@ function updateSelectedElementDisplay() {
     const elementInfo = elementPricesData.find(el => el.symbol === selectedElement);
     const backgroundColor = getElementBackgroundColor(selectedElement);
     
-    // Update main display
+
     if (elementInfo) {
         document.getElementById('selectedElementName').textContent = elementInfo.name;
         document.getElementById('selectedElement').textContent = elementInfo.symbol;
@@ -1812,10 +1768,7 @@ function updateSelectedElementDisplay() {
         document.getElementById('selectedElementName').textContent = '';
         document.getElementById('selectedElement').textContent = selectedElement;
         document.getElementById('selectedElement').style.backgroundColor = backgroundColor;
-    }
-
-    // Update modal display
-    if (elementInfo) {
+    } if (elementInfo) {
         document.getElementById('modalSelectedElementName').textContent = elementInfo.name;
         document.getElementById('modalSelectedElement').textContent = elementInfo.symbol;
         document.getElementById('modalSelectedElement').style.backgroundColor = backgroundColor;
@@ -2133,7 +2086,7 @@ function updateMetallurgicalCheckbox(checked) {
 
      // Function to set initial opacity for layers when they are added
      function setInitialLayerOpacity(layer) {
-        const opacity = opacitySlider ? opacitySlider.value / 100 : 1; // Default to 1 if slider not initialized
+        const opacity = opacitySlider ? opacitySlider.value / 100 : 1;
         if (layer instanceof L.ImageOverlay) {
             layer.setOpacity(opacity);
         } else if (layer instanceof L.GeoJSON) {
@@ -2165,7 +2118,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const opacity = this.value / 100;
         opacityValue.textContent = this.value + '%';
 
-        // Update opacity for all relevant overlays
         for (let key in overlayImages) {
             if (overlayImages[key].layer && map.hasLayer(overlayImages[key].layer)) {
                 overlayImages[key].layer.setOpacity(opacity);
@@ -2211,7 +2163,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Ensure all checkboxes with the same value are updated
             document.querySelectorAll(`.checkbox-container input[value="${value}"]`).forEach(cb => {
                 cb.checked = this.checked;
             });
@@ -2297,7 +2248,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
     function updateSortArrows() {
         document.querySelectorAll('#elementTable th.sortable').forEach(header => {
             header.classList.remove('sorted-asc', 'sorted-desc');
@@ -2381,7 +2331,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
     
-                // Update arrow direction for the opening collapse
                 const button = document.querySelector(`[data-bs-target="#${this.id}"]`);
                 if (button) {
                     const arrow = button.querySelector('.filter-arrow');
@@ -2390,7 +2339,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     
             collapse.addEventListener('hide.bs.collapse', function() {
-                // Update arrow direction for the closing collapse
                 const button = document.querySelector(`[data-bs-target="#${this.id}"]`);
                 if (button) {
                     const arrow = button.querySelector('.filter-arrow');
@@ -2550,7 +2498,7 @@ function updateTop20Table(tableId, data, type) {
         tbody.appendChild(row);
     });
 
-    // Add tooltips to kg-data cells (unchanged)
+    // Add tooltips to kg-data cells
     const kgCells = tbody.querySelectorAll('.kg-data');
     kgCells.forEach(cell => {
         const price = parseInt(cell.dataset.price);

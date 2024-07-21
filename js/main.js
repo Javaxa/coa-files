@@ -271,7 +271,7 @@ document.querySelectorAll('[data-tooltip]').forEach(element => {
 
 $(document).ready(function() {
     $('#periodicModal').on('shown.bs.modal', function () {
-        $(this).find('.modal-body').load('/periodic.html', function() {
+        $(this).find('.modal-body').load('/misc/periodic.html', function() {
             // Create a set of allowed elements
             const allowedElements = new Set(elementPricesData.map(el => el.symbol));
 
@@ -1611,7 +1611,7 @@ document.head.appendChild(style);
 
 
 function loadData() {
-    const csvFileUrl = 'https://main--stellular-khapse-e51f2d.netlify.app/mapdata.csv';
+    const csvFileUrl = 'https://main--stellular-khapse-e51f2d.netlify.app/data/mapdata.csv';
     const timestamp = new Date().getTime();
     fetch(`${csvFileUrl}?t=${timestamp}`)
         .then(response => {
@@ -2355,7 +2355,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         function loadTop20Data() {
-            const csvFileUrl = 'https://main--stellular-khapse-e51f2d.netlify.app/mapdata.csv';
+            const csvFileUrl = 'https://main--stellular-khapse-e51f2d.netlify.app/data/mapdata.csv';
             const timestamp = new Date().getTime();
             fetch(`${csvFileUrl}?t=${timestamp}`)
                 .then(response => {

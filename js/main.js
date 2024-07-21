@@ -1415,7 +1415,7 @@ function updateLegend() {
 
 document.getElementById('heatmapModeButton').addEventListener('click', () => {
     heatmapMode = heatmapMode === 'average' ? 'highest' : 'average';
-    document.getElementById('heatmapModeButton').textContent = heatmapMode === 'average' ? 'Heatmap by Highest ppm' : 'Heatmap by Average ppm';
+    document.getElementById('heatmapModeButton').textContent = heatmapMode === 'average' ? 'Heat Map by Highest ppm' : 'Heat Map by Average ppm';
 
  
     const selectedElement = document.getElementById('elementSelect').value;

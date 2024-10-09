@@ -162,7 +162,6 @@ const coaFiles = {
             }
         };
     const metallurgicalTypes = ['LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', 'LMB+ (Mtlg-AqRg)'];
-    const metallurgicalCheckboxes = document.querySelectorAll('input[value="LMB+ (Metallurgical)"]');
     const headers = ['Description', 'Incursion Type', 'Lab', 'Stid', 'Zone', 'Northing', 'Easting', 'DH', 'Depth', 'Assay Type', 'COA', 'Weight'];
     const elements = ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag', 'Al', 'As', 'B', 'Ba', 'Be', 'Bi', 'Ca', 'Cd', 'Ce', 'Co', 'Cr', 'Cs', 'Cu', 'Cl', 'Fe', 'Ga', 'Ge', 'Hf', 'Hg', 'In', 'K', 'La', 'Li', 'Mg', 'Mn', 'Mo', 'Na', 'Nb', 'Ni', 'P', 'Pb', 'Rb', 'Re', 'S', 'Sb', 'Sc', 'Se', 'Sn', 'Sr', 'Ta', 'Te', 'Th', 'Ti', 'Tl', 'U', 'V', 'W', 'Y', 'Zn', 'Zr', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb'];
 
@@ -440,7 +439,6 @@ document.querySelector('.table-download').addEventListener('click', function() {
             case 'LMB Flux': return 'LMB Flux';
             case 'LMB+': return 'LMB+';
             case '4-Acid Dig': return '4-Acid';
-            case 'LMB+ (Metallurgical)': return 'LMB+ (Metallurgical)';
             default: return type;
         }
     }).join(', ');
@@ -2147,8 +2145,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     activeIncursionTypes.delete(value);
                 }
-            } else if (value === 'LMB+ (Metallurgical)') {
-                updateMetallurgicalCheckbox(this.checked);
             } else if (['LMB Flux', 'LMB+', '4-Acid Dig'].includes(value)) {
                 if (this.checked) {
                     activeAssayTypes.add(value);

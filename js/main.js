@@ -161,7 +161,6 @@ const coaFiles = {
                 layer: null
             }
         };
-    const metallurgicalTypes = ['LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', 'LMB+ (Mtlg-AqRg)'];
     const headers = ['Description', 'Incursion Type', 'Lab', 'Stid', 'Zone', 'Northing', 'Easting', 'DH', 'Depth', 'Assay Type', 'COA', 'Weight'];
     const elements = ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag', 'Al', 'As', 'B', 'Ba', 'Be', 'Bi', 'Ca', 'Cd', 'Ce', 'Co', 'Cr', 'Cs', 'Cu', 'Cl', 'Fe', 'Ga', 'Ge', 'Hf', 'Hg', 'In', 'K', 'La', 'Li', 'Mg', 'Mn', 'Mo', 'Na', 'Nb', 'Ni', 'P', 'Pb', 'Rb', 'Re', 'S', 'Sb', 'Sc', 'Se', 'Sn', 'Sr', 'Ta', 'Te', 'Th', 'Ti', 'Tl', 'U', 'V', 'W', 'Y', 'Zn', 'Zr', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb'];
 
@@ -414,24 +413,6 @@ document.querySelector('.table-download').addEventListener('click', function() {
 
     // Determine the data type being exported
     let dataType = '';
-    const hasMetallurgical = selectedAssayTypes.some(type => 
-        type.includes('Metallurgical') || 
-        type.includes('Mtlg') || 
-        metallurgicalTypes.includes(type)
-    );
-    const hasSediment = selectedAssayTypes.some(type => 
-        !type.includes('Metallurgical') && 
-        !type.includes('Mtlg') && 
-        !metallurgicalTypes.includes(type)
-    );
-
-    if (hasSediment && hasMetallurgical) {
-        dataType = 'Sediment & Metallurgical';
-    } else if (hasMetallurgical) {
-        dataType = 'Metallurgical';
-    } else {
-        dataType = 'Sediment';
-    }
 
     // Format assay types for display
     const assayTypesString = selectedAssayTypes.map(type => {
@@ -2071,16 +2052,7 @@ document.getElementById('showDHLabels').addEventListener('change', function() {
     }
 });
 
-  
-function updateMetallurgicalCheckbox(checked) {
-    metallurgicalTypes.forEach(type => {
-        if (checked) {
-            activeAssayTypes.add(type);
-        } else {
-            activeAssayTypes.delete(type);
-        }
-    });
-}
+
 
      // Function to set initial opacity for layers when they are added
      function setInitialLayerOpacity(layer) {
@@ -2169,12 +2141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    
 
-    metallurgicalCheckboxes.forEach(checkbox => {
-        checkbox.checked = metallurgicalTypes.some(type => activeAssayTypes.has(type));
-        updateMetallurgicalCheckbox(checkbox.checked);
-    });
 
     const infoPopup = document.getElementById('infoPopup');
     infoPopup.style.display = 'block';

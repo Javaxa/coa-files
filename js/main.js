@@ -2118,7 +2118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 activeIncursionTypes.delete(value);
             }
-        } else if (['LMB Flux', 'LMB+', '4-Acid Dig', 'Metallurgical'].includes(value)) {
+        } else if (['LMB Flux', 'LMB+', '4-Acid Dig', 'Metallurgical (Aqua Regia)'].includes(value)) {
             if (this.checked) {
                 activeAssayTypes.add(value);
             } else {

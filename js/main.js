@@ -420,6 +420,7 @@ document.querySelector('.table-download').addEventListener('click', function() {
             case 'LMB Flux': return 'LMB Flux';
             case 'LMB+': return 'LMB+';
             case '4-Acid Dig': return '4-Acid';
+            case 'Metallurgical (Aqua Regia)': return 'Metallurgical';
             default: return type;
         }
     }).join(', ');

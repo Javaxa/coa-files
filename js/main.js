@@ -1465,10 +1465,11 @@ function updateMap() {
     const uniquePoints = new Map();
     maxPPM = 0;
 
-  sampleData.forEach((sample, index) => {
+   sampleData.forEach((sample, index) => {
         if (sample.Northing && sample.Easting &&
             activeIncursionTypes.has(sample['Incursion Type']) &&
-            activeAssayTypes.has(sample['Assay Type']) &&
+            (activeAssayTypes.has(sample['Assay Type']) || 
+             (sample['Assay Type'] === 'Metallurgical (Aqua Regia)' && activeAssayTypes.has('Metallurgical'))) &&
             activeZones.has(sample['Zone']) &&
             activeCOAs.has(sample['COA'])) {
 
@@ -1630,7 +1631,8 @@ function loadData() {
 
  sortedData = sortedData.filter(sample =>
         activeIncursionTypes.has(sample['Incursion Type']) &&
-        activeAssayTypes.has(sample['Assay Type']) &&
+        (activeAssayTypes.has(sample['Assay Type']) || 
+         (sample['Assay Type'] === 'Metallurgical (Aqua Regia)' && activeAssayTypes.has('Metallurgical'))) &&
         activeZones.has(sample['Zone']) &&
         activeCOAs.has(sample['COA'])
     );
@@ -2118,11 +2120,11 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 activeIncursionTypes.delete(value);
             }
-        } else if (['LMB Flux', 'LMB+', '4-Acid Dig', 'Metallurgical (Aqua Regia)'].includes(value)) {
+        } else if (['LMB Flux', 'LMB+', '4-Acid Dig', 'Metallurgical'].includes(value)) {
             if (this.checked) {
-                activeAssayTypes.add(value);
+                activeAssayTypes.add(value === 'Metallurgical' ? 'Metallurgical (Aqua Regia)' : value);
             } else {
-                activeAssayTypes.delete(value);
+                activeAssayTypes.delete(value === 'Metallurgical' ? 'Metallurgical (Aqua Regia)' : value);
             }
         } else if (['1', '2', '3', '4', '5', '6'].includes(value)) {
             if (this.checked) {

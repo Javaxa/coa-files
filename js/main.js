@@ -1464,7 +1464,7 @@ function updateMap() {
     const uniquePoints = new Map();
     maxPPM = 0;
 
-    sampleData.forEach((sample, index) => {
+  sampleData.forEach((sample, index) => {
         if (sample.Northing && sample.Easting &&
             activeIncursionTypes.has(sample['Incursion Type']) &&
             activeAssayTypes.has(sample['Assay Type']) &&
@@ -1627,7 +1627,7 @@ function loadData() {
         sortedData = selectedIndices.map(index => sampleData[index]);
     }
 
-    sortedData = sortedData.filter(sample =>
+ sortedData = sortedData.filter(sample =>
         activeIncursionTypes.has(sample['Incursion Type']) &&
         activeAssayTypes.has(sample['Assay Type']) &&
         activeZones.has(sample['Zone']) &&
@@ -2108,38 +2108,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     document.querySelectorAll('.checkbox-container input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const value = this.value;
-            
-            if (['HY20', 'HN04', 'Rock', 'Source Sample', 'Shaft'].includes(value)) {
-                if (this.checked) {
-                    activeIncursionTypes.add(value);
-                } else {
-                    activeIncursionTypes.delete(value);
-                }
-            } else if (['LMB Flux', 'LMB+', '4-Acid Dig'].includes(value)) {
-                if (this.checked) {
-                    activeAssayTypes.add(value);
-                } else {
-                    activeAssayTypes.delete(value);
-                }
-            } else if (['1', '2', '3', '4', '5', '6'].includes(value)) {
-                if (this.checked) {
-                    activeZones.add(value);
-                } else {
-                    activeZones.delete(value);
-                }
+    checkbox.addEventListener('change', function() {
+        const value = this.value;
+        
+        if (['HY20', 'HN04', 'Rock', 'Source Sample', 'Shaft'].includes(value)) {
+            if (this.checked) {
+                activeIncursionTypes.add(value);
+            } else {
+                activeIncursionTypes.delete(value);
             }
+        } else if (['LMB Flux', 'LMB+', '4-Acid Dig', 'Metallurgical'].includes(value)) {
+            if (this.checked) {
+                activeAssayTypes.add(value);
+            } else {
+                activeAssayTypes.delete(value);
+            }
+        } else if (['1', '2', '3', '4', '5', '6'].includes(value)) {
+            if (this.checked) {
+                activeZones.add(value);
+            } else {
+                activeZones.delete(value);
+            }
+        }
 
-            document.querySelectorAll(`.checkbox-container input[value="${value}"]`).forEach(cb => {
-                cb.checked = this.checked;
-            });
-
-            updateMap();
-            updateElementTable();
-            updateElementAverages();
+        document.querySelectorAll(`.checkbox-container input[value="${value}"]`).forEach(cb => {
+            cb.checked = this.checked;
         });
+
+        updateMap();
+        updateElementTable();
+        updateElementAverages();
     });
+});
 
 
 

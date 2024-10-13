@@ -111,10 +111,10 @@
                             </button>
                             <div class="collapse" id="assayFilters">
                                 <div class="checkbox-container">
-                                    <label><input type="checkbox" value="4-Acid Dig" data-tooltip="Nitric, Hydrochloric, Perchloric, Hydrofluoric"> 4-Acid</label>
-                                    <label><input type="checkbox" value="LMB Flux" checked data-tooltip="Lithium metaborate"> LMB Flux</label>
-                                    <label><input type="checkbox" value="LMB+" checked data-tooltip="Lithium metaborate + HCl"> LMB+</label>
-                                    <label><input type="checkbox" value="Metallurgical" data-tooltip="Aqua Regia"> Metallurgical</label>
+                                    <label data-tooltip="Nitric, Hydrochloric, Perchloric, Hydrofluoric"><input type="checkbox" value="4-Acid Dig"> 4-Acid</label>
+                                    <label data-tooltip="Lithium metaborate"><input type="checkbox" value="LMB Flux" checked> LMB Flux</label>
+                                    <label data-tooltip="Lithium metaborate + HCl"><input type="checkbox" value="LMB+" checked> LMB+</label>
+                                    <label data-tooltip="Aqua Regia Digestions"><input type="checkbox" value="Metallurgical"> Metallurgical</label>
                                 </div>
                             </div>
                             <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#zoneFilters" aria-expanded="false" aria-controls="zoneFilters">
@@ -196,11 +196,11 @@
                                             <label>
                                                 <input type="radio" name="iconSizeMode" value="fixed" checked> Fixed Icon Sizes
                                             </label>
-                                            <label>
-                                                <input type="radio" name="iconSizeMode" value="highest" data-tooltip="Scale icon size based on highest grade of DH"> Size based on Highest Grade
+                                            <label data-tooltip="Scale icon size based on highest grade of DH">
+                                                <input type="radio" name="iconSizeMode" value="highest"> Size based on Highest Grade
                                             </label>
-                                            <label>
-                                                <input type="radio" name="iconSizeMode" value="average" data-tooltip="Scale icon size based on average grade of DH"> Size based on Average Grade
+                                            <label data-tooltip="Scale icon size based on average grade of DH">
+                                                <input type="radio" name="iconSizeMode" value="average"> Size based on Average Grade
                                             </label>
                                         </div>
                                     </div>

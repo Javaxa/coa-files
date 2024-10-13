@@ -282,6 +282,7 @@ const coaFiles = {
                 } else {
                     activeCOAs.delete(this.value);
                 }
+                updateDepthFilter(); // Call this for COA filter changes
                 updateMap();
                 updateElementTable();
             });
@@ -425,12 +426,23 @@ function exportTableToCSV(filename) {
     for (let i = 1; i < rows.length; i++) {
         const row = [];
         const cells = rows[i].querySelectorAll('td');
-        cells.forEach(cell => {
+        let includeRow = true;
+
+        cells.forEach((cell, index) => {
+            // Check if this cell represents the Depth column
+            if (headers[index] === 'Depth') {
+                // Only include the row if the depth is in activeDepths
+                includeRow = activeDepths.has(cell.textContent.trim());
+            }
+
             // Escape double quotes and wrap the content in quotes
             let content = cell.textContent.trim().replace(/"/g, '""');
             row.push(`"${content}"`);
         });
-        csv.push(row.join(','));
+
+        if (includeRow) {
+            csv.push(row.join(','));
+        }
     }
 
     // Create CSV content
@@ -460,9 +472,6 @@ document.querySelector('.table-download').addEventListener('click', function() {
     // Get selected assay types
     const selectedAssayTypes = Array.from(activeAssayTypes);
 
-    // Determine the data type being exported
-    let dataType = '';
-
     // Format assay types for display
     const assayTypesString = selectedAssayTypes.map(type => {
         switch(type) {
@@ -483,14 +492,18 @@ document.querySelector('.table-download').addEventListener('click', function() {
         }
     }).join(', ');
     
+    // Get selected depths
+    const selectedDepths = Array.from(activeDepths).sort((a, b) => parseFloat(a) - parseFloat(b));
+    let depthsString = selectedDepths.length === allUniqueDepths.size ? 'All Depths' : selectedDepths.join(', ');
+
     // Get cut-off grade values
     const minCutoff = document.getElementById('minCutoff').value;
     const maxCutoff = document.getElementById('maxCutoff').value;
     
-    let confirmMessage = `You are about to export <span class="export-highlight">${dataType}</span> data for <div class="export-highlight modalSelectedElementContainer">
+    let confirmMessage = `You are about to export data for <div class="export-highlight modalSelectedElementContainer">
         <span class="modalSelectedElementName">${elementInfo ? elementInfo.name : ''}</span>
         <span class="modalSelectedElement" style="background-color: ${backgroundColor};">${selectedElement}</span>
-    </div> Assayed with <span class="export-highlight">${assayTypesString}</span> for <span class="export-highlight">${selectedIncursionTypes}</span> Incursion(s).`;
+    </div> Assayed with <span class="export-highlight">${assayTypesString}</span> for <span class="export-highlight">${selectedIncursionTypes}</span> Incursion(s) at depths: <span class="export-highlight">${depthsString}</span>.`;
     
     if (minCutoff || maxCutoff) {
         confirmMessage += ` with Cut-off grade of `;
@@ -1449,7 +1462,10 @@ function updateDepthFilter() {
     const availableDepths = new Set();
 
     sampleData.forEach(sample => {
-        if (activeIncursionTypes.has(sample['Incursion Type'])) {
+        if (activeIncursionTypes.has(sample['Incursion Type']) &&
+            activeAssayTypes.has(sample['Assay Type']) &&
+            activeZones.has(sample['Zone']) &&
+            activeCOAs.has(sample['COA'])) {
             availableDepths.add(sample['Depth']);
         }
     });
@@ -2195,6 +2211,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
     document.querySelectorAll('.checkbox-container input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             const value = this.value;
@@ -2205,7 +2222,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     activeIncursionTypes.delete(value);
                 }
-                updateDepthFilter(); // Add this line
             } else if (['LMB Flux', 'LMB+', '4-Acid Dig', 'Metallurgical'].includes(value)) {
                 if (this.checked) {
                     activeAssayTypes.add(value === 'Metallurgical' ? 'Metallurgical (Aqua Regia)' : value);
@@ -2224,6 +2240,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cb.checked = this.checked;
             });
     
+            updateDepthFilter(); // Call this for all filter changes
             updateMap();
             updateElementTable();
             updateElementAverages();

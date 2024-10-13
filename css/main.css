@@ -1448,3 +1448,6 @@ body {
     justify-content: center;
 }
 
+.depth-filter-buttons {
+    width: 100%;
+}

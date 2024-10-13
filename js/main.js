@@ -130,6 +130,10 @@ const coaFiles = {
     let blmClaimsLayer;
     let layerControl;
     let opacitySlider;
+    let allUniqueDepths = new Set();
+    let uniqueDepths = new Set();
+    let activeDepths = new Set();
+    let activeDepth = null;
     let currentSortColumn = 'Element (PPM)';
     let currentSortDirection = 'desc';
     let activeZones = new Set(['1', '2', '3', '4', '5', '6']);
@@ -137,7 +141,7 @@ const coaFiles = {
     let activeIncursionTypes = new Set(['HY20']);
         const overlayImages = {
             "Zone": {
-                url: '/overlays/zone.png', 
+                url: 'overlays/zone.png', 
                 bounds: [
                     convertUTMToLatLng(3913300, 443088),
                     convertUTMToLatLng(3893000, 463668)
@@ -145,7 +149,7 @@ const coaFiles = {
                 layer: null
             },
             "Claims": {
-                url: '/overlays/claims.png',
+                url: 'overlays/claims.png',
                 bounds: [
                     convertUTMToLatLng(3913300, 443088),
                     convertUTMToLatLng(3893000, 463668)
@@ -153,7 +157,7 @@ const coaFiles = {
                 layer: null
             },
             "Magnetic": {
-                url: '/overlays/magnetic.png',
+                url: 'overlays/magnetic.png',
                 bounds: [
                     convertUTMToLatLng(3913300, 443088),
                     convertUTMToLatLng(3893000, 463668)
@@ -161,6 +165,7 @@ const coaFiles = {
                 layer: null
             }
         };
+    const metallurgicalTypes = ['LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', 'LMB+ (Mtlg-AqRg)'];
     const headers = ['Description', 'Incursion Type', 'Lab', 'Stid', 'Zone', 'Northing', 'Easting', 'DH', 'Depth', 'Assay Type', 'COA', 'Weight'];
     const elements = ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag', 'Al', 'As', 'B', 'Ba', 'Be', 'Bi', 'Ca', 'Cd', 'Ce', 'Co', 'Cr', 'Cs', 'Cu', 'Cl', 'Fe', 'Ga', 'Ge', 'Hf', 'Hg', 'In', 'K', 'La', 'Li', 'Mg', 'Mn', 'Mo', 'Na', 'Nb', 'Ni', 'P', 'Pb', 'Rb', 'Re', 'S', 'Sb', 'Sc', 'Se', 'Sn', 'Sr', 'Ta', 'Te', 'Th', 'Ti', 'Tl', 'U', 'V', 'W', 'Y', 'Zn', 'Zr', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb'];
 
@@ -177,8 +182,10 @@ const coaFiles = {
                 return object;
             }, {});
         });
-
+    
         const uniqueCOAs = new Set();
+        uniqueDepths.clear(); // Clear existing depths before repopulating
+    
         lines.slice(1).forEach((line, rowIndex) => {
             const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
             elements.forEach((element, elementIndex) => {
@@ -191,19 +198,67 @@ const coaFiles = {
                 elementData[rowIndex] = elementData[rowIndex] || {};
                 elementData[rowIndex][element] = value;
             });
-
             const coaValue = values[headers.indexOf('COA')].trim();
             if (coaValue) {
                 uniqueCOAs.add(coaValue);
             }
+            const depthValue = values[headers.indexOf('Depth')];
+            if (depthValue) {
+                allUniqueDepths.add(depthValue);
+            }
         });
-
+    
         createCOACheckboxes(uniqueCOAs);
-
+        createDepthCheckboxes(uniqueDepths);
+    
         return data;
     }
 
-
+    function createDepthCheckboxes(depths) {
+        const container = document.getElementById('depthCheckboxContainer');
+        container.innerHTML = '';
+    
+        const allDepthsRadio = document.createElement('input');
+        allDepthsRadio.type = 'radio';
+        allDepthsRadio.id = 'allDepths';
+        allDepthsRadio.name = 'depthFilter';
+        allDepthsRadio.value = 'all';
+        allDepthsRadio.checked = activeDepth === null;
+    
+        const allDepthsLabel = document.createElement('label');
+        allDepthsLabel.htmlFor = 'allDepths';
+        allDepthsLabel.textContent = 'All Depths';
+    
+        container.appendChild(allDepthsRadio);
+        container.appendChild(allDepthsLabel);
+    
+        Array.from(depths).sort((a, b) => parseFloat(a) - parseFloat(b)).forEach(depth => {
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.id = `depth-${depth}`;
+            radio.name = 'depthFilter';
+            radio.value = depth;
+            radio.checked = activeDepth === depth;
+    
+            const label = document.createElement('label');
+            label.htmlFor = `depth-${depth}`;
+            label.textContent = `${depth} ft`;
+    
+            container.appendChild(radio);
+            container.appendChild(label);
+        });
+    
+        // Add event listener for depth filter changes
+        container.addEventListener('change', function(event) {
+            if (event.target.type === 'radio') {
+                activeDepth = event.target.value === 'all' ? null : event.target.value;
+                updateMap();
+                updateElementTable();
+                updateElementAverages();
+            }
+        });
+    }
+    
 
     function createCOACheckboxes(coaValues) {
         const sidebarContainer = document.querySelector('#sidebarCOACheckboxContainer');
@@ -270,7 +325,6 @@ document.querySelectorAll('[data-tooltip]').forEach(element => {
 $(document).ready(function() {
     $('#periodicModal').on('shown.bs.modal', function () {
         $(this).find('.modal-body').load('misc/periodic.html', function() {
-            // Create a set of allowed elements
             const allowedElements = new Set(elementPricesData.map(el => el.symbol));
 
             $('.chip').each(function() {
@@ -287,20 +341,15 @@ $(document).ready(function() {
             });
 
             $('.chip').click(function() {
-
                 if (!$(this).hasClass('not-allowed')) {
                     var elementName = $(this).find('.face.front strong').text();
                     var $dropdown = $('#elementSelect');
-                    
                     $dropdown.val(elementName);
-                    
                     setTimeout(function() {
                         $dropdown.trigger('change');
-                        
                         var event = new Event('change', { bubbles: true });
                         $dropdown[0].dispatchEvent(event);
                     }, 10); 
-                    
                     $('#periodicModal').modal('hide');
                 }
             });
@@ -468,24 +517,20 @@ document.getElementById('confirmExportBtn').addEventListener('click', function()
 function updateElementAverages() {
     const selectedElement = document.getElementById('elementSelect').value;
     document.getElementById('selectedElement').textContent = selectedElement;
-
     let total = 0;
     let count = 0;
     let highest = -Infinity;
     const zoneData = {};
-
-    // Get cut-off values
     const minCutoff = parseFloat(document.getElementById('minCutoff').value) || -Infinity;
     const maxCutoff = parseFloat(document.getElementById('maxCutoff').value) || Infinity;
-
-    // Find the price of the selected element (price is per kg in the data)
     const elementPrice = elementPricesData.find(el => el.symbol === selectedElement)?.price || 0;
 
     sampleData.forEach((sample, index) => {
         if (activeIncursionTypes.has(sample['Incursion Type']) &&
             activeAssayTypes.has(sample['Assay Type']) &&
             activeZones.has(sample['Zone']) &&
-            activeCOAs.has(sample['COA'])) {
+            activeCOAs.has(sample['COA']) &&
+            activeDepths.has(sample['Depth'])) {
 
             const elementValue = elementData[index] && elementData[index][selectedElement] ? 
                                  parseFloat(elementData[index][selectedElement].replace(/["',]/g, '')) : NaN;
@@ -525,6 +570,7 @@ function updateElementAverages() {
         document.getElementById('highestValue').textContent = 'N/A';
         document.getElementById('highestValuePerTonne').textContent = 'N/A';
     }
+
 
     // Update zone averages
     const zoneAveragesList = document.getElementById('zoneAveragesList');
@@ -678,14 +724,11 @@ function updateElementPricesModal() {
 
 function selectElement(elementSymbol) {
     selectedElement = elementSymbol;
-    
     document.querySelectorAll('.element-price-card input[type="checkbox"]').forEach(cb => {
         cb.checked = cb.id === `checkbox-${elementSymbol}`;
     });
-
     const elementSelect = document.getElementById('elementSelect');
     elementSelect.value = elementSymbol;
-    
     const changeEvent = new Event('change');
     elementSelect.dispatchEvent(changeEvent);
 }
@@ -711,14 +754,11 @@ document.getElementById('elementPricesBtn').addEventListener('click', () => {
 function hideModalBackdrop(modalId) {
         const modal = document.getElementById(modalId);
         const modalBackdrop = document.querySelector('.modal-backdrop');
-
         modal.classList.remove('show');
         modal.style.display = 'none';
-        
         if (modalBackdrop) {
             modalBackdrop.parentNode.removeChild(modalBackdrop);
         }
-
         document.body.classList.remove('modal-open');
         document.body.style = '';
     }
@@ -744,7 +784,6 @@ function hideModalBackdrop(modalId) {
             attribution: '&copy; BGS 2024'
         });
     
-    
         const esriWorldStreetMap = L.tileLayer.provider('Esri.WorldStreetMap', {
             attribution: '&copy; BGS 2024'
         });
@@ -758,8 +797,6 @@ function hideModalBackdrop(modalId) {
             maxZoom: 20,
             attribution: '&copy; BGS 2024'
         });
-
-
     
         map = L.map('map', {
             layers: [satelliteLayer]
@@ -787,7 +824,7 @@ function hideModalBackdrop(modalId) {
         map.on('overlayadd', function(event) {
             updateSidebarCheckbox(event.name, true);
         });
-    
+
         map.on('overlayremove', function(event) {
             updateSidebarCheckbox(event.name, false);
         });
@@ -836,7 +873,6 @@ function hideModalBackdrop(modalId) {
                                     let rcrdAcrs = feature.properties.RCRD_ACRS || 'N/A';
                                     let created = feature.properties.Created || 'N/A';
                                     let modified = feature.properties.Modified || 'N/A';
-    
                                     let tooltipContent = `
                                         <div class="blm-claims-tooltip">
                                             <strong>BLM_PROD:</strong> ${blmProd}<br>
@@ -846,27 +882,21 @@ function hideModalBackdrop(modalId) {
                                             <strong>Created:</strong> ${created}<br>
                                             <strong>Modified:</strong> ${modified}
                                         </div>`;
-                                    
                                     layer.bindTooltip(tooltipContent, {
                                         permanent: false,
                                         direction: 'top',
                                         className: 'blm-claims-tooltip',
                                         sticky: true
                                     });
-                                    
                                     let popupContent = '<b>BLM Claim Info:</b><br>';
                                     for (let key in feature.properties) {
                                         popupContent += `<strong>${key}:</strong> ${feature.properties[key]}<br>`;
-                                    }
-                                    
+                                    }   
                                     layer.bindPopup(popupContent);
                                 }
-                            
                                 setInitialLayerOpacity(blmClaimsLayer);}
                         });
-                        
                         map.addLayer(blmClaimsLayer);
-                        
                         resolve();
                     })
                     .catch(error => {
@@ -876,7 +906,6 @@ function hideModalBackdrop(modalId) {
             }
         });
     }
-    
 
 
     function addOwnershipOverlay() {
@@ -903,34 +932,29 @@ function hideModalBackdrop(modalId) {
                                     let ownLevel = feature.properties.OWN_LEVEL || 'Unknown';
                                     let ownAgency = feature.properties.OWN_AGENCY || 'Unknown';
                                     let ownGroup = feature.properties.OWN_GROUP || 'Unknown';
-    
                                     let tooltipContent = `
                                         <div class="ownership-tooltip">
                                             <strong>OWN_LEVEL:</strong> ${ownLevel}<br>
                                             <strong>OWN_AGENCY:</strong> ${ownAgency}<br>
                                             <strong>OWN_GROUP:</strong> ${ownGroup}
                                         </div>`;
-                                    
                                     layer.bindTooltip(tooltipContent, {
                                         permanent: false,
                                         direction: 'top',
                                         className: 'ownership-tooltip',
-                                        sticky: true // Makes the tooltip follow the cursor
+                                        sticky: true
                                     });
                                     
                                     let popupContent = '<b>Ownership Info:</b><br>';
                                     for (let key in feature.properties) {
                                         popupContent += `<strong>${key}:</strong> ${feature.properties[key]}<br>`;
                                     }
-                                    
                                     layer.bindPopup(popupContent);
                                 }
                                 setInitialLayerOpacity(ownershipLayer);
                             }
                         });
-                        
                         map.addLayer(ownershipLayer);
-                        
                         resolve();
                     })
                     .catch(error => {
@@ -967,39 +991,30 @@ function hideModalBackdrop(modalId) {
                                     let townshipProp = Object.keys(feature.properties).find(key => key.toLowerCase().includes('town'));
                                     let rangeProp = Object.keys(feature.properties).find(key => key.toLowerCase().includes('range'));
                                     let sectionProp = Object.keys(feature.properties).find(key => key.toLowerCase().includes('section'));
-                                    
                                     let township = feature.properties[townshipProp] || 'N/A';
                                     let range = feature.properties[rangeProp] || 'N/A';
                                     let section = feature.properties[sectionProp] || 'N/A';
-                                    
-    
                                     let tooltipContent = `<div class="custom-plss-tooltip">
                                                             <strong>Township:</strong> ${township}<br>
                                                             <strong>Range:</strong> ${range}<br>
                                                             <strong>Section:</strong> ${section}
                                                           </div>`;
-                                    
                                     layer.bindTooltip(tooltipContent, {
                                         permanent: false,
                                         direction: 'top',
                                         className: 'plss-tooltip'
                                     });
-                                    
                                     let popupContent = '<b>PLSS Info:</b><br>';
                                     for (let key in feature.properties) {
                                         popupContent += `<strong>${key}:</strong> ${feature.properties[key]}<br>`;
                                     }
-                                    
                                     layer.bindPopup(popupContent);
                                 }
                                 setInitialLayerOpacity(plssLayer);
                             }
                         });
-                        
                         map.addLayer(plssLayer);
                         plssLayerAdded = true;
-                        
-                        
                         resolve();
                     })
                     .catch(error => {
@@ -1035,21 +1050,17 @@ function hideModalBackdrop(modalId) {
         const selectedElement = document.getElementById('elementSelect').value;
         const tbody = document.querySelector('#elementTable tbody');
         tbody.innerHTML = '';
-    
         const selectedDH = sampleData[indices[0]].DH;
         document.getElementById('selectedDH').textContent = `Selected DH: ${selectedDH}`;
         document.getElementById('selectedDH').style.display = 'inline-block';
-    
         let totalElementPPM = 0;
         let countElementPPM = 0;
         let highestElementPPM = -Infinity;
-    
         indices.sort((a, b) => {
             const aValue = elementData[a] ? parseFloat(elementData[a][selectedElement].replace(/,/g, '')) : NaN;
             const bValue = elementData[b] ? parseFloat(elementData[b][selectedElement].replace(/,/g, '')) : NaN;
             return bValue - aValue;
         });
-    
         indices.forEach(index => {
             const sample = sampleData[index];
             const row = document.createElement('tr');
@@ -1062,7 +1073,6 @@ function hideModalBackdrop(modalId) {
                         const cellValue = this.textContent.trim();
                         const fileExtension = cellValue.split('.').pop().toLowerCase();
                         document.getElementById('coaModalLabel').textContent = cellValue;
-    
                         if (fileExtension === 'pdf') {
                             document.getElementById('coaIframe').src = `/coas/${cellValue}`;
                             document.getElementById('coaIframe').style.display = 'block';
@@ -1089,7 +1099,6 @@ function hideModalBackdrop(modalId) {
             elementCell.textContent = formatNumberWithCommas(elementValue);
             row.appendChild(elementCell);
             tbody.appendChild(row);
-    
             if (elementValue) {
                 const value = parseFloat(elementValue.replace(/,/g, ''));
                 if (!isNaN(value)) {
@@ -1104,13 +1113,10 @@ function hideModalBackdrop(modalId) {
     
         const averageElementPPM = countElementPPM > 0 ? (totalElementPPM / countElementPPM).toFixed(2) : 'N/A';
         const highestElementPPMFormatted = highestElementPPM > -Infinity ? formatNumberWithCommas(highestElementPPM.toFixed(2)) : 'N/A';
-    
         document.getElementById('selectedElementPPM').textContent = `Average Grade: ${formatNumberWithCommas(averageElementPPM)}`;
         document.getElementById('selectedElementHighestPPM').textContent = `Highest Grade: ${highestElementPPMFormatted}`;
-    
         document.getElementById('selectedElementPPM').style.display = 'inline-block';
         document.getElementById('selectedElementHighestPPM').style.display = 'inline-block';
-    
         document.getElementById('clearSelectionButton').style.display = 'inline-block';
         hideViewTop20Button();
     }
@@ -1119,7 +1125,6 @@ function hideModalBackdrop(modalId) {
 
         function viewExcelFile(filePath) {
             fetch(filePath)
-            
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -1214,9 +1219,7 @@ function hideModalBackdrop(modalId) {
                 default:
                     className = 'circle-icon white-circle';
             }
-    
             const labelHtml = showDHLabels ? `<span class="icon-label">${dh}</span>` : '';
-    
             return L.divIcon({
                 className: className,
                 html: labelHtml,
@@ -1253,7 +1256,7 @@ function updateDHLabelsVisibility() {
     }
 }
 
-    document.getElementById('toggleHeatmapButton').addEventListener('click', () => {
+document.getElementById('toggleHeatmapButton').addEventListener('click', () => {
     const selectedElement = document.getElementById('elementSelect').value;
     if (selectedElement) {
         toggleHeatmap(selectedElement);
@@ -1266,7 +1269,6 @@ function updateDHLabelsVisibility() {
 function toggleHeatmap(selectedElement) {
     const mapLegend = document.querySelector('.legend-wrapper');
     const heatmapLegend = document.getElementById('heatmapLegend');
-
     if (heatLayer) {
         map.removeLayer(heatLayer);
         heatLayer = null;
@@ -1288,7 +1290,6 @@ function toggleHeatmap(selectedElement) {
 function initializeLegends() {
     const mapLegend = document.querySelector('.legend-wrapper');
     const heatmapLegend = document.getElementById('heatmapLegend');
-
     if (heatmapEnabled) {
         mapLegend.classList.add('hidden');
         heatmapLegend.style.display = 'block';
@@ -1355,8 +1356,6 @@ function updateLegend() {
 document.getElementById('heatmapModeButton').addEventListener('click', () => {
     heatmapMode = heatmapMode === 'average' ? 'highest' : 'average';
     document.getElementById('heatmapModeButton').textContent = heatmapMode === 'average' ? 'Heat Map by Highest ppm' : 'Heat Map by Average ppm';
-
- 
     const selectedElement = document.getElementById('elementSelect').value;
     if (heatmapEnabled && selectedElement) {
         toggleHeatmap(selectedElement); 
@@ -1376,17 +1375,13 @@ function calculateHeatmapData(selectedElement, mode) {
             activeAssayTypes.has(sample['Assay Type']) &&
             activeZones.has(sample['Zone']) &&
             activeCOAs.has(sample['COA'])) {
-
             const latLng = convertUTMToLatLng(sample.Northing, sample.Easting);
             const dh = sample.DH;
-
             const elementValue = elementData[index] ? parseFloat(elementData[index][selectedElement].replace(/,/g, '')) : NaN;
-
             if (!isNaN(elementValue) && elementValue >= minCutoff && elementValue <= maxCutoff) {
                 if (!dhMap.has(dh)) {
                     dhMap.set(dh, { latLng, totalPPM: 0, count: 0, highestPPM: -Infinity });
                 }
-
                 const dhData = dhMap.get(dh);
                 dhData.totalPPM += elementValue;
                 dhData.count++;
@@ -1410,7 +1405,6 @@ function calculateHeatmapData(selectedElement, mode) {
         }
         heatData.push([value.latLng[0], value.latLng[1], heatmapValue]);
     });
-
     return { data: heatData.map(([lat, lng, ppm]) => [lat, lng, ppm / maxPPM]), maxPPM };
 }
 
@@ -1426,27 +1420,111 @@ function updateHeatmapLegend(maxPPM) {
 
     const legendContainer = document.getElementById('legendColors');
     legendContainer.innerHTML = '';
-
     legendColors.forEach(({ color, value }) => {
         const legendItem = document.createElement('div');
         legendItem.className = 'heatmap-legend-item';
-        
         const colorBox = document.createElement('div');
         colorBox.className = 'heatmap-legend-color';
         colorBox.style.backgroundColor = color;
-
         const legendText = document.createElement('div');
         legendText.className = 'heatmap-legend-text';
         legendText.textContent = `${formatNumberWithCommas(value)} ppm`;
-
         legendItem.appendChild(colorBox);
         legendItem.appendChild(legendText);
         legendContainer.appendChild(legendItem);
     });
 }
 
+function applyDepthFilter(data) {
+    if (activeDepth !== null) {
+        return data.filter(sample => sample['Depth'] === activeDepth);
+    }
+    return data;
+}
 
+function updateDepthFilter() {
+    const container = document.getElementById('depthCheckboxContainer');
+    container.innerHTML = '';
 
+    const availableDepths = new Set();
+
+    sampleData.forEach(sample => {
+        if (activeIncursionTypes.has(sample['Incursion Type'])) {
+            availableDepths.add(sample['Depth']);
+        }
+    });
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'depth-filter-buttons';
+
+    const selectAllButton = document.createElement('button');
+    selectAllButton.textContent = 'Select All';
+    selectAllButton.className = 'btn btn-sm btn-outline-primary';
+    selectAllButton.addEventListener('click', () => {
+        availableDepths.forEach(depth => activeDepths.add(depth));
+        container.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
+        updateMap();
+        updateElementTable();
+        updateElementAverages();
+    });
+
+    const deselectAllButton = document.createElement('button');
+    deselectAllButton.textContent = 'Deselect All';
+    deselectAllButton.className = 'btn btn-sm btn-outline-secondary';
+    deselectAllButton.addEventListener('click', () => {
+        activeDepths.clear();
+        container.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        updateMap();
+        updateElementTable();
+        updateElementAverages();
+    });
+
+    buttonContainer.appendChild(selectAllButton);
+    buttonContainer.appendChild(deselectAllButton);
+    container.appendChild(buttonContainer);
+
+    Array.from(availableDepths).sort((a, b) => parseFloat(a) - parseFloat(b)).forEach(depth => {
+        const label = document.createElement('label');
+        label.className = 'depth-filter-label';
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = depth;
+        checkbox.checked = activeDepths.has(depth);
+        checkbox.className = 'depth-filter-checkbox';
+        
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                activeDepths.add(this.value);
+            } else {
+                activeDepths.delete(this.value);
+            }
+            updateMap();
+            updateElementTable();
+            updateElementAverages();
+        });
+        
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(` ${depth} ft`));
+        container.appendChild(label);
+    });
+}
+
+// Separate function for handling depth filter changes
+function depthFilterChangeHandler(event) {
+    if (event.target.type === 'checkbox') {
+        if (event.target.checked) {
+            activeDepths.add(event.target.value);
+        } else {
+            activeDepths.delete(event.target.value);
+        }
+        updateMap();
+        updateElementTable();
+        updateElementAverages();
+    }
+}
+
+document.getElementById('depthCheckboxContainer').addEventListener('change', depthFilterChangeHandler);
 
 
 function updateMap() {
@@ -1465,13 +1543,14 @@ function updateMap() {
     const uniquePoints = new Map();
     maxPPM = 0;
 
-   sampleData.forEach((sample, index) => {
+    sampleData.forEach((sample, index) => {
         if (sample.Northing && sample.Easting &&
             activeIncursionTypes.has(sample['Incursion Type']) &&
             (activeAssayTypes.has(sample['Assay Type']) || 
              (sample['Assay Type'] === 'Metallurgical (Aqua Regia)' && activeAssayTypes.has('Metallurgical'))) &&
             activeZones.has(sample['Zone']) &&
-            activeCOAs.has(sample['COA'])) {
+            activeCOAs.has(sample['COA']) &&
+           activeDepths.has(sample['Depth'])) {
 
             const elementValue = elementData[index] && elementData[index][selectedElement] ? 
                                  parseFloat(elementData[index][selectedElement].replace(/["',]/g, '')) : NaN;
@@ -1513,6 +1592,7 @@ function updateMap() {
     }
 
     updateHeatmapIfEnabled(selectedElement);
+    updateElementAverages();
     updateElementTable();
 }
 
@@ -1530,8 +1610,6 @@ function generateTooltipContent(indices) {
     let highestPPM = -Infinity;
     let count = 0;
     const stids = new Set();
-
-    // Find the price of the selected element (price is per kg in the data)
     const elementPrice = elementPricesData.find(el => el.symbol === selectedElement)?.price || 0;
 
     indices.forEach(index => {
@@ -1548,8 +1626,6 @@ function generateTooltipContent(indices) {
 
     const averagePPM = count > 0 ? (totalPPM / count) : NaN;
     const stidList = Array.from(stids).join(', ');
-
-    // Calculate value/tonne for average and highest
     const valuePerTonneAvg = (averagePPM / 1000) * elementPrice;
     const valuePerTonneHighest = (highestPPM / 1000) * elementPrice;
 
@@ -1603,8 +1679,10 @@ function loadData() {
         })
         .then(text => {
             sampleData = parseCSV(text);
-            updateMap();
+            // Initialize activeDepths with all unique depths
+            activeDepths = new Set(allUniqueDepths);
             updateElementTable();
+            updateMap();
         })
         .catch(error => {
             console.error('Error loading the CSV file:', error);
@@ -1612,9 +1690,7 @@ function loadData() {
 }
 
 
-  
-
-  function updateElementTable() {
+function updateElementTable() {
     const selectedElement = document.getElementById('elementSelect').value;
     const tbody = document.querySelector('#elementTable tbody');
     const minCutoff = parseFloat(document.getElementById('minCutoff').value) || -Infinity;
@@ -1624,17 +1700,19 @@ function loadData() {
     let sortedData = [...sampleData];
     let total = 0;
     let count = 0;
+    uniqueDepths.clear(); // Clear existing depths before repopulating
 
     if (selectedIndices.length > 0) {
         sortedData = selectedIndices.map(index => sampleData[index]);
     }
 
- sortedData = sortedData.filter(sample =>
+    sortedData = sortedData.filter(sample =>
         activeIncursionTypes.has(sample['Incursion Type']) &&
         (activeAssayTypes.has(sample['Assay Type']) || 
          (sample['Assay Type'] === 'Metallurgical (Aqua Regia)' && activeAssayTypes.has('Metallurgical'))) &&
         activeZones.has(sample['Zone']) &&
-        activeCOAs.has(sample['COA'])
+        activeCOAs.has(sample['COA']) &&
+        activeDepths.has(sample['Depth'])  // Changed this line to use activeDepths
     );
 
     sortedData.sort((a, b) => {
@@ -1726,6 +1804,9 @@ function loadData() {
                         count++;
                     }
                 }
+
+                // Add depth to uniqueDepths if it passes all filters
+                uniqueDepths.add(sample['Depth']);
             }
         }
     });
@@ -1733,7 +1814,10 @@ function loadData() {
     updateAverageValue(total, count);
     updateZoneAverages();
     updateElementAverages();
-    updateSelectedDHAverage(); 
+    updateSelectedDHAverage();
+    
+    // Update depth filter options
+    updateDepthFilter(uniqueDepths);
 }
 
 function updateSelectedElementDisplay() {
@@ -1815,7 +1899,6 @@ function formatNumberWithCommas(value) {
 }
 
 
-// Modify the elementSelect change event listener
 document.getElementById('elementSelect').addEventListener('change', () => {
     const selectedElementSymbol = document.getElementById('elementSelect').value;
     const elementInfo = elementPricesData.find(el => el.symbol === selectedElementSymbol);
@@ -1829,7 +1912,6 @@ document.getElementById('elementSelect').addEventListener('change', () => {
         document.getElementById('selectedElement').textContent = selectedElementSymbol;
     }
 
-    // Update the checkboxes in the modal if it's open
     document.querySelectorAll('.element-price-card input[type="checkbox"]').forEach(cb => {
         cb.checked = cb.id === `checkbox-${selectedElementSymbol}`;
     });
@@ -1863,10 +1945,10 @@ function openVisualizationModal() {
     const modal = new bootstrap.Modal(document.getElementById('visualizationModal'));
     modal.show();
     
-    // Wait for the modal to be fully visible before rendering charts
+
     document.getElementById('visualizationModal').addEventListener('shown.bs.modal', function () {
         renderCharts();
-    }, { once: true }); // Use { once: true } to ensure the listener is removed after it's called
+    }, { once: true }); 
 }
 
 function renderCharts() {
@@ -1877,7 +1959,6 @@ function renderCharts() {
 function renderBarChart() {
     const ctx = document.getElementById('barChart').getContext('2d');
     
-    // Destroy existing chart if it exists
     if (barChart) {
         barChart.destroy();
     }
@@ -1939,12 +2020,10 @@ function renderBarChart() {
 function renderPieChart() {
     const ctx = document.getElementById('pieChart').getContext('2d');
     
-    // Destroy existing chart if it exists
     if (pieChart) {
         pieChart.destroy();
     }
 
-    // Define color mapping for zones
     const zoneColors = {
         'Zone 1': '#e02a2c',
         'Zone 2': '#44a0ff',
@@ -1954,7 +2033,6 @@ function renderPieChart() {
         'Zone 6': '#c61dde'
     };
 
-    // Sort visualizationData to ensure consistent order
     const sortedData = visualizationData.sort((a, b) => {
         return parseInt(a.name.split(' ')[1]) - parseInt(b.name.split(' ')[1]);
     });
@@ -2041,7 +2119,6 @@ function updateZoneAverages() {
         };
     });
 
-    // Sort visualization data by zone number
     visualizationData.sort((a, b) => {
         const zoneA = parseInt(a.name.split(' ')[1]);
         const zoneB = parseInt(b.name.split(' ')[1]);
@@ -2055,9 +2132,17 @@ document.getElementById('showDHLabels').addEventListener('change', function() {
     }
 });
 
+  
+function updateMetallurgicalCheckbox(checked) {
+    metallurgicalTypes.forEach(type => {
+        if (checked) {
+            activeAssayTypes.add(type);
+        } else {
+            activeAssayTypes.delete(type);
+        }
+    });
+}
 
-
-     // Function to set initial opacity for layers when they are added
      function setInitialLayerOpacity(layer) {
         const opacity = opacitySlider ? opacitySlider.value / 100 : 1;
         if (layer instanceof L.ImageOverlay) {
@@ -2111,51 +2196,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     document.querySelectorAll('.checkbox-container input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        const value = this.value;
-        
-        if (['HY20', 'HN04', 'Rock', 'Source Sample', 'Shaft'].includes(value)) {
-            if (this.checked) {
-                activeIncursionTypes.add(value);
-            } else {
-                activeIncursionTypes.delete(value);
+        checkbox.addEventListener('change', function() {
+            const value = this.value;
+            
+            if (['HY20', 'HN04', 'Rock', 'Source Sample', 'Shaft'].includes(value)) {
+                if (this.checked) {
+                    activeIncursionTypes.add(value);
+                } else {
+                    activeIncursionTypes.delete(value);
+                }
+                updateDepthFilter(); // Add this line
+            } else if (['LMB Flux', 'LMB+', '4-Acid Dig', 'Metallurgical'].includes(value)) {
+                if (this.checked) {
+                    activeAssayTypes.add(value === 'Metallurgical' ? 'Metallurgical (Aqua Regia)' : value);
+                } else {
+                    activeAssayTypes.delete(value === 'Metallurgical' ? 'Metallurgical (Aqua Regia)' : value);
+                }
+            } else if (['1', '2', '3', '4', '5', '6'].includes(value)) {
+                if (this.checked) {
+                    activeZones.add(value);
+                } else {
+                    activeZones.delete(value);
+                }
             }
-        } else if (['LMB Flux', 'LMB+', '4-Acid Dig', 'Metallurgical'].includes(value)) {
-            if (this.checked) {
-                activeAssayTypes.add(value === 'Metallurgical' ? 'Metallurgical (Aqua Regia)' : value);
-            } else {
-                activeAssayTypes.delete(value === 'Metallurgical' ? 'Metallurgical (Aqua Regia)' : value);
-            }
-        } else if (['1', '2', '3', '4', '5', '6'].includes(value)) {
-            if (this.checked) {
-                activeZones.add(value);
-            } else {
-                activeZones.delete(value);
-            }
-        }
-
-        document.querySelectorAll(`.checkbox-container input[value="${value}"]`).forEach(cb => {
-            cb.checked = this.checked;
+    
+            document.querySelectorAll(`.checkbox-container input[value="${value}"]`).forEach(cb => {
+                cb.checked = this.checked;
+            });
+    
+            updateMap();
+            updateElementTable();
+            updateElementAverages();
         });
-
-        updateMap();
-        updateElementTable();
-        updateElementAverages();
     });
-});
-
 
 
     const infoPopup = document.getElementById('infoPopup');
     infoPopup.style.display = 'block';
 
-    // Close the popup when the close button is clicked
     const closeBtn = document.querySelector('.close-btn');
     closeBtn.addEventListener('click', () => {
         infoPopup.style.display = 'none';
     });
 
-    // Close the popup when clicking outside of it
     window.addEventListener('click', (event) => {
         if (event.target === infoPopup) {
             infoPopup.style.display = 'none';
@@ -2178,8 +2261,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
  
-
-        // Existing COA cell click event handler
         document.querySelector('#elementTable tbody').addEventListener('click', function(e) {
     if (e.target && e.target.classList.contains('editable')) {
         const cellValue = e.target.textContent.trim();
@@ -2285,12 +2366,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-
-
-        
         collapseElements.forEach(collapse => {
             collapse.addEventListener('show.bs.collapse', function() {
-                // Close all other open collapses
+
                 collapseElements.forEach(otherCollapse => {
                     if (otherCollapse !== collapse && otherCollapse.classList.contains('show')) {
                         bootstrap.Collapse.getInstance(otherCollapse).hide();
@@ -2458,7 +2536,6 @@ function updateTop20Table(tableId, data, type) {
         tbody.appendChild(row);
     });
 
-    // Add tooltips to kg-data cells
     const kgCells = tbody.querySelectorAll('.kg-data');
     kgCells.forEach(cell => {
         const price = parseInt(cell.dataset.price);
@@ -2581,9 +2658,7 @@ function updateBarChart(canvasId, label, data) {
                 calculateTop20Elements();
             });
         });
-
-    
-
+        
     updateElementTable();
     loadTop20Data();
 });

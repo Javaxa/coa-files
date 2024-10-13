@@ -157,7 +157,7 @@ body {
     border: 1px solid #dee2e6;
     border-radius: 5px;
     overflow-y: auto;
-    max-height: 500px;
+    max-height: 550px;
 }
 
 .checkbox-container label, .overlay-checkbox-container label {

@@ -35,31 +35,6 @@ body {
     background: #ff9914;
 }
 
-.tooltip {
-    position: fixed;
-    background-color: #333;
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 14px;
-    pointer-events: none;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s, transform 0.3s;
-    z-index: 9999;
-}
-
-.tooltip::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #333 transparent transparent transparent;
-}
-
 .editable:hover {
     background-color: #ff9914;
     color: white;
@@ -1450,4 +1425,18 @@ body {
 
 .depth-filter-buttons {
     width: 100%;
+}
+
+
+.tooltip-i {
+    position: absolute;
+    z-index: 1001;
+    background-color: rgb(49, 115, 208);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 14px;
+    line-height: 1.4;
+    pointer-events: none;
 }

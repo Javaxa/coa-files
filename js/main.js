@@ -2471,8 +2471,10 @@ function calculateTop20Elements() {
 
         rawSampleData.forEach((sample, index) => {
             if ((selectedZone === 'all' || sample.Zone === selectedZone) &&
-                sample['Incursion Type'] === 'HY20' &&
-                (sample['Assay Type'] === 'LMB Flux' || sample['Assay Type'] === 'LMB+')) {
+                activeIncursionTypes.has(sample['Incursion Type']) &&
+                activeAssayTypes.has(sample['Assay Type']) &&
+                activeCOAs.has(sample['COA']) &&
+                activeDepths.has(sample['Depth'])) {
                 
                 const elementValue = rawElementData[index] && rawElementData[index][element] ? 
                                      parseFloat(rawElementData[index][element].replace(/["',]/g, '')) : NaN;
@@ -2508,6 +2510,33 @@ function calculateTop20Elements() {
 
     updateTop20Tables();
     updateTop20Charts();
+    updateTop20ModalHeader();
+}
+
+function updateTop20ModalHeader() {
+    const modalHeader = document.querySelector('#top20Modal .modal-header label');
+    
+    const incursionTypes = Array.from(activeIncursionTypes).map(type => {
+        switch(type) {
+            case 'HY20': return '20-Foot';
+            case 'HN04': return '4-Foot';
+            default: return type;
+        }
+    }).join(', ');
+
+    const assayTypes = Array.from(activeAssayTypes).map(type => {
+        switch(type) {
+            case 'LMB Flux': return 'LMB Flux';
+            case 'LMB+': return 'LMB+';
+            case '4-Acid Dig': return '4-Acid';
+            case 'Metallurgical (Aqua Regia)': return 'Metallurgical';
+            default: return type;
+        }
+    }).join(', ');
+
+    const depths = Array.from(activeDepths).length === allUniqueDepths.size ? 'All Depths' : Array.from(activeDepths).join(', ');
+
+    modalHeader.textContent = `Currently Displaying ${incursionTypes} Incursion Data at Depths: ${depths}, Assayed with ${assayTypes}`;
 }
         
 function updateTop20Tables() {
@@ -2660,21 +2689,23 @@ function updateBarChart(canvasId, label, data) {
     });
 }
         
-        document.getElementById('viewTop20Button').addEventListener('click', () => {
-            if (rawSampleData.length === 0) {
-                loadTop20Data();
-            } else {
-                calculateTop20Elements();
-            }
-            const modal = new bootstrap.Modal(document.getElementById('top20Modal'));
-            modal.show();
-        });
+document.getElementById('viewTop20Button').addEventListener('click', () => {
+    if (rawSampleData.length === 0) {
+        loadTop20Data();
+    } else {
+        // Reset the zone filter to 'All Zones' when opening the modal
+        document.getElementById('zoneAll').checked = true;
+        calculateTop20Elements();
+    }
+    const modal = new bootstrap.Modal(document.getElementById('top20Modal'));
+    modal.show();
+});
         
-        document.querySelectorAll('input[name="zoneFilter"]').forEach(radio => {
-            radio.addEventListener('change', () => {
-                calculateTop20Elements();
-            });
-        });
+document.querySelectorAll('input[name="zoneFilter"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        calculateTop20Elements();
+    });
+});
         
     updateElementTable();
     loadTop20Data();

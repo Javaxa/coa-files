@@ -290,38 +290,6 @@ const coaFiles = {
     }
 
 
-const tooltip = document.createElement('div');
-tooltip.className = 'tooltip';
-document.body.appendChild(tooltip);
-
-
-function showTooltip(event) {
-    const target = event.currentTarget;
-    const tooltipText = target.getAttribute('data-tooltip');
-    tooltip.textContent = tooltipText;
-    tooltip.style.display = 'block';
-    const rect = target.getBoundingClientRect();
-    tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
-    tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
-    setTimeout(() => {
-        tooltip.style.opacity = '1';
-        tooltip.style.transform = 'translateY(0)';
-    }, 10);
-}
-
-function hideTooltip() {
-    tooltip.style.opacity = '0';
-    tooltip.style.transform = 'translateY(10px)';
-    setTimeout(() => {
-        tooltip.style.display = 'none';
-    }, 300);
-}
-
-document.querySelectorAll('[data-tooltip]').forEach(element => {
-    element.addEventListener('mouseenter', showTooltip);
-    element.addEventListener('mouseleave', hideTooltip);
-});
-
 
 $(document).ready(function() {
     $('#periodicModal').on('shown.bs.modal', function () {

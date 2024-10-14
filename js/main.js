@@ -2624,16 +2624,27 @@ function updateTop20ModalHeader() {
         }
     }).join(', ');
 
-    const depths = Array.from(activeDepths).length === allUniqueDepths.size ? 'All Depths' : Array.from(activeDepths).join(', ');
+    // Get checked depth filters
+    const checkedDepths = Array.from(document.querySelectorAll('.depth-filter-checkbox:checked'))
+        .map(checkbox => checkbox.value)
+        .sort((a, b) => parseFloat(a) - parseFloat(b));
+
+    // Format depths
+    let depths;
+    if (checkedDepths.length === document.querySelectorAll('.depth-filter-checkbox').length) {
+        depths = "All Depths";
+    } else {
+        depths = checkedDepths.join(', ');
+    }
 
     const categoryText = activeElementCategory === 'all' ? 'All Elements' : `${activeElementCategory.charAt(0).toUpperCase() + activeElementCategory.slice(1)} Elements`;
 
     const selectedZone = document.querySelector('input[name="zoneFilter"]:checked').value;
     const zoneText = selectedZone === 'all' ? 'All Zones' : `Zone ${selectedZone}`;
 
-    modalHeader.textContent = `Currently Displaying ${categoryText} for ${incursionTypes} Incursion Data at Depths: ${depths}, Assayed with ${assayTypes} in ${zoneText}`;
+    modalHeader.innerHTML = `Currently Displaying <strong>${categoryText}</strong> for <strong>${incursionTypes} Incursion</strong> Data at Depths: <strong>${depths}</strong>, Assayed with <strong>${assayTypes}</strong> in <strong>${zoneText}</strong>`;
 }
-        
+
 function updateTop20Tables() {
     updateTop20Table('top20AverageTable', top20AverageData, 'average');
     updateTop20Table('top20HighestTable', top20HighestData, 'highest');

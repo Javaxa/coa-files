@@ -36,77 +36,77 @@ const coaFiles = {
     let sampleData = [];
     let elementData = {};
     const elementPricesData = [
-    { symbol: "Au", name: "Gold", price: 78000 },
-    { symbol: "Pt", name: "Platinum", price: 32000 },
-    { symbol: "Pd", name: "Palladium", price: 32000 },
-    { symbol: "Rh", name: "Rhodium", price: 140000 },
-    { symbol: "Ir", name: "Iridium", price: 151000 },
-    { symbol: "Os", name: "Osmium", price: 400000 },
-    { symbol: "Ru", name: "Ruthenium", price: 13000 },
-    { symbol: "Ag", name: "Silver", price: 1000 },
-    { symbol: "Al", name: "Aluminum", price: 2.4 },
-    { symbol: "As", name: "Arsenic", price: 1.51 },
-    { symbol: "B", name: "Boron", price: 2.03 },
-    { symbol: "Ba", name: "Barium", price: 0.22 },
-    { symbol: "Be", name: "Beryllium", price: 8240 },
-    { symbol: "Bi", name: "Bismuth", price: 11.9 },
-    { symbol: "Ca", name: "Calcium", price: 1.19 },
-    { symbol: "Cd", name: "Cadmium", price: 4.08 },
-    { symbol: "Ce", name: "Cerium", price: 1.19 },
-    { symbol: "Co", name: "Cobalt", price: 68.2 },
-    { symbol: "Cr", name: "Chromium", price: 10.1 },
-    { symbol: "Cs", name: "Cesium", price: 125000 }, 
-    { symbol: "Cu", name: "Copper", price: 8.3 },
-    { symbol: "Cl", name: "Chlorine", price: 0.21 },
-    { symbol: "Fe", name: "Iron", price: 0.12 },
-    { symbol: "Ga", name: "Gallium", price: 409 },
-    { symbol: "Ge", name: "Germanium", price: 3650 },
-    { symbol: "Hf", name: "Hafnium", price: 4000 },
-    { symbol: "Hg", name: "Mercury", price: 1210 }, 
-    { symbol: "In", name: "Indium", price: 381 },
-    { symbol: "K", name: "Potassium", price: 16.8 },
-    { symbol: "La", name: "Lanthanum", price: 1.97 },
-    { symbol: "Li", name: "Lithium", price: 71.3 },
-    { symbol: "Mg", name: "Magnesium", price: 2.32 },
-    { symbol: "Mn", name: "Manganese", price: 2.06 },
-    { symbol: "Mo", name: "Molybdenum", price: 29.4 },
-    { symbol: "Na", name: "Sodium", price: 3.24 },
-    { symbol: "Nb", name: "Niobium", price: 40.7 },
-    { symbol: "Ni", name: "Nickel", price: 18.3 },
-    { symbol: "P", name: "Phosphorus", price: 1.15 },
-    { symbol: "Pb", name: "Lead", price: 2.01 },
-    { symbol: "Rb", name: "Rubidium", price: 36000 }, 
-    { symbol: "Re", name: "Rhenium", price: 4670 },
-    { symbol: "S", name: "Sulfur", price: 0.6 },
-    { symbol: "Sb", name: "Antimony", price: 11.7 },
-    { symbol: "Sc", name: "Scandium", price: 270000 },
-    { symbol: "Se", name: "Selenium", price: 33.4 },
-    { symbol: "Sn", name: "Tin", price: 23.6 },
-    { symbol: "Sr", name: "Strontium", price: 6.08 },
-    { symbol: "Ta", name: "Tantalum", price: 264 },
-    { symbol: "Te", name: "Tellurium", price: 62.9 },
-    { symbol: "Th", name: "Thorium", price: 287 }, 
-    { symbol: "Ti", name: "Titanium", price: 9.58 },
-    { symbol: "Tl", name: "Thallium", price: 6080 },
-    { symbol: "U", name: "Uranium", price: 124 },
-    { symbol: "V", name: "Vanadium", price: 22.9 },
-    { symbol: "W", name: "Tungsten", price: 37.8 },
-    { symbol: "Y", name: "Yttrium", price: 45 },
-    { symbol: "Zn", name: "Zinc", price: 2.78 },
-    { symbol: "Zr", name: "Zirconium", price: 37.4 },
-    { symbol: "Dy", name: "Dysprosium", price: 307 },
-    { symbol: "Er", name: "Erbium", price: 43.9 },
-    { symbol: "Eu", name: "Europium", price: 263 },
-    { symbol: "Gd", name: "Gadolinium", price: 28.6 },
-    { symbol: "Ho", name: "Holmium", price: 60.3 },
-    { symbol: "Lu", name: "Lutetium", price: 6900 },
-    { symbol: "Nd", name: "Neodymium", price: 116 },
-    { symbol: "Pr", name: "Praseodymium", price: 103 },
-    { symbol: "Sm", name: "Samarium", price: 1.97 },
-    { symbol: "Tb", name: "Terbium", price: 1260 },
-    { symbol: "Tm", name: "Thulium", price: 12800 },
-    { symbol: "Yb", name: "Ytterbium", price: 14.3 }
-];
+        { symbol: "Au", name: "Gold", price: 78000, aca: 0.004 },
+        { symbol: "Pt", name: "Platinum", price: 32000, aca: 0.005 },
+        { symbol: "Pd", name: "Palladium", price: 32000, aca: 0.015 },
+        { symbol: "Rh", name: "Rhodium", price: 140000, aca: 0.001 },
+        { symbol: "Ir", name: "Iridium", price: 151000, aca: 0.001 },
+        { symbol: "Os", name: "Osmium", price: 400000, aca: 0.0015 },
+        { symbol: "Ru", name: "Ruthenium", price: 13000, aca: 0.001 },
+        { symbol: "Ag", name: "Silver", price: 1000, aca: 0.075 },
+        { symbol: "Al", name: "Aluminum", price: 2.4, aca: 82300 },
+        { symbol: "As", name: "Arsenic", price: 1.51, aca: 1.8 },
+        { symbol: "B", name: "Boron", price: 2.03, aca: 10 },
+        { symbol: "Ba", name: "Barium", price: 0.22, aca: 425 },
+        { symbol: "Be", name: "Beryllium", price: 8240, aca: 2.8 },
+        { symbol: "Bi", name: "Bismuth", price: 11.9, aca: 0.2 },
+        { symbol: "Ca", name: "Calcium", price: 1.19, aca: 41500 },
+        { symbol: "Cd", name: "Cadmium", price: 4.08, aca: 0.2 },
+        { symbol: "Ce", name: "Cerium", price: 1.19, aca: 66.5 },
+        { symbol: "Co", name: "Cobalt", price: 68.2, aca: 25 },
+        { symbol: "Cr", name: "Chromium", price: 10.1, aca: 102 },
+        { symbol: "Cs", name: "Cesium", price: 125000, aca: 3 },
+        { symbol: "Cu", name: "Copper", price: 8.3, aca: 60 },
+        { symbol: "Cl", name: "Chlorine", price: 0.21, aca: 145 },
+        { symbol: "Fe", name: "Iron", price: 0.12, aca: 56300 },
+        { symbol: "Ga", name: "Gallium", price: 409, aca: 19 },
+        { symbol: "Ge", name: "Germanium", price: 3650, aca: 1.5 },
+        { symbol: "Hf", name: "Hafnium", price: 4000, aca: 3 },
+        { symbol: "Hg", name: "Mercury", price: 1210, aca: 0.085 },
+        { symbol: "In", name: "Indium", price: 381, aca: 0.25 },
+        { symbol: "K", name: "Potassium", price: 16.8, aca: 20900 },
+        { symbol: "La", name: "Lanthanum", price: 1.97, aca: 39 },
+        { symbol: "Li", name: "Lithium", price: 71.3, aca: 20 },
+        { symbol: "Mg", name: "Magnesium", price: 2.32, aca: 23300 },
+        { symbol: "Mn", name: "Manganese", price: 2.06, aca: 950 },
+        { symbol: "Mo", name: "Molybdenum", price: 29.4, aca: 1.2 },
+        { symbol: "Na", name: "Sodium", price: 3.24, aca: 23600 },
+        { symbol: "Nb", name: "Niobium", price: 40.7, aca: 20 },
+        { symbol: "Ni", name: "Nickel", price: 18.3, aca: 84 },
+        { symbol: "P", name: "Phosphorus", price: 1.15, aca: 1050 },
+        { symbol: "Pb", name: "Lead", price: 2.01, aca: 14 },
+        { symbol: "Rb", name: "Rubidium", price: 36000, aca: 90 },
+        { symbol: "Re", name: "Rhenium", price: 4670, aca: 0.0007 },
+        { symbol: "S", name: "Sulfur", price: 0.6, aca: 350 },
+        { symbol: "Sb", name: "Antimony", price: 11.7, aca: 0.2 },
+        { symbol: "Sc", name: "Scandium", price: 270000, aca: 22 },
+        { symbol: "Se", name: "Selenium", price: 33.4, aca: 0.05 },
+        { symbol: "Sn", name: "Tin", price: 23.6, aca: 2.3 },
+        { symbol: "Sr", name: "Strontium", price: 6.08, aca: 370 },
+        { symbol: "Ta", name: "Tantalum", price: 264, aca: 2 },
+        { symbol: "Te", name: "Tellurium", price: 62.9, aca: 0.001 },
+        { symbol: "Th", name: "Thorium", price: 287, aca: 9.6 },
+        { symbol: "Ti", name: "Titanium", price: 9.58, aca: 5650 },
+        { symbol: "Tl", name: "Thallium", price: 6080, aca: 0.85 },
+        { symbol: "U", name: "Uranium", price: 124, aca: 2.7 },
+        { symbol: "V", name: "Vanadium", price: 22.9, aca: 120 },
+        { symbol: "W", name: "Tungsten", price: 37.8, aca: 1.2 },
+        { symbol: "Y", name: "Yttrium", price: 45, aca: 33 },
+        { symbol: "Zn", name: "Zinc", price: 2.78, aca: 70 },
+        { symbol: "Zr", name: "Zirconium", price: 37.4, aca: 165 },
+        { symbol: "Dy", name: "Dysprosium", price: 307, aca: 5.2 },
+        { symbol: "Er", name: "Erbium", price: 43.9, aca: 3.5 },
+        { symbol: "Eu", name: "Europium", price: 263, aca: 2 },
+        { symbol: "Gd", name: "Gadolinium", price: 28.6, aca: 6.2 },
+        { symbol: "Ho", name: "Holmium", price: 60.3, aca: 1.3 },
+        { symbol: "Lu", name: "Lutetium", price: 6900, aca: 0.8 },
+        { symbol: "Nd", name: "Neodymium", price: 116, aca: 41.5 },
+        { symbol: "Pr", name: "Praseodymium", price: 103, aca: 9.2 },
+        { symbol: "Sm", name: "Samarium", price: 1.97, aca: 7.05 },
+        { symbol: "Tb", name: "Terbium", price: 1260, aca: 1.2 },
+        { symbol: "Tm", name: "Thulium", price: 12800, aca: 0.52 },
+        { symbol: "Yb", name: "Ytterbium", price: 14.3, aca: 3.2 }
+    ];
     let appliedFilters = {}; 
     let map;
     let markers = [];
@@ -289,13 +289,23 @@ const coaFiles = {
         });
     }
 
-
-
 $(document).ready(function() {
     $('#periodicModal').on('shown.bs.modal', function () {
         $(this).find('.modal-body').load('misc/periodic.html', function() {
-            const allowedElements = new Set(elementPricesData.map(el => el.symbol));
+            const currentElement = document.getElementById('elementSelect').value;
+            updateSelectedElement(currentElement);
 
+            // Event delegation for dynamically loaded content
+            $(this).on('click', '.elements-main', function() {
+                const symbol = $(this).find('strong').text();
+                const dropdown = $('#elementSelect');
+                if (dropdown.length) {
+                    dropdown.val(symbol).trigger('change');
+                }
+            });
+
+            // Rest of your existing code for handling allowed elements
+            const allowedElements = new Set(elementPricesData.map(el => el.symbol));
             $('.chip').each(function() {
                 const elementSymbol = $(this).find('.face.front strong').text();
                 if (!allowedElements.has(elementSymbol)) {
@@ -1808,7 +1818,6 @@ function updateSelectedElementDisplay() {
     const selectedElement = document.getElementById('elementSelect').value;
     const elementInfo = elementPricesData.find(el => el.symbol === selectedElement);
     const backgroundColor = getElementBackgroundColor(selectedElement);
-    
 
     if (elementInfo) {
         document.getElementById('selectedElementName').textContent = elementInfo.name;
@@ -1829,6 +1838,18 @@ function updateSelectedElementDisplay() {
     }
 }
 
+function updateSelectedElement(symbol) {
+    const periodicModal = $('#periodicModal');
+    if (periodicModal.length) {
+        // Remove 'selected' class from all elements
+        periodicModal.find('.elements-main').removeClass('selected');
+
+        // Add 'selected' class to the matching element
+        periodicModal.find('.elements-main').filter(function() {
+            return $(this).find('strong').text() === symbol;
+        }).addClass('selected');
+    }
+}
 
 function updateSelectedDHAverage() {
     if (selectedIndices.length > 0) {
@@ -1883,8 +1904,9 @@ function formatNumberWithCommas(value) {
 }
 
 
-document.getElementById('elementSelect').addEventListener('change', () => {
-    const selectedElementSymbol = document.getElementById('elementSelect').value;
+document.getElementById('elementSelect').addEventListener('change', function() {
+    const selectedElementSymbol = this.value;
+    updateSelectedElement(selectedElementSymbol);
     const elementInfo = elementPricesData.find(el => el.symbol === selectedElementSymbol);
     
     if (elementInfo) {
@@ -2680,92 +2702,21 @@ document.querySelectorAll('input[name="zoneFilter"]').forEach(radio => {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    let tooltip;
-    let isTooltipPinned = false;
-    let currentTooltipElement = null;
-    document.body.addEventListener('mouseover', function(event) {
-        const target = event.target.closest('[data-tooltip]');
-        if (target && !isTooltipPinned) {
-            createAndPositionTooltip(target);
-            currentTooltipElement = target; 
-        }
-    });
-
-    document.body.addEventListener('mouseout', function(event) {
-        const relatedTarget = event.relatedTarget;
-        if (currentTooltipElement && !isTooltipPinned && (!relatedTarget || !relatedTarget.closest('[data-tooltip]'))) {
-            removeTooltip();
-            currentTooltipElement = null;
-        }
-    });
-
-    document.body.addEventListener('click', function(event) {
-        const target = event.target.closest('[data-tooltip]');
-        if (target) {
-            if (target.classList.contains('dashboard-page')) {
-                isTooltipPinned = !isTooltipPinned;
-                if (isTooltipPinned) {
-                    if (currentTooltipElement !== target) {
-                        createAndPositionTooltip(target);
-                        currentTooltipElement = target;
-                    }
-                } else {
-                    removeTooltip();
-                    currentTooltipElement = null;
+    const periodicModal = document.getElementById('periodicModal');
+    if (periodicModal) {
+        periodicModal.addEventListener('click', function(event) {
+            const elementChip = event.target.closest('.elements-main');
+            if (elementChip) {
+                const symbol = elementChip.querySelector('strong').textContent;
+                
+                // Update the dropdown
+                const dropdown = document.getElementById('elementSelect');
+                if (dropdown) {
+                    dropdown.value = symbol;
+                    // Trigger change event
+                    dropdown.dispatchEvent(new Event('change'));
                 }
             }
-        } else if (!event.target.closest('.tooltip-i') && !event.target.closest('.collapse-inner')) {
-            isTooltipPinned = false;
-            removeTooltip();
-            currentTooltipElement = null;
-        }
-    });
-
-    function createAndPositionTooltip(element) {
-        if (tooltip) {
-            tooltip.parentNode.removeChild(tooltip);
-            tooltip = null;
-        }
-        
-        tooltip = document.createElement('div');
-        tooltip.className = 'tooltip-i';
-        tooltip.textContent = element.getAttribute('data-tooltip');
-        document.body.appendChild(tooltip);
-        
-        positionTooltip(element);
-
-        // Add event listener for scroll events
-        window.addEventListener('scroll', () => positionTooltip(element));
-    }
-
-    function positionTooltip(element) {
-        if (!tooltip) return;
-
-        const rect = element.getBoundingClientRect();
-        let top, left;
-
-        if (element.closest('.left-side')) {
-            top = rect.top + (rect.height / 2) - (tooltip.offsetHeight / 2);
-            left = rect.right + 10;
-        } else {
-            top = rect.top - tooltip.offsetHeight - 5;
-            left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2);
-            left = Math.max(5, Math.min(left, window.innerWidth - tooltip.offsetWidth - 5));
-            top = Math.max(5, top);
-        }
-
-        tooltip.style.position = 'fixed';
-        tooltip.style.top = `${top}px`;
-        tooltip.style.left = `${left}px`;
-        tooltip.classList.add('visible');
-    }
-
-    function removeTooltip() {
-        if (tooltip && tooltip.parentNode) {
-            tooltip.parentNode.removeChild(tooltip);
-            tooltip = null;
-        }
-        // Remove scroll event listener when tooltip is removed
-        window.removeEventListener('scroll', positionTooltip);
+        });
     }
 });

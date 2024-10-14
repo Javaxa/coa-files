@@ -521,8 +521,31 @@ span.swatch.elements-noble-gas {
     }
 }
 
+#periodicModal .elements-main.selected {
+    position: relative;
+    z-index: 2;
+}
 
+#periodicModal .elements-main.selected::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: inset 0 0 0 3px #ff0000;
+    pointer-events: none;
+}
 
+#periodicModal .elements-main.selected .chip {
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in-out;
+}
+
+#periodicModal .elements-main .chip {
+    border: none;
+    box-shadow: none;
+}
     </style>
 </head>
 <body>

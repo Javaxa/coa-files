@@ -1365,7 +1365,8 @@ function calculateHeatmapData(selectedElement, mode) {
             activeIncursionTypes.has(sample['Incursion Type']) &&
             activeAssayTypes.has(sample['Assay Type']) &&
             activeZones.has(sample['Zone']) &&
-            activeCOAs.has(sample['COA'])) {
+            activeCOAs.has(sample['COA']) &&
+            activeDepths.has(sample['Depth'])) {  // Add this line to check depth
             const latLng = convertUTMToLatLng(sample.Northing, sample.Easting);
             const dh = sample.DH;
             const elementValue = elementData[index] ? parseFloat(elementData[index][selectedElement].replace(/,/g, '')) : NaN;

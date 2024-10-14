@@ -507,9 +507,18 @@ document.querySelector('.table-download').addEventListener('click', function() {
         }
     }).join(', ');
     
-    // Get selected depths
-    const selectedDepths = Array.from(activeDepths).sort((a, b) => parseFloat(a) - parseFloat(b));
-    let depthsString = selectedDepths.length === allUniqueDepths.size ? 'All Depths' : selectedDepths.join(', ');
+    // Get checked depth filters
+    const checkedDepths = Array.from(document.querySelectorAll('.depth-filter-checkbox:checked'))
+        .map(checkbox => checkbox.value)
+        .sort((a, b) => parseFloat(a) - parseFloat(b));
+
+    // Format depths
+    let depthsString;
+    if (checkedDepths.length === document.querySelectorAll('.depth-filter-checkbox').length) {
+        depthsString = "All Depths";
+    } else {
+        depthsString = checkedDepths.join(', ');
+    }
 
     // Get cut-off grade values
     const minCutoff = document.getElementById('minCutoff').value;

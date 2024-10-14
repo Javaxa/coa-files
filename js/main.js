@@ -168,6 +168,13 @@ const coaFiles = {
     const metallurgicalTypes = ['LMB+ (Mtlg-AqRg-SMB)', 'LMB+ (Mtlg-AqRg-AC)', 'LMB+ (Mtlg-AqRg)'];
     const headers = ['Description', 'Incursion Type', 'Lab', 'Stid', 'Zone', 'Northing', 'Easting', 'DH', 'Depth', 'Assay Type', 'COA', 'Weight'];
     const elements = ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag', 'Al', 'As', 'B', 'Ba', 'Be', 'Bi', 'Ca', 'Cd', 'Ce', 'Co', 'Cr', 'Cs', 'Cu', 'Cl', 'Fe', 'Ga', 'Ge', 'Hf', 'Hg', 'In', 'K', 'La', 'Li', 'Mg', 'Mn', 'Mo', 'Na', 'Nb', 'Ni', 'P', 'Pb', 'Rb', 'Re', 'S', 'Sb', 'Sc', 'Se', 'Sn', 'Sr', 'Ta', 'Te', 'Th', 'Ti', 'Tl', 'U', 'V', 'W', 'Y', 'Zn', 'Zr', 'Dy', 'Er', 'Eu', 'Gd', 'Ho', 'Lu', 'Nd', 'Pr', 'Sm', 'Tb', 'Tm', 'Yb'];
+    const elementCategories = {
+        precious: ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag'],
+        critical: ['Rb', 'Cs', 'Sc'],
+        industrial: elements.filter(el => !['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag', 'Rb', 'Cs', 'Sc'].includes(el))
+    };
+    
+    let activeElementCategory = 'all';
 
     function parseCSV(text) {
         const lines = text.trim().split('\n');
@@ -2470,12 +2477,34 @@ function parseTop20CSV(text) {
     });
 }
 
+
+document.getElementById('top20Modal').addEventListener('shown.bs.modal', function () {
+    const categoryRadios = document.querySelectorAll('#top20Modal input[name="elementCategoryFilter"]');
+    
+    categoryRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            activeElementCategory = this.value;
+            calculateTop20Elements();
+        });
+    });
+});
+
+document.getElementById('elementCategoryFilterContainer').addEventListener('change', function(event) {
+    if (event.target.name === 'elementCategoryFilter') {
+        activeElementCategory = event.target.value;
+        calculateTop20Elements();
+    }
+});
+
 function calculateTop20Elements() {
     const selectedZone = document.querySelector('input[name="zoneFilter"]:checked').value;
     let highestData = [];
     let averageData = [];
 
     elements.forEach(element => {
+        if (activeElementCategory !== 'all' && !elementCategories[activeElementCategory].includes(element)) {
+            return;
+        }
         let highest = -Infinity;
         let total = 0;
         let count = 0;
@@ -2498,22 +2527,24 @@ function calculateTop20Elements() {
             }
         });
 
-        const average = count > 0 ? total / count : 0;
-        const elementPrice = elementPricesData.find(el => el.symbol === element)?.price || 0;
-        const highestValuePerTonne = (highest / 1000) * elementPrice;
-        const averageValuePerTonne = (average / 1000) * elementPrice;
+        if (count > 0) {
+            const average = total / count;
+            const elementPrice = elementPricesData.find(el => el.symbol === element)?.price || 0;
+            const highestValuePerTonne = (highest / 1000) * elementPrice;
+            const averageValuePerTonne = (average / 1000) * elementPrice;
 
-        highestData.push({
-            element,
-            highest,
-            highestValuePerTonne
-        });
+            highestData.push({
+                element,
+                highest,
+                highestValuePerTonne
+            });
 
-        averageData.push({
-            element,
-            average,
-            averageValuePerTonne
-        });
+            averageData.push({
+                element,
+                average,
+                averageValuePerTonne
+            });
+        }
     });
 
     top20HighestData = highestData.sort((a, b) => b.highestValuePerTonne - a.highestValuePerTonne).slice(0, 20);
@@ -2547,7 +2578,9 @@ function updateTop20ModalHeader() {
 
     const depths = Array.from(activeDepths).length === allUniqueDepths.size ? 'All Depths' : Array.from(activeDepths).join(', ');
 
-    modalHeader.textContent = `Currently Displaying ${incursionTypes} Incursion Data at Depths: ${depths}, Assayed with ${assayTypes}`;
+    const categoryText = activeElementCategory === 'all' ? 'All Elements' : `${activeElementCategory.charAt(0).toUpperCase() + activeElementCategory.slice(1)} Elements`;
+
+    modalHeader.textContent = `Currently Displaying ${categoryText} for ${incursionTypes} Incursion Data at Depths: ${depths}, Assayed with ${assayTypes}`;
 }
         
 function updateTop20Tables() {
@@ -2631,6 +2664,7 @@ function updateTop20Table(tableId, data, type) {
         });
     });
 }
+
 
 function updateTop20Charts() {
     updateBarChart('highestValueChart', 'Highest Value ($/tonne)', top20HighestData);

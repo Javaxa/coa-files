@@ -1451,3 +1451,40 @@ body {
     line-height: 1.4;
     pointer-events: none;
 }
+
+
+
+.element-category-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.element-category-filter-container .form-check-inline {
+    margin-right: 0;
+}
+
+.element-category-filter-container .form-check-input[type="radio"] {
+    display: none;
+}
+
+.element-category-filter-container .form-check-label {
+    padding: 5px 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.element-category-filter-container .form-check-input[type="radio"]:checked + .form-check-label {
+    background-color: #075496;
+    color: white;
+    border: solid 1px #ff9000;
+}
+
+.element-category-filter-container .form-check-label:hover {
+    background-color: #e9ecef;
+}

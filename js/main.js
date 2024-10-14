@@ -1924,10 +1924,21 @@ function updateAverageValue(total, count) {
 }
 
 function formatNumberWithCommas(value) {
-    if (!value) return value;
-    const parts = value.toString().split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    return parts.join('.');
+    if (typeof value === 'string') {
+        value = parseFloat(value.replace(/,/g, ''));
+    }
+    if (isNaN(value)) {
+        return 'N/A';
+    }
+    
+    let result;
+    if (value >= 1000) {
+        result = Math.round(value).toString();
+    } else {
+        result = value.toFixed(2);
+    }
+    
+    return result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 

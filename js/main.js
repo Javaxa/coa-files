@@ -214,49 +214,79 @@ const coaFiles = {
         return data;
     }
 
+    function selectAllDepths() {
+        const checkboxes = document.querySelectorAll('.depth-filter-checkbox');
+        checkboxes.forEach(cb => {
+            cb.checked = true;
+            activeDepths.add(cb.value);
+        });
+        updateMap();
+        updateElementTable();
+        updateElementAverages();
+    }
+    
+    function deselectAllDepths() {
+        const checkboxes = document.querySelectorAll('.depth-filter-checkbox');
+        checkboxes.forEach(cb => {
+            cb.checked = false;
+            activeDepths.delete(cb.value);
+        });
+        updateMap();
+        updateElementTable();
+        updateElementAverages();
+    }
+    
+    
+
     function createDepthCheckboxes(depths) {
         const container = document.getElementById('depthCheckboxContainer');
         container.innerHTML = '';
     
-        const allDepthsRadio = document.createElement('input');
-        allDepthsRadio.type = 'radio';
-        allDepthsRadio.id = 'allDepths';
-        allDepthsRadio.name = 'depthFilter';
-        allDepthsRadio.value = 'all';
-        allDepthsRadio.checked = activeDepth === null;
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'depth-filter-buttons';
     
-        const allDepthsLabel = document.createElement('label');
-        allDepthsLabel.htmlFor = 'allDepths';
-        allDepthsLabel.textContent = 'All Depths';
+        const selectAllButton = document.createElement('button');
+        selectAllButton.textContent = 'Select All';
+        selectAllButton.className = 'btn btn-sm btn-outline-primary';
+        selectAllButton.addEventListener('click', selectAllDepths);
     
-        container.appendChild(allDepthsRadio);
-        container.appendChild(allDepthsLabel);
+        const deselectAllButton = document.createElement('button');
+        deselectAllButton.textContent = 'Deselect All';
+        deselectAllButton.className = 'btn btn-sm btn-outline-secondary';
+        deselectAllButton.addEventListener('click', deselectAllDepths);
+    
+        buttonContainer.appendChild(selectAllButton);
+        buttonContainer.appendChild(deselectAllButton);
+        container.appendChild(buttonContainer);
     
         Array.from(depths).sort((a, b) => parseFloat(a) - parseFloat(b)).forEach(depth => {
-            const radio = document.createElement('input');
-            radio.type = 'radio';
-            radio.id = `depth-${depth}`;
-            radio.name = 'depthFilter';
-            radio.value = depth;
-            radio.checked = activeDepth === depth;
-    
             const label = document.createElement('label');
-            label.htmlFor = `depth-${depth}`;
-            label.textContent = `${depth} ft`;
-    
-            container.appendChild(radio);
-            container.appendChild(label);
-        });
-    
-        // Add event listener for depth filter changes
-        container.addEventListener('change', function(event) {
-            if (event.target.type === 'radio') {
-                activeDepth = event.target.value === 'all' ? null : event.target.value;
+            label.className = 'depth-filter-label';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = depth;
+            checkbox.checked = true; // Always checked by default
+            checkbox.className = 'depth-filter-checkbox';
+            
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    activeDepths.add(this.value);
+                } else {
+                    activeDepths.delete(this.value);
+                }
                 updateMap();
                 updateElementTable();
                 updateElementAverages();
-            }
+            });
+            
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(` ${depth} ft`));
+            container.appendChild(label);
         });
+    
+        // Ensure activeDepths includes all depths
+        activeDepths = new Set(depths);
     }
     
 
@@ -1455,24 +1485,12 @@ function updateDepthFilter() {
     const selectAllButton = document.createElement('button');
     selectAllButton.textContent = 'Select All';
     selectAllButton.className = 'btn btn-sm btn-outline-primary';
-    selectAllButton.addEventListener('click', () => {
-        availableDepths.forEach(depth => activeDepths.add(depth));
-        container.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
-        updateMap();
-        updateElementTable();
-        updateElementAverages();
-    });
+    selectAllButton.addEventListener('click', selectAllDepths);
 
     const deselectAllButton = document.createElement('button');
     deselectAllButton.textContent = 'Deselect All';
     deselectAllButton.className = 'btn btn-sm btn-outline-secondary';
-    deselectAllButton.addEventListener('click', () => {
-        activeDepths.clear();
-        container.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-        updateMap();
-        updateElementTable();
-        updateElementAverages();
-    });
+    deselectAllButton.addEventListener('click', deselectAllDepths);
 
     buttonContainer.appendChild(selectAllButton);
     buttonContainer.appendChild(deselectAllButton);
@@ -1504,6 +1522,7 @@ function updateDepthFilter() {
         container.appendChild(label);
     });
 }
+
 
 // Separate function for handling depth filter changes
 function depthFilterChangeHandler(event) {
@@ -2210,6 +2229,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (['HY20', 'HN04', 'Rock', 'Source Sample', 'Shaft'].includes(value)) {
                 if (this.checked) {
                     activeIncursionTypes.add(value);
+                    selectAllDepths(); // Select all depths when an incursion type is selected
                 } else {
                     activeIncursionTypes.delete(value);
                 }
@@ -2231,7 +2251,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cb.checked = this.checked;
             });
     
-            updateDepthFilter(); // Call this for all filter changes
+            updateDepthFilter(); // Update depth filter for all filter changes
             updateMap();
             updateElementTable();
             updateElementAverages();

@@ -2628,7 +2628,10 @@ function updateTop20ModalHeader() {
 
     const categoryText = activeElementCategory === 'all' ? 'All Elements' : `${activeElementCategory.charAt(0).toUpperCase() + activeElementCategory.slice(1)} Elements`;
 
-    modalHeader.textContent = `Currently Displaying ${categoryText} for ${incursionTypes} Incursion Data at Depths: ${depths}, Assayed with ${assayTypes}`;
+    const selectedZone = document.querySelector('input[name="zoneFilter"]:checked').value;
+    const zoneText = selectedZone === 'all' ? 'All Zones' : `Zone ${selectedZone}`;
+
+    modalHeader.textContent = `Currently Displaying ${categoryText} for ${incursionTypes} Incursion Data at Depths: ${depths}, Assayed with ${assayTypes} in ${zoneText}`;
 }
         
 function updateTop20Tables() {
@@ -2823,6 +2826,7 @@ document.getElementById('viewTop20Button').addEventListener('click', () => {
         document.getElementById('zoneAll').checked = true;
         calculateTop20Elements();
     }
+    updateTop20ModalHeader(); // Add this line
     const modal = new bootstrap.Modal(document.getElementById('top20Modal'));
     modal.show();
 });
@@ -2830,6 +2834,7 @@ document.getElementById('viewTop20Button').addEventListener('click', () => {
 document.querySelectorAll('input[name="zoneFilter"]').forEach(radio => {
     radio.addEventListener('change', () => {
         calculateTop20Elements();
+        updateTop20ModalHeader();
     });
 });
         
@@ -2856,3 +2861,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+

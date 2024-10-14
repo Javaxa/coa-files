@@ -2498,57 +2498,94 @@ document.getElementById('elementCategoryFilterContainer').addEventListener('chan
 
 function calculateTop20Elements() {
     const selectedZone = document.querySelector('input[name="zoneFilter"]:checked').value;
-    let highestData = [];
-    let averageData = [];
+    let elementData = {};
 
     elements.forEach(element => {
         if (activeElementCategory !== 'all' && !elementCategories[activeElementCategory].includes(element)) {
             return;
         }
-        let highest = -Infinity;
-        let total = 0;
-        let count = 0;
+        elementData[element] = { 
+            highest: -Infinity, 
+            highestZone: null, 
+            totalAllZones: 0, 
+            countAllZones: 0,
+            zoneAverages: {}
+        };
+    });
 
-        rawSampleData.forEach((sample, index) => {
-            if ((selectedZone === 'all' || sample.Zone === selectedZone) &&
-                activeIncursionTypes.has(sample['Incursion Type']) &&
-                activeAssayTypes.has(sample['Assay Type']) &&
-                activeCOAs.has(sample['COA']) &&
-                activeDepths.has(sample['Depth'])) {
-                
-                const elementValue = rawElementData[index] && rawElementData[index][element] ? 
-                                     parseFloat(rawElementData[index][element].replace(/["',]/g, '')) : NaN;
+    rawSampleData.forEach((sample, index) => {
+        if (activeIncursionTypes.has(sample['Incursion Type']) &&
+            activeAssayTypes.has(sample['Assay Type']) &&
+            activeCOAs.has(sample['COA']) &&
+            activeDepths.has(sample['Depth']) &&
+            (selectedZone === 'all' || sample.Zone === selectedZone)) {
+            
+            elements.forEach(element => {
+                if (activeElementCategory === 'all' || elementCategories[activeElementCategory].includes(element)) {
+                    const elementValue = rawElementData[index] && rawElementData[index][element] ? 
+                                         parseFloat(rawElementData[index][element].replace(/["',]/g, '')) : NaN;
 
-                if (!isNaN(elementValue)) {
-                    highest = Math.max(highest, elementValue);
-                    total += elementValue;
-                    count++;
+                    if (!isNaN(elementValue)) {
+                        // Update highest value across all zones
+                        if (elementValue > elementData[element].highest) {
+                            elementData[element].highest = elementValue;
+                            elementData[element].highestZone = sample.Zone;
+                        }
+
+                        // Update totals for average calculation
+                        elementData[element].totalAllZones += elementValue;
+                        elementData[element].countAllZones++;
+
+                        // Update zone-specific averages
+                        if (!elementData[element].zoneAverages[sample.Zone]) {
+                            elementData[element].zoneAverages[sample.Zone] = { total: 0, count: 0 };
+                        }
+                        elementData[element].zoneAverages[sample.Zone].total += elementValue;
+                        elementData[element].zoneAverages[sample.Zone].count++;
+                    }
                 }
-            }
-        });
-
-        if (count > 0) {
-            const average = total / count;
-            const elementPrice = elementPricesData.find(el => el.symbol === element)?.price || 0;
-            const highestValuePerTonne = (highest / 1000) * elementPrice;
-            const averageValuePerTonne = (average / 1000) * elementPrice;
-
-            highestData.push({
-                element,
-                highest,
-                highestValuePerTonne
-            });
-
-            averageData.push({
-                element,
-                average,
-                averageValuePerTonne
             });
         }
     });
 
-    top20HighestData = highestData.sort((a, b) => b.highestValuePerTonne - a.highestValuePerTonne).slice(0, 20);
-    top20AverageData = averageData.sort((a, b) => b.averageValuePerTonne - a.averageValuePerTonne).slice(0, 20);
+    const elementPrice = (element) => elementPricesData.find(el => el.symbol === element)?.price || 0;
+    const calculateValuePerTonne = (ppm, element) => (ppm / 1000) * elementPrice(element);
+
+    top20HighestData = Object.entries(elementData)
+        .map(([element, data]) => ({
+            element,
+            highest: data.highest,
+            highestValuePerTonne: calculateValuePerTonne(data.highest, element),
+            zone: data.highestZone
+        }))
+        .filter(item => item.highest > -Infinity)
+        .sort((a, b) => b.highestValuePerTonne - a.highestValuePerTonne)
+        .slice(0, 20);
+
+    top20AverageData = Object.entries(elementData)
+        .map(([element, data]) => {
+            let highestAverage = -Infinity;
+            let highestAverageZone = null;
+
+            // Find the highest average across all zones
+            Object.entries(data.zoneAverages).forEach(([zone, zoneData]) => {
+                const zoneAverage = zoneData.count > 0 ? zoneData.total / zoneData.count : 0;
+                if (zoneAverage > highestAverage) {
+                    highestAverage = zoneAverage;
+                    highestAverageZone = zone;
+                }
+            });
+
+            return {
+                element,
+                average: highestAverage,
+                averageValuePerTonne: calculateValuePerTonne(highestAverage, element),
+                zone: highestAverageZone
+            };
+        })
+        .filter(item => item.average > 0)
+        .sort((a, b) => b.averageValuePerTonne - a.averageValuePerTonne)
+        .slice(0, 20);
 
     updateTop20Tables();
     updateTop20Charts();
@@ -2595,6 +2632,9 @@ function updateTop20Table(tableId, data, type) {
     }
     tbody.innerHTML = '';
 
+    const selectedZone = document.querySelector('input[name="zoneFilter"]:checked').value;
+    const isAllZones = selectedZone === 'all';
+
     data.forEach(item => {
         const row = document.createElement('tr');
         const ppmValue = type === 'highest' ? item.highest : item.average;
@@ -2608,12 +2648,30 @@ function updateTop20Table(tableId, data, type) {
         const annualFigure = isIridium 
             ? tenKTonneProduction * 365 
             : Math.round(tenKTonneProduction * 365);
+;
 
-        const tenKTonnePrice = Math.round(valuePerTonne * 10000);
-        const annualPrice = Math.round(valuePerTonne * 10000 * 365);
+const tenKTonnePrice = Math.round(valuePerTonne * 10000);
+const annualPrice = Math.round(valuePerTonne * 10000 * 365);
+
+const zoneStyle = `
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: ${getZoneColor(item.zone)};
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    line-height: 20px;
+    margin-left: 5px;
+    float: right;
+`;
 
         row.innerHTML = `
-            <td>${item.element}</td>
+            <td>
+                ${item.element}
+                ${isAllZones ? `<span style="${zoneStyle}">${item.zone}</span>` : ''}
+            </td>
             <td class="${type}-value-2">${formatNumberWithCommas(ppmValue.toFixed(2))}</td>
             <td class="dollar-value-2">$${formatNumberWithCommas(valuePerTonne.toFixed(2))}</td>
             <td class="kg-data" data-price="${tenKTonnePrice}">
@@ -2663,6 +2721,18 @@ function updateTop20Table(tableId, data, type) {
             tooltip.style.opacity = '0';
         });
     });
+}
+
+function getZoneColor(zone) {
+    const colors = {
+        '1': '#ff6668',
+        '2': '#44a0ff',
+        '3': '#4c69e7',
+        '4': '#3cdf19',
+        '5': '#ffcd57',
+        '6': '#e94eff'
+    };
+    return colors[zone] || '#888888'; // Default color if zone is not found
 }
 
 

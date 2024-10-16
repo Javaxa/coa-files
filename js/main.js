@@ -857,6 +857,7 @@ function hideModalBackdrop(modalId) {
         }    
     
         layerControl = L.control.layers(baseLayers).addTo(map);
+        
     
         map.on('overlayadd', function(event) {
             updateSidebarCheckbox(event.name, true);
@@ -2880,5 +2881,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+            // Add this code after your map has been initialized and the layer control added
+setTimeout(function() {
+    var layerToggle = document.querySelector('.leaflet-control-layers');
+    if (layerToggle) {
+        layerToggle.setAttribute('data-tooltip', 'Map Selections');
+    }
+}, 100);
 });
 

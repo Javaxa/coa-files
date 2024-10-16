@@ -1941,14 +1941,17 @@ function formatNumberWithCommas(value) {
         return 'N/A';
     }
     
-    let result;
+    let formattedValue;
     if (value >= 1000) {
-        result = Math.round(value).toString();
+        // Round to nearest integer for values >= 1000
+        formattedValue = Math.round(value).toString();
     } else {
-        result = value.toFixed(2);
+        // Preserve original decimal places for values < 1000
+        formattedValue = value.toString();
     }
     
-    return result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    // Add thousand separators
+    return formattedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 

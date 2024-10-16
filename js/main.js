@@ -1933,7 +1933,8 @@ function updateAverageValue(total, count) {
     }
 }
 
-function formatNumberWithCommas(value) {
+
+function formatNumberWithCommas(value, columnType = 'default') {
     if (typeof value === 'string') {
         value = parseFloat(value.replace(/,/g, ''));
     }
@@ -1942,16 +1943,21 @@ function formatNumberWithCommas(value) {
     }
     
     let formattedValue;
-    if (value >= 1000) {
-        // Round to nearest integer for values >= 1000
+    if (columnType === 'production' && value < 999) {
+        // For production columns, keep two decimal places for values under 999
+        formattedValue = value.toFixed(2);
+    } else if (value >= 1000) {
+        // For all values 1000 and above, round to the nearest integer
         formattedValue = Math.round(value).toString();
     } else {
-        // Preserve original decimal places for values < 1000
+        // For other cases, preserve original decimal places
         formattedValue = value.toString();
     }
     
     // Add thousand separators
-    return formattedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    let parts = formattedValue.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.join('.');
 }
 
 
@@ -2678,32 +2684,26 @@ function updateTop20Table(tableId, data, type) {
         const ppmValue = type === 'highest' ? item.highest : item.average;
         const valuePerTonne = type === 'highest' ? item.highestValuePerTonne : item.averageValuePerTonne;
         
-        // Special handling for Iridium (Ir)
-        const isIridium = item.element === 'Ir';
-        const tenKTonneProduction = isIridium 
-            ? (ppmValue * 10000) / 1000 
-            : Math.round((ppmValue * 10000) / 1000);
-        const annualFigure = isIridium 
-            ? tenKTonneProduction * 365 
-            : Math.round(tenKTonneProduction * 365);
-;
+        // Calculate production values
+        const tenKTonneProduction = (ppmValue * 10000) / 1000; // This gives kg per 10,000 tonnes
+        const annualFigure = tenKTonneProduction * 365;
 
-const tenKTonnePrice = Math.round(valuePerTonne * 10000);
-const annualPrice = Math.round(valuePerTonne * 10000 * 365);
+        const tenKTonnePrice = Math.round(valuePerTonne * 10000);
+        const annualPrice = Math.round(valuePerTonne * 10000 * 365);
 
-const zoneStyle = `
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: ${getZoneColor(item.zone)};
-    color: white;
-    text-align: center;
-    font-size: 12px;
-    line-height: 20px;
-    margin-left: 5px;
-    float: right;
-`;
+        const zoneStyle = `
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: ${getZoneColor(item.zone)};
+            color: white;
+            text-align: center;
+            font-size: 12px;
+            line-height: 20px;
+            margin-left: 5px;
+            float: right;
+        `;
 
         row.innerHTML = `
             <td>
@@ -2713,15 +2713,15 @@ const zoneStyle = `
             <td class="${type}-value-2">${formatNumberWithCommas(ppmValue.toFixed(2))}</td>
             <td class="dollar-value-2">$${formatNumberWithCommas(valuePerTonne.toFixed(2))}</td>
             <td class="kg-data" data-price="${tenKTonnePrice}">
-                ${isIridium ? formatNumberWithCommas(tenKTonneProduction.toFixed(2)) : formatNumberWithCommas(tenKTonneProduction)}
+                ${formatNumberWithCommas(tenKTonneProduction, 'production')}
             </td>
             <td class="kg-data" data-price="${annualPrice}">
-                ${isIridium ? formatNumberWithCommas(annualFigure.toFixed(2)) : formatNumberWithCommas(annualFigure)}
+                ${formatNumberWithCommas(annualFigure, 'production')}
             </td>
         `;
         tbody.appendChild(row);
     });
-
+    
     const kgCells = tbody.querySelectorAll('.kg-data');
     kgCells.forEach(cell => {
         const price = parseInt(cell.dataset.price);

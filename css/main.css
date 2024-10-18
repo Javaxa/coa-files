@@ -1509,6 +1509,7 @@ body {
     width: 34px;
     height: 34px;
     color: #464646;
+    background: #ffffff;
 }
 
 .leaflet-control-custom:hover {

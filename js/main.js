@@ -191,7 +191,7 @@ const coaFiles = {
         });
     
         const uniqueCOAs = new Set();
-        uniqueDepths.clear(); // Clear existing depths before repopulating
+        uniqueDepths.clear(); 
     
         lines.slice(1).forEach((line, rowIndex) => {
             const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
@@ -273,7 +273,7 @@ const coaFiles = {
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.value = depth;
-            checkbox.checked = true; // Always checked by default
+            checkbox.checked = true;
             checkbox.className = 'depth-filter-checkbox';
             
             checkbox.addEventListener('change', function() {
@@ -291,24 +291,17 @@ const coaFiles = {
             label.appendChild(document.createTextNode(` ${depth} ft`));
             container.appendChild(label);
         });
-    
-        // Ensure activeDepths includes all depths
         activeDepths = new Set(depths);
     }
     
 
     function createCOACheckboxes(coaValues) {
         const sidebarContainer = document.querySelector('#sidebarCOACheckboxContainer');
-        
         sidebarContainer.innerHTML = '';
-    
         coaValues.forEach(coa => {
             const label = document.createElement('label');
-            
             label.innerHTML = `<input type="checkbox" value="${coa}" checked> ${coa}`;
-            
             sidebarContainer.appendChild(label);
-            
             activeCOAs.add(coa);
         });
     
@@ -319,7 +312,7 @@ const coaFiles = {
                 } else {
                     activeCOAs.delete(this.value);
                 }
-                updateDepthFilter(); // Call this for COA filter changes
+                updateDepthFilter();
                 updateMap();
                 updateElementTable();
             });
@@ -331,8 +324,6 @@ $(document).ready(function() {
         $(this).find('.modal-body').load('misc/periodic.html', function() {
             const currentElement = document.getElementById('elementSelect').value;
             updateSelectedElement(currentElement);
-
-            // Event delegation for dynamically loaded content
             $(this).on('click', '.elements-main', function() {
                 const symbol = $(this).find('strong').text();
                 const dropdown = $('#elementSelect');
@@ -341,7 +332,6 @@ $(document).ready(function() {
                 }
             });
 
-            // Rest of your existing code for handling allowed elements
             const allowedElements = new Set(elementPricesData.map(el => el.symbol));
             $('.chip').each(function() {
                 const elementSymbol = $(this).find('.face.front strong').text();
@@ -377,7 +367,6 @@ document.getElementById('removeCutoff').addEventListener('click', removeCutoff);
 
 function removeCutoff() {
     const inputIds = ['minCutoff', 'maxCutoff'];
-
     inputIds.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
@@ -386,7 +375,6 @@ function removeCutoff() {
             console.warn(`Input element with id '${id}' not found.`);
         }
     });
-
     setTimeout(() => {
         const applyCutoffButton = document.getElementById('applyCutoff');
         if (applyCutoffButton) {
@@ -405,7 +393,6 @@ document.getElementById('applyCutoff').addEventListener('click', () => {
 function getElementCategory(symbol) {
     const primaryElements = ['Au', 'Pt', 'Pd', 'Rh', 'Ir', 'Os', 'Ru', 'Ag'];
     const secondaryElements = ['Rb', 'Cs', 'Sc'];
-    
     if (primaryElements.includes(symbol)) return 'primary';
     if (secondaryElements.includes(symbol)) return 'secondary';
     return 'tertiary';
@@ -428,29 +415,21 @@ function exportTableToCSV(filename) {
     const table = document.getElementById('elementTable');
     const rows = table.querySelectorAll('tr');
     const csv = [];
-
-    // Get headers
     const headers = [];
     const headerCells = rows[0].querySelectorAll('th');
     headerCells.forEach(cell => {
         headers.push(cell.textContent.trim());
     });
     csv.push(headers.join(','));
-
-    // Get data rows
     for (let i = 1; i < rows.length; i++) {
         const row = [];
         const cells = rows[i].querySelectorAll('td');
         let includeRow = true;
 
         cells.forEach((cell, index) => {
-            // Check if this cell represents the Depth column
             if (headers[index] === 'Depth') {
-                // Only include the row if the depth is in activeDepths
                 includeRow = activeDepths.has(cell.textContent.trim());
             }
-
-            // Escape double quotes and wrap the content in quotes
             let content = cell.textContent.trim().replace(/"/g, '""');
             row.push(`"${content}"`);
         });
@@ -460,13 +439,8 @@ function exportTableToCSV(filename) {
         }
     }
 
-    // Create CSV content
     const csvContent = csv.join('\n');
-
-    // Create a Blob with the CSV content
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-    // Create a download link
     const link = document.createElement('a');
     if (link.download !== undefined) {
         const url = URL.createObjectURL(blob);
@@ -483,11 +457,7 @@ document.querySelector('.table-download').addEventListener('click', function() {
     const selectedElement = document.getElementById('elementSelect').value;
     const elementInfo = elementPricesData.find(el => el.symbol === selectedElement);
     const backgroundColor = getElementBackgroundColor(selectedElement);
-    
-    // Get selected assay types
     const selectedAssayTypes = Array.from(activeAssayTypes);
-
-    // Format assay types for display
     const assayTypesString = selectedAssayTypes.map(type => {
         switch(type) {
             case 'LMB Flux': return 'LMB Flux';
@@ -497,8 +467,7 @@ document.querySelector('.table-download').addEventListener('click', function() {
             default: return type;
         }
     }).join(', ');
-    
-    // Get selected incursion types
+
     const selectedIncursionTypes = Array.from(activeIncursionTypes).map(type => {
         switch(type) {
             case 'HY20': return '20-Foot';
@@ -507,12 +476,10 @@ document.querySelector('.table-download').addEventListener('click', function() {
         }
     }).join(', ');
     
-    // Get checked depth filters
     const checkedDepths = Array.from(document.querySelectorAll('.depth-filter-checkbox:checked'))
         .map(checkbox => checkbox.value)
         .sort((a, b) => parseFloat(a) - parseFloat(b));
 
-    // Format depths
     let depthsString;
     if (checkedDepths.length === document.querySelectorAll('.depth-filter-checkbox').length) {
         depthsString = "All Depths";
@@ -520,10 +487,8 @@ document.querySelector('.table-download').addEventListener('click', function() {
         depthsString = checkedDepths.join(', ');
     }
 
-    // Get cut-off grade values
     const minCutoff = document.getElementById('minCutoff').value;
     const maxCutoff = document.getElementById('maxCutoff').value;
-    
     let confirmMessage = `You are about to export data for <div class="export-highlight modalSelectedElementContainer">
         <span class="modalSelectedElementName">${elementInfo ? elementInfo.name : ''}</span>
         <span class="modalSelectedElement" style="background-color: ${backgroundColor};">${selectedElement}</span>
@@ -561,7 +526,6 @@ function updateElementAverages() {
     const minCutoff = parseFloat(document.getElementById('minCutoff').value) || -Infinity;
     const maxCutoff = parseFloat(document.getElementById('maxCutoff').value) || Infinity;
     const elementPrice = elementPricesData.find(el => el.symbol === selectedElement)?.price || 0;
-
     sampleData.forEach((sample, index) => {
         if (activeIncursionTypes.has(sample['Incursion Type']) &&
             activeAssayTypes.has(sample['Assay Type']) &&
@@ -588,10 +552,7 @@ function updateElementAverages() {
         }
     });
 
-    // Update overall assay count
     document.getElementById('overallAssayCount').textContent = count;
-
-    // Update overall averages
     if (count > 0) {
         const average = total / count;
         const pricePerTonneHighest = (highest / 1000) * elementPrice;
@@ -608,8 +569,6 @@ function updateElementAverages() {
         document.getElementById('highestValuePerTonne').textContent = 'N/A';
     }
 
-
-    // Update zone averages
     const zoneAveragesList = document.getElementById('zoneAveragesList');
     zoneAveragesList.innerHTML = '';
 
@@ -887,13 +846,12 @@ function hideModalBackdrop(modalId) {
                 rectangle: false,
                 marker: false,
                 circlemarker: false,
-                circle: false  // Removed circle option
+                circle: false
             },
             edit: false
         });
         map.addControl(drawControl);
         
-        // Add custom delete control
         L.Control.DeleteAll = L.Control.extend({
             onAdd: function(map) {
                 var deleteButton = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
@@ -907,10 +865,8 @@ function hideModalBackdrop(modalId) {
         });
         map.addControl(new L.Control.DeleteAll({ position: 'topleft' }));
 
-        // Add data-tooltip attributes to existing draw controls
         document.querySelector('.leaflet-draw-draw-polyline').setAttribute('data-tooltip', 'Measure Distance');
         document.querySelector('.leaflet-draw-draw-polygon').setAttribute('data-tooltip', 'Measure Acres');
-        
         
         var measureTooltip;
         var measureTooltipElement;
@@ -931,7 +887,6 @@ function hideModalBackdrop(modalId) {
         
         function updateMeasureTooltip(latlngs, layerType) {
             if (!measureTooltipElement) return;
-        
             if (layerType === 'polygon') {
                 var closedLatLngs = latlngs.concat([latlngs[0]]);
                 var area = L.GeometryUtil.geodesicArea(closedLatLngs);
@@ -1360,7 +1315,6 @@ function hideModalBackdrop(modalId) {
         const showDHLabels = document.getElementById('showDHLabels').checked;
     
         if (iconSizeMode === 'fixed') {
-            // Fixed size mode
             if (incursionType === 'HN04') {
                 return L.divIcon({
                     className: 'red-dot-icon',
@@ -1383,20 +1337,20 @@ function hideModalBackdrop(modalId) {
                     iconAnchor: [10, 10],  
                     popupAnchor: [0, -10]  
                 });
-            } else { // This will handle 'HY20' (20-foot incursion) and any other types
+            } else {
                 return L.divIcon({
                     className: 'custom-div-icon',
-                    html: dh, // Always show label for HY20 in fixed size mode
+                    html: dh,
                     iconSize: [11, 11],
                     iconAnchor: [5, 5],
                     popupAnchor: [0, -11],
                 });
             }
         } else {
-            // Variable size mode (highest or average)
-            let size = 10; // Default size
+            
+            let size = 10;
             const ppm = iconSizeMode === 'average' ? avgPPM : highestPPM;
-            size = Math.max(8, Math.min(30, 8 + (ppm / maxPPM) * 22)); // Scale size between 8 and 30
+            size = Math.max(8, Math.min(30, 8 + (ppm / maxPPM) * 22));
     
             let className;
             switch (incursionType) {
@@ -1701,8 +1655,6 @@ function updateDepthFilter() {
     });
 }
 
-
-// Separate function for handling depth filter changes
 function depthFilterChangeHandler(event) {
     if (event.target.type === 'checkbox') {
         if (event.target.checked) {
@@ -1769,7 +1721,6 @@ function updateMap() {
         const marker = L.marker([parseFloat(lat), parseFloat(lng)], { 
             icon: createCustomIcon(dh, sampleData[point.indices[0]]['Incursion Type'], avgPPM, point.highestPPM, iconSizeMode) 
         }).addTo(map);
-        
         const tooltipContent = generateTooltipContent(point.indices);
         marker.bindTooltip(tooltipContent, { className: 'custom-tooltip' });
         marker.bindPopup(() => createPopupContent(point.indices));
@@ -1871,7 +1822,6 @@ function loadData() {
         })
         .then(text => {
             sampleData = parseCSV(text);
-            // Initialize activeDepths with all unique depths
             activeDepths = new Set(allUniqueDepths);
             updateElementTable();
             updateMap();
@@ -1888,11 +1838,10 @@ function updateElementTable() {
     const minCutoff = parseFloat(document.getElementById('minCutoff').value) || -Infinity;
     const maxCutoff = parseFloat(document.getElementById('maxCutoff').value) || Infinity;
     tbody.innerHTML = '';
-
     let sortedData = [...sampleData];
     let total = 0;
     let count = 0;
-    uniqueDepths.clear(); // Clear existing depths before repopulating
+    uniqueDepths.clear();
 
     if (selectedIndices.length > 0) {
         sortedData = selectedIndices.map(index => sampleData[index]);
@@ -1904,7 +1853,7 @@ function updateElementTable() {
          (sample['Assay Type'] === 'Metallurgical (Aqua Regia)' && activeAssayTypes.has('Metallurgical'))) &&
         activeZones.has(sample['Zone']) &&
         activeCOAs.has(sample['COA']) &&
-        activeDepths.has(sample['Depth'])  // Changed this line to use activeDepths
+        activeDepths.has(sample['Depth'])
     );
 
     sortedData.sort((a, b) => {
@@ -1982,7 +1931,7 @@ function updateElementTable() {
             const elementCell = document.createElement('td');
             let elementValue = elementData[sampleData.indexOf(sample)] && elementData[sampleData.indexOf(sample)][selectedElement] ?
                 elementData[sampleData.indexOf(sample)][selectedElement] : '';
-            elementValue = elementValue.replace(/["']/g, ''); // Remove double quotes
+            elementValue = elementValue.replace(/["']/g, '');
 
             const numericValue = parseFloat(elementValue.replace(/,/g, ''));
             if (!isNaN(numericValue) && numericValue >= minCutoff && numericValue <= maxCutoff) {
@@ -1996,8 +1945,6 @@ function updateElementTable() {
                         count++;
                     }
                 }
-
-                // Add depth to uniqueDepths if it passes all filters
                 uniqueDepths.add(sample['Depth']);
             }
         }
@@ -2007,8 +1954,6 @@ function updateElementTable() {
     updateZoneAverages();
     updateElementAverages();
     updateSelectedDHAverage();
-    
-    // Update depth filter options
     updateDepthFilter(uniqueDepths);
 }
 
@@ -2039,10 +1984,7 @@ function updateSelectedElementDisplay() {
 function updateSelectedElement(symbol) {
     const periodicModal = $('#periodicModal');
     if (periodicModal.length) {
-        // Remove 'selected' class from all elements
         periodicModal.find('.elements-main').removeClass('selected');
-
-        // Add 'selected' class to the matching element
         periodicModal.find('.elements-main').filter(function() {
             return $(this).find('strong').text() === symbol;
         }).addClass('selected');
@@ -2105,17 +2047,12 @@ function formatNumberWithCommas(value, columnType = 'default') {
     
     let formattedValue;
     if (columnType === 'production' && value < 999) {
-        // For production columns, keep two decimal places for values under 999
         formattedValue = value.toFixed(2);
     } else if (value >= 1000) {
-        // For all values 1000 and above, round to the nearest integer
         formattedValue = Math.round(value).toString();
     } else {
-        // For other cases, preserve original decimal places
         formattedValue = value.toString();
     }
-    
-    // Add thousand separators
     let parts = formattedValue.split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return parts.join('.');
@@ -2931,7 +2868,7 @@ function getZoneColor(zone) {
         '5': '#ffcd57',
         '6': '#e94eff'
     };
-    return colors[zone] || '#888888'; // Default color if zone is not found
+    return colors[zone] || '#888888';
 }
 
 
@@ -3007,11 +2944,10 @@ document.getElementById('viewTop20Button').addEventListener('click', () => {
     if (rawSampleData.length === 0) {
         loadTop20Data();
     } else {
-        // Reset the zone filter to 'All Zones' when opening the modal
         document.getElementById('zoneAll').checked = true;
         calculateTop20Elements();
     }
-    updateTop20ModalHeader(); // Add this line
+    updateTop20ModalHeader();
     const modal = new bootstrap.Modal(document.getElementById('top20Modal'));
     modal.show();
 });
@@ -3034,18 +2970,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const elementChip = event.target.closest('.elements-main');
             if (elementChip) {
                 const symbol = elementChip.querySelector('strong').textContent;
-                
-                // Update the dropdown
                 const dropdown = document.getElementById('elementSelect');
                 if (dropdown) {
                     dropdown.value = symbol;
-                    // Trigger change event
                     dropdown.dispatchEvent(new Event('change'));
                 }
             }
         });
     }
-            // Add this code after your map has been initialized and the layer control added
 setTimeout(function() {
     var layerToggle = document.querySelector('.leaflet-control-layers');
     if (layerToggle) {

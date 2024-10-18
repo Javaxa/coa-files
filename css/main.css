@@ -1489,3 +1489,50 @@ body {
     background-color: #e9ecef;
 }
 
+.leaflet-control a {
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+}
+
+.leaflet-control a:hover {
+    background-color: #f4f4f4;
+}
+
+
+.area-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
+    line-height: 15px;
+}
+
+.measurement-label {
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.leaflet-control-custom {
+    outline-style: none;
+    width: 34px;
+    height: 34px;
+    color: #464646;
+}
+
+.leaflet-control-custom:hover {
+    background-color: #dbdbdb;
+    color: rgb(255, 154, 23);
+}
+
+.leaflet-draw-toolbar a:hover {
+    color: rgb(255, 154, 23);
+}

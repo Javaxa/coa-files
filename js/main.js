@@ -839,6 +839,7 @@ function hideModalBackdrop(modalId) {
             layers: [satelliteLayer]
         }).setView([0, 0], 2);
     
+       
         const baseLayers = {
             "Satellite": satelliteLayer,
             "Sat + Topo": usgsUSImageryTopo,
@@ -857,6 +858,166 @@ function hideModalBackdrop(modalId) {
         }    
     
         layerControl = L.control.layers(baseLayers).addTo(map);
+        var drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+        
+        var drawControl = new L.Control.Draw({
+            draw: {
+                polyline: {
+                    shapeOptions: {
+                        color: '#f357a1',
+                        weight: 3
+                    },
+                    metric: false,
+                    feet: true
+                },
+                polygon: {
+                    allowIntersection: false,
+                    showArea: true,
+                    drawError: {
+                        color: '#e1e100',
+                        message: '<strong>Overlap Detected!</strong> you can\'t measure that.'
+                    },
+                    shapeOptions: {
+                        color: 'rgb(240, 143, 33)'
+                    },
+                    metric: false,
+                    feet: true
+                },
+                rectangle: false,
+                marker: false,
+                circlemarker: false,
+                circle: false  // Removed circle option
+            },
+            edit: false
+        });
+        map.addControl(drawControl);
+        
+        // Add custom delete control
+        L.Control.DeleteAll = L.Control.extend({
+            onAdd: function(map) {
+                var deleteButton = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
+                deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
+                deleteButton.setAttribute('data-tooltip', 'Delete Measurements');
+                deleteButton.onclick = function(){
+                    drawnItems.clearLayers();
+                }
+                return deleteButton;
+            }
+        });
+        map.addControl(new L.Control.DeleteAll({ position: 'topleft' }));
+
+        // Add data-tooltip attributes to existing draw controls
+        document.querySelector('.leaflet-draw-draw-polyline').setAttribute('data-tooltip', 'Measure Distance');
+        document.querySelector('.leaflet-draw-draw-polygon').setAttribute('data-tooltip', 'Measure Acres');
+        
+        
+        var measureTooltip;
+        var measureTooltipElement;
+        
+        function createMeasureTooltip() {
+            if (measureTooltipElement && measureTooltipElement.parentNode) {
+                measureTooltipElement.parentNode.removeChild(measureTooltipElement);
+            }
+            measureTooltipElement = document.createElement('div');
+            measureTooltipElement.className = 'leaflet-tooltip leaflet-tooltip-top';
+            measureTooltip = L.tooltip({
+                permanent: true,
+                offset: [0, -40],
+                direction: 'top',
+                className: 'leaflet-measure-tooltip'
+            }).setContent(measureTooltipElement);
+        }
+        
+        function updateMeasureTooltip(latlngs, layerType) {
+            if (!measureTooltipElement) return;
+        
+            if (layerType === 'polygon') {
+                var closedLatLngs = latlngs.concat([latlngs[0]]);
+                var area = L.GeometryUtil.geodesicArea(closedLatLngs);
+                var areaAcres = (area / 4046.86).toFixed(2);
+                var formattedArea = Number(areaAcres).toLocaleString('en-US', {maximumFractionDigits: 2});
+                measureTooltipElement.innerHTML = formattedArea + ' acres';
+            } else {
+                var totalDistance = 0;
+                for (var i = 0; i < latlngs.length - 1; i++) {
+                    totalDistance += latlngs[i].distanceTo(latlngs[i + 1]);
+                }
+                var km = (totalDistance / 1000).toFixed(2);
+                var miles = (totalDistance / 1609.34).toFixed(2);
+                measureTooltipElement.innerHTML = km + ' km<br>' + miles + ' miles';
+            }
+            measureTooltip.setLatLng(latlngs[latlngs.length - 1]);
+        }
+        
+        function createLabel(content, latlng) {
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    className: 'measurement-label',
+                    html: content,
+                    iconSize: [120, 40]
+                }),
+                interactive: false
+            });
+        }
+        
+        map.on('draw:drawstart', function (e) {
+            createMeasureTooltip();
+            var drawingLayer = e.layer;
+            if (drawingLayer) {
+                drawingLayer.on('mousedown', function() {
+                    map.addLayer(measureTooltip);
+                });
+                drawingLayer.on('mousemove', function(e) {
+                    if (this.getLatLngs) {
+                        updateMeasureTooltip(this.getLatLngs(), e.layerType);
+                    }
+                });
+            }
+        });
+        
+        map.on(L.Draw.Event.CREATED, function (event) {
+            var layer = event.layer;
+        
+            if (layer instanceof L.Polygon) {
+                var area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
+                var areaAcres = (area / 4046.86).toFixed(2);
+                var perimeter = 0;
+                var latlngs = layer.getLatLngs()[0];
+                for (var i = 0; i < latlngs.length; i++) {
+                    perimeter += latlngs[i].distanceTo(latlngs[(i + 1) % latlngs.length]);
+                }
+                var perimeterMiles = (perimeter / 1609.34).toFixed(2);
+                
+                var formattedArea = Number(areaAcres).toLocaleString('en-US', {maximumFractionDigits: 2});
+                
+                var center = layer.getBounds().getCenter();
+                var label = L.divIcon({
+                    className: 'area-label',
+                    html: formattedArea + ' acres<br>' + perimeterMiles + ' miles',
+                    iconSize: [120, 40]
+                });
+                
+                var labelMarker = L.marker(center, {icon: label, interactive: false});
+                drawnItems.addLayer(labelMarker);
+            } else if (layer instanceof L.Polyline) {
+                var distance = 0;
+                var latlngs = layer.getLatLngs();
+                for (var i = 0; i < latlngs.length - 1; i++) {
+                    distance += latlngs[i].distanceTo(latlngs[i + 1]);
+                }
+                var km = (distance / 1000).toFixed(2);
+                var miles = (distance / 1609.34).toFixed(2);
+                var midpoint = latlngs[Math.floor(latlngs.length / 2)];
+                var label = createLabel(km + " km<br>" + miles + " miles", midpoint);
+                drawnItems.addLayer(label);
+            }
+        
+            drawnItems.addLayer(layer);
+            if (measureTooltip) {
+                map.removeLayer(measureTooltip);
+            }
+        });
         
     
         map.on('overlayadd', function(event) {

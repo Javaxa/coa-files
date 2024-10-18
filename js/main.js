@@ -898,7 +898,7 @@ function hideModalBackdrop(modalId) {
             onAdd: function(map) {
                 var deleteButton = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
                 deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
-                deleteButton.setAttribute('data-tooltip', 'Delete Measurements');
+                deleteButton.setAttribute('data-tooltip', 'Clear Measurements');
                 deleteButton.onclick = function(){
                     drawnItems.clearLayers();
                 }

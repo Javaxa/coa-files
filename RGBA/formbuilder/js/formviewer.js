@@ -319,7 +319,7 @@ function loadLookupData() {
         const lookupId = $container.data('lookup-id');
 
         $.ajax({
-            url: '/warehouse/php/lookup_types.php',
+            url: '/RGBA/warehouse/php/lookup_types.php',
             method: 'GET',
             data: { lookupTypeId: lookupId },
             dataType: 'json',
@@ -380,7 +380,7 @@ function updateCheckboxOrRadio($container, data, type) {
 function loadData() {
     return $.when(
         $.ajax({
-            url: '/warehouse/json/user_data.json',
+            url: '/RGBA/warehouse/json/user_data.json',
             dataType: 'json',
             timeout: 5000 // 5 second timeout
         }).catch(function() {
@@ -388,7 +388,7 @@ function loadData() {
             return [];
         }),
         $.ajax({
-            url: '/warehouse/json/departments.json',
+            url: '/RGBA/warehouse/json/departments.json',
             dataType: 'json',
             timeout: 5000 // 5 second timeout
         }).catch(function() {

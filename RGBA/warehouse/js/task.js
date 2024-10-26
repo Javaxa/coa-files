@@ -129,7 +129,7 @@ function getCurrentUser() {
 function getUserImageSrc(user) {
     return user.profilePicture && user.profilePicture !== '' 
         ? user.profilePicture 
-        : '/warehouse/images/user.jpg';
+        : '/RGBA/warehouse/images/user.jpg';
 }
 
 function populateUserSelection(departmentId = null) {
@@ -147,7 +147,7 @@ function populateUserSelection(departmentId = null) {
                         .attr('src', getUserImageSrc(user))
                         .addClass('user-avatar')
                         .on('error', function() {
-                            $(this).attr('src', '/warehouse/images/user.jpg');
+                            $(this).attr('src', '/RGBA/warehouse/images/user.jpg');
                         }),
                     $('<p>').text(`${user.firstname} ${user.lastname}`).addClass('user-name'),
                     $('<p>').text(user.department).addClass('user-department')
@@ -599,7 +599,7 @@ function populateEditUserSelection(departmentId = null) {
                         .attr('src', getUserImageSrc(user))
                         .addClass('user-avatar')
                         .on('error', function() {
-                            $(this).attr('src', '/warehouse/images/user.jpg');
+                            $(this).attr('src', '/RGBA/warehouse/images/user.jpg');
                         }),
                     $('<p>').text(`${user.firstname} ${user.lastname}`).addClass('user-name'),
                     $('<p>').text(user.department).addClass('user-department')

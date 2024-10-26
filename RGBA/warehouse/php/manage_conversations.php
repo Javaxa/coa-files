@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 ini_set('log_errors', 1);
-ini_set('error_log', '/Applications/MAMP/htdocs/RBGA/warehouse/php/error.log');
+ini_set('error_log', '/RBGA/warehouse/php/error.log');
 
 header('Content-Type: application/json');
 
@@ -13,7 +13,7 @@ function handleError($message) {
 }
 
 function getConversationFilename($conversationId, $isDepartment = false) {
-    $baseDir = '/Applications/MAMP/htdocs/RBGA/warehouse/messages/';
+    $baseDir = '/RBGA/warehouse/messages/';
     if (!is_dir($baseDir)) {
         if (!@mkdir($baseDir, 0755, true)) {
             handleError("Failed to create directory: $baseDir");

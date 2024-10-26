@@ -820,7 +820,7 @@ $('#saveInputOptions3').click(function() {
 
 function populateLookupDropdown() {
     $.ajax({
-        url: '/warehouse/php/lookup_types.php',
+        url: '/RGBA/warehouse/php/lookup_types.php',
         method: 'GET',
         dataType: 'json',
         success: function(response) {
@@ -1093,7 +1093,7 @@ $('#multipleChoiceModal').on('show.bs.modal', function() {
     
         // Fetch and display the current lookup data
         $.ajax({
-            url: '/warehouse/php/lookup_types.php',
+            url: '/RGBA/warehouse/php/lookup_types.php',
             method: 'GET',
             data: { lookupTypeId: lookupTypeId },
             dataType: 'json',
@@ -1450,7 +1450,7 @@ $('#discardAndLoadBtn').click(function() {
 
 // Load departments from JSON file
 function loadDepartments() {
-    $.getJSON('/warehouse/json/departments.json')
+    $.getJSON('/RGBA/warehouse/json/departments.json')
         .done(function(data) {
             if (data && data.departments) {
                 populateDepartments(data.departments);
@@ -1991,7 +1991,7 @@ function loadFormList() {
 
                     // Fetch and display the current lookup data
                     $.ajax({
-                        url: '/warehouse/php/lookup_types.php',
+                        url: '/RGBA/warehouse/php/lookup_types.php',
                         method: 'GET',
                         data: { lookupTypeId: lookupId },
                         dataType: 'json',

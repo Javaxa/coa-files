@@ -8,8 +8,8 @@ $(document).ready(function() {
     let currentAIChatId = null;
     
     $.when(
-        $.getJSON('/warehouse/json/user_data.json'),
-        $.getJSON('/warehouse/json/departments.json')
+        $.getJSON('/RGBA/warehouse/json/user_data.json'),
+        $.getJSON('/RGBA/warehouse/json/departments.json')
     ).done(function(userResponse, deptResponse) {
         userData = userResponse[0];
         departmentData = deptResponse[0];
@@ -18,7 +18,7 @@ $(document).ready(function() {
         console.error("Error loading data:", textStatus, errorThrown);
     });
 
-    const aiProfilePicture = '/warehouse/images/ai.jpg';
+    const aiProfilePicture = '/RGBA/warehouse/images/ai.jpg';
 
     function updateSidebar() {
         const sidebar = $('#userList');
@@ -48,7 +48,7 @@ $(document).ready(function() {
 
     function displayAIChats() {
         const sidebar = $('#userList');
-        $.getJSON(`/warehouse/json/${loggedInUser.username}-ai.json`, function(aiChats) {
+        $.getJSON(`/RGBA/warehouse/json/${loggedInUser.username}-ai.json`, function(aiChats) {
             aiChats.forEach((chat, index) => {
                 const chatElement = $('<div>', {
                     class: 'ai-chat-item',
@@ -68,7 +68,7 @@ $(document).ready(function() {
         $('.message-input').show();
         $('#messageText').val('');
 
-        $.getJSON(`/warehouse/json/${loggedInUser.username}-ai.json`, function(aiChats) {
+        $.getJSON(`/RGBA/warehouse/json/${loggedInUser.username}-ai.json`, function(aiChats) {
             const chat = aiChats.find(c => c.id === chatId);
             if (chat) {
                 chat.messages.forEach(message => {
@@ -148,7 +148,7 @@ $(document).ready(function() {
     }).append(
         $('<img>', {
             class: 'user-img',
-            src: user.profilePicture || '/warehouse/images/user.jpg'
+            src: user.profilePicture || '/RGBA/warehouse/images/user.jpg'
         }),
         $('<span>', {
             class: 'user-name',
@@ -211,7 +211,7 @@ function selectDepartment(element, dept) {
         usersInDept.forEach(user => {
             html += `
                 <div class="department-user">
-                    <img src="${user.profilePicture || '/warehouse/images/user.jpg'}" alt="${user.firstname} ${user.lastname}" class="user-icon">
+                    <img src="${user.profilePicture || '/RGBA/warehouse/images/user.jpg'}" alt="${user.firstname} ${user.lastname}" class="user-icon">
                     <span>${user.firstname} ${user.lastname}</span>
                 </div>
             `;
@@ -298,7 +298,7 @@ function selectDepartment(element, dept) {
 
     function getUserIcon(userId) {
         const user = userData.find(u => u.id === userId);
-        return user ? user.profilePicture : '/warehouse/images/user.jpg';
+        return user ? user.profilePicture : '/RGBA/warehouse/images/user.jpg';
     }
 
 

@@ -646,7 +646,7 @@ function uploadStoredFiles() {
         const lookupId = $container.data('lookup-id');
 
         $.ajax({
-            url: '/warehouse/php/lookup_types.php',  // Correct path
+            url: '/RGBA/warehouse/php/lookup_types.php',  // Correct path
             method: 'GET',
             data: { lookupTypeId: lookupId },
             dataType: 'json',
@@ -673,7 +673,7 @@ function uploadStoredFiles() {
 function loadData() {
     return $.when(
         $.ajax({
-            url: '/warehouse/json/user_data.json',  // Correct path
+            url: '/RGBA/warehouse/json/user_data.json',  // Correct path
             dataType: 'json',
             timeout: 5000
         }).catch(function() {
@@ -681,7 +681,7 @@ function loadData() {
             return [];
         }),
         $.ajax({
-            url: '/warehouse/json/departments.json',  // Correct path
+            url: '/RGBA/warehouse/json/departments.json',  // Correct path
             dataType: 'json',
             timeout: 5000
         }).catch(function() {
@@ -1103,7 +1103,7 @@ function updateProgressBar() {
             
                 // Load user data for profile pictures
                 $.ajax({
-                    url: '/warehouse/json/user_data.json',
+                    url: '/RGBA/warehouse/json/user_data.json',
                     method: 'GET',
                     dataType: 'json',
                     success: function(userData) {
@@ -1174,10 +1174,10 @@ function updateProgressBar() {
                 if (task.assignedToName && user && user.profilePicture) {
                     assigneeDisplay = `
                         <div class="d-flex align-items-center">
-                            <img src="/warehouse/${user.profilePicture}" 
+                            <img src="/RGBA/warehouse/${user.profilePicture}" 
                                  alt="${task.assignedToName}" 
                                  style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; margin-right: 8px;"
-                                 onerror="this.onerror=null; this.src='/warehouse/images/user.jpg'; this.style.display='none'; this.nextElementSibling.style.display='inline-block';"
+                                 onerror="this.onerror=null; this.src='/RGBA/warehouse/images/user.jpg'; this.style.display='none'; this.nextElementSibling.style.display='inline-block';"
                             >
                             <i class="fas fa-user" style="display: none; margin-right: 8px;"></i>
                             <span>${task.assignedToName}</span>

@@ -1,7 +1,7 @@
 
 function loadSubElements(selectElement, lookupTypeId) {
     $.ajax({
-        url: '/warehouse/php/lookup_types.php',
+        url: '/RGBA/warehouse/php/lookup_types.php',
         method: 'GET',
         data: { lookupTypeId: lookupTypeId },
         dataType: 'json',
@@ -65,7 +65,7 @@ return new Promise((resolve, reject) => {
         const lookupId = $container.data('lookup-id');
 
         $.ajax({
-            url: '/warehouse/php/lookup_types.php',
+            url: '/RGBA/warehouse/php/lookup_types.php',
             method: 'GET',
             data: { lookupTypeId: lookupId },
             dataType: 'json',

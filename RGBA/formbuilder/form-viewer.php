@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-    <link rel="stylesheet" href="/warehouse/css/main.css">
+    <link rel="stylesheet" href="/RGBA/warehouse/css/main.css">
     <link rel="stylesheet" type="text/css" href="css/builder.css">
     <link rel="stylesheet" type="text/css" href="css/viewer.css">
-    <link rel="stylesheet" href="/warehouse/css/ui.css">
+    <link rel="stylesheet" href="/RGBA/warehouse/css/ui.css">
 </head>
 <style>
 
@@ -99,7 +99,7 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="js/login-state.js"></script>
   <script src="js/user-auth.js"></script>
-  <script src="/warehouse/js/ui.js"></script>
+  <script src="/RGBA/warehouse/js/ui.js"></script>
   <script src="js/formviewer.js"></script>
 </body>
 </html>

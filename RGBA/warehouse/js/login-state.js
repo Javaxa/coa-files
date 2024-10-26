@@ -10,7 +10,7 @@ function getCurrentPage() {
 }
 
 function redirectToLogin() {
-    window.location.href = '/warehouse/login.html';
+    window.location.href = '/RGBA/warehouse/login.html';
 }
 
 function protectPage() {

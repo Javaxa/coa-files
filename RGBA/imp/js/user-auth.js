@@ -29,7 +29,7 @@ $(document).ready(function() {
 
     // Load navbar
     function loadNavbar() {
-        $("#navbar").load("/warehouse/navbar.html", function() {
+        $("#navbar").load("/RGBA/warehouse/navbar.html", function() {
             // This callback function runs after the navbar is loaded
         });
     }
@@ -41,7 +41,7 @@ $(document).ready(function() {
             e.preventDefault();
             localStorage.removeItem('loggedInUser');
             showLoggedOutState();
-            window.location.href = '/warehouse/login.html'; // Redirect to login page
+            window.location.href = '/RGBA/warehouse/login.html'; // Redirect to login page
         });
     }
 

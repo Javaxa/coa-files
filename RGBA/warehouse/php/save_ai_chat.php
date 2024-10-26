@@ -13,7 +13,7 @@ $chatId = $data['chatId'];
 $userMessage = $data['userMessage'];
 $aiMessage = $data['aiMessage'];
 
-$filename = $_SERVER['DOCUMENT_ROOT'] . "/warehouse/json/{$username}-ai.json";
+$filename = $_SERVER['DOCUMENT_ROOT'] . "/RGBA/warehouse/json/{$username}-ai.json";
 
 if (file_exists($filename)) {
     $chats = json_decode(file_get_contents($filename), true);

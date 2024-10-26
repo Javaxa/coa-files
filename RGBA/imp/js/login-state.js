@@ -12,7 +12,7 @@ function getCurrentPage() {
 
 // Function to redirect to login page
 function redirectToLogin() {
-    window.location.href = '/warehouse/login.html';
+    window.location.href = '/RGBA/warehouse/login.html';
 }
 
 // Function to protect pages

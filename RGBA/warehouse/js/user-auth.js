@@ -43,7 +43,7 @@ $(document).ready(function() {
             e.preventDefault();
             localStorage.removeItem('loggedInUser');
             showLoggedOutState();
-            window.location.href = '/warehouse/login.html'; // Redirect to login page
+            window.location.href = '/RGBA/warehouse/login.html'; // Redirect to login page
         });
     }
 

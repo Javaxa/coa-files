@@ -662,7 +662,7 @@ function getTimeConstraintClass(timeConstraint) {
         // Add to your existing ready function
         $('.my-tasks').click(function(e) {
             e.preventDefault();
-            window.location.href = '/warehouse/mypage.html';
+            window.location.href = '/RGBA/warehouse/mypage.html';
         });
     
         // Update the employee card whenever data is loaded

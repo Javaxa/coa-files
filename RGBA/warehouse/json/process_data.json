@@ -1,0 +1,26 @@
+[
+    {
+        "id": "60f23ad3-900a-4f04-a945-97e4ad2bdd4d",
+        "delegationType": "attachForm",
+        "title": "Aqua Regia 24\/09\/24",
+        "description": "Fill In Aqua Regia Data",
+        "priorityLevel": "critical2",
+        "status": "completed",
+        "category": "work",
+        "startDate": "07\/10\/2024 21:38",
+        "endDate": "17\/10\/2024 21:38",
+        "createdAt": "2024-10-24T04:39:26.385Z",
+        "updatedAt": "Fri, 25 Oct 2024 23:41:54 GMT",
+        "departmentId": "4627",
+        "createdBy": {
+            "id": "1",
+            "firstname": "Irakli",
+            "lastname": "Javakhadze",
+            "department": "CTO"
+        },
+        "assignedToId": 8,
+        "assignedToName": "Joseph Ballard",
+        "departmentName": "Warehouse Manager",
+        "attachedForm": "s-5ef760c0bd62e9be.txt"
+    }
+]

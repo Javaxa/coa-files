@@ -142,7 +142,7 @@ $(document).ready(function() {
                 return '/' + photoUrl;
             }
         }
-        return "images/noimage.png";
+        return "/RGBA/warehouse/images/noimage.png";
     }
 
     // Show item details in modal

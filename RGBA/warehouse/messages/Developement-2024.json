@@ -1,0 +1,16 @@
+{
+    "participants": [
+        "Developement"
+    ],
+    "messages": [
+        {
+            "sender": {
+                "id": "1",
+                "name": "Irakli Javakhadze"
+            },
+            "message": "SADHUH'",
+            "timestamp": 1728403803,
+            "type": "text"
+        }
+    ]
+}

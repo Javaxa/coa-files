@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGS - Inventory Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/inventory.css">
+    <link rel="stylesheet" href="css/ui.css">
+</head>
+<style>
+    .lookup-page {
+        color: #0093ff;
+    }
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Inventory Management</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                            <li><a class="dropdown-item category-filter" href="#" data-category="all">All Items</a></li>
+                            <li><a class="dropdown-item category-filter" href="#" data-category="Tools">Tools</a></li>
+                            <li><a class="dropdown-item category-filter" href="#" data-category="Heavy Duty">Heavy Duty</a></li>
+                            <li><a class="dropdown-item category-filter" href="#" data-category="Storage Containers">Storage Containers</a></li>
+                            <li><a class="dropdown-item category-filter" href="#" data-category="Chemicals">Chemicals</a></li>
+                            <li><a class="dropdown-item category-filter" href="#" data-category="Mining Equipment">Mining Equipment</a></li>
+                            <li><a class="dropdown-item category-filter" href="#" data-category="Lab Equipment">Lab Equipment</a></li>
+                            <li><a class="dropdown-item category-filter" href="#" data-category="Electronics">Electronics</a></li>
+                            <li><a class="dropdown-item category-filter" href="#" data-category="Miscellaneous">Miscellaneous</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarNav"></div>
+                <ul class="navbar-nav navigation-class">
+                    <li class="nav-item dropdown user-menu d-none">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userFirstName"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#" id="logoutButton">Logout</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                        </ul>
+                    </li>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" id="registerSupply">Register Inventory</button>
+                    </div>
+                </ul>
+            </div>
+    </nav>
+   
+
+</div>
+    <div id="navbar"></div>
+    <div class="container mt-4">
+        <div class="search-container">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search for inventory">
+        </div>
+        <div id="storageFilterContainer" class="mb-4">
+            <h5>Storage Locations:</h5>
+            <div id="storageRadios" class="d-flex flex-wrap">
+
+            </div>
+        </div>
+        <div id="itemsContainer" class="d-flex flex-wrap justify-content-center">
+
+        </div>
+    </div>
+    <div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="itemModalLabel">Item Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="editItemBtn">Edit</button>
+                    <button type="button" class="btn btn-danger" id="deleteItemBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="registerItemModal" tabindex="-1" aria-labelledby="registerItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerItemModalLabel">Register New Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerItemForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select class="form-control" id="category" name="Category" required>
+                                <option value="">Select a category</option>
+                                <option value="Tools">Tools</option>
+                                <option value="Heavy Duty">Heavy Duty</option>
+                                <option value="Storage Containers">Storage Containers</option>
+                                <option value="Chemicals">Chemicals</option>
+                                <option value="Mining Equipment">Mining Equipment</option>
+                                <option value="Lab Equipment">Lab Equipment</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Miscellaneous">Miscellaneous</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="stock">Stock</label>
+                            <input type="number" class="form-control" id="stock" name="Stock" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="notifyThreshold">Notify if stock is under:</label>
+                            <input type="number" class="form-control" id="notifyThreshold" name="NotifyThreshold" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="storageInfo">Storage Location</label>
+                            <input type="text" class="form-control" id="storageInfo" name="Storage_Information">
+                        </div>
+                        <div class="form-group">
+                            <label for="purchaseLocation">Purchase Location</label>
+                            <input type="text" class="form-control" id="purchaseLocation" name="Purchase Location">
+                        </div>
+                        <div class="form-group">
+                            <label for="purchaseDate">Purchase Date</label>
+                            <input type="date" class="form-control" id="purchaseDate" name="Purchase Date">
+                        </div>
+                        <div class="form-group">
+                            <label for="photo">Photo</label>
+                            <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label for="receipt">Receipt URL</label>
+                            <input type="url" class="form-control" id="receipt" name="Receipt">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveNewItemBtn">Register Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editItemForm" enctype="multipart/form-data">
+                        <!-- The form fields will be dynamically populated by JavaScript -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveEditBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="js/login-state.js"></script>
+    <script src="js/user-auth.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+    "participants": [
+        "1",
+        6
+    ],
+    "messages": [
+        {
+            "sender": {
+                "id": "1",
+                "name": "Irakli Javakhadze"
+            },
+            "message": "Hello",
+            "timestamp": 1728403757,
+            "type": "text"
+        },
+        {
+            "sender": {
+                "id": "1",
+                "name": "Irakli Javakhadze"
+            },
+            "message": "{\"type\":\"file\",\"filePath\":\"\/uploads\/67055933a3cb2.jpg\",\"originalName\":\"photo_1728403763650.jpg\",\"fileExtension\":\"jpg\",\"fileType\":\"image\/jpeg\"}",
+            "timestamp": 1728403763,
+            "type": "file"
+        },
+        {
+            "sender": {
+                "id": "1",
+                "name": "Irakli Javakhadze"
+            },
+            "message": "{\"type\":\"file\",\"filePath\":\"\/uploads\/670b6c6a71c47.docx\",\"originalName\":\"RRCM-PEA-DRAFT-08Jun24 SAF 1722.docx\",\"fileExtension\":\"docx\",\"fileType\":\"application\/vnd.openxmlformats-officedocument.wordprocessingml.document\"}",
+            "timestamp": 1728801898,
+            "type": "file"
+        }
+    ]
+}

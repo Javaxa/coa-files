@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGS - Lookup Manager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/ui.css">
+</head>
+<style>
+
+.dashboard-page {
+        color: #0093ff;
+    }
+    
+
+.main-content {
+    background: initial;
+    width: 400px;
+    margin: auto;
+    margin-top: 90px;
+    border-radius: 6px;
+    border: 1px solid #c6c6c6;
+    display: flex;
+	
+}
+
+a {
+	text-decoration: none !important;
+}
+
+.form-control {
+	width: -webkit-fill-available;
+  }
+
+
+  .main-view {
+	display: initial;
+    background-color: white;
+    padding: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+	width: 600px;
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	height: fit-content;
+  }
+
+  .table-striped {
+	margin-top: 20px;
+	text-align: center;
+  }
+
+  .modal-content {
+	text-align: left;
+  }
+
+  .close {
+	opacity: 0.5;
+  }
+
+  
+  .close:hover {
+	opacity: 0.3;
+  }
+
+ .btn {
+	background-color: #286090;
+    border: none;
+    border-radius: 8px;
+    display: inline;
+    width: 100%;
+	font-size: 14px;
+  }
+
+  td .btn:hover {
+	background-color: #224a6e;
+  }
+
+  td .btn:active {
+	background-color: #223a50 !important;
+  }
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #efefef;
+}
+
+td {
+	vertical-align: middle !important;
+	position: relative;
+}
+
+.table td {
+	cursor: pointer;
+	transition: transform 0.1s ease-in-out;
+}
+
+.table td:hover {
+	transform: scale(1.03);
+	background: #bbbbdf;
+}
+
+#subElementsContainer {
+	margin-top: 10px;
+	background: #eeeeee;
+	padding: 10px;
+	border-radius: 5px;
+	border: 1px solid #c8c8c8;
+}
+
+#subElementsContainer div {
+	padding: 5px;
+	transition: background 0.1s ease;
+}
+
+#subElementsContainer div:not(:last-child) {
+	border-bottom: 1px solid #d5d5d5;
+}
+
+#subElementsContainer div:hover {
+	background: #dfdfdf;
+}
+
+.delete-btn {
+	color: white;
+	background-color: #ff4d4d;
+	border: none;
+	border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+}
+
+.delete-btn:hover {
+	background-color: #ff3333;
+}
+
+#subElementsModal .delete-btn {
+		margin-right: 22px;
+	}
+
+
+
+
+	#subElementsContainer.draggable .sub-element {
+    cursor: move;
+    transition: background-color 0.3s;
+}
+
+#subElementsContainer.draggable .sub-element:hover {
+    background-color: #f0f0f0;
+}
+
+.sub-element {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.sub-element.draggable-item {
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.drag-icon {
+    margin-right: 10px;
+    color: #999;
+    display: none;
+}
+
+.sub-element-name {
+    flex-grow: 1;
+}
+
+
+
+.ui-sortable-helper {
+    background-color: #f0f0f0 !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+}
+
+</style>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Lookup Manager</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav navigation-class">
+                    <li class="nav-item dropdown user-menu d-none">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userFirstName"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#" id="logoutButton">Logout</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+    </nav>
+		<div id="navbar"></div>
+        <div class="main-content">
+				<div class="main-view">
+					<h1>Lookup Types</h1>
+					<div class="action-bar"><button class="btn btn-primary pull-left" type="button" data-toggle="modal" data-target="#myModal">Create</button></div>
+					<div id="subElementsModal" class="modal fade" role="dialog">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title">Add Sub-Elements to Lookup Type</h4>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<input type="text" id="subElementInput" placeholder="Enter sub-element" class="form-control">
+									<button id="addSubElementBtn" class="btn btn-primary" style="margin-top: 15px;">Create</button>
+									<button id="toggleDragBtn" class="btn btn-secondary" style="margin-top: 12px; margin-bottom: 2px;">Change Lookup Order</button>
+									<div id="subElementsContainer"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="createModalLabel">Create Lookup</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<form class="form-information">
+										<div class="mb-3">
+											<label for="lookuptype" class="form-label">Lookup Type:</label>
+											<input type="text" class="form-control" id="lookuptype" name="lookuptype" required>
+										</div>
+										<input type="hidden" class="user-id" name="id" value="">
+										<button class="btn btn-primary btn-save-change" type="submit">Save</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<table class="table table-striped" id="table-list">
+					  <tbody></tbody>
+					</table>
+</div>
+</div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="js/login-state.js"></script>
+  <script src="js/user-auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/lookup.js"></script>
+</body>
+</html>

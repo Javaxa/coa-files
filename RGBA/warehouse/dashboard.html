@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGS - Home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/ui.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<style>
+
+    .dashboard-page-2 {
+        color: #0093ff;
+    }
+
+        .blob:hover {
+            transform: scale(1.1);
+        }
+        .blob:nth-child(2) {
+            width: 30px;
+            height: 30px;
+			background: #2c64cd;
+        }
+        .blob:nth-child(3) {
+            width: 27px;
+            height: 27px;
+			background: #dd5f5f;
+
+        }
+		.blob {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+			background: #ffd03c;
+			width: 25px;
+            height: 25px;
+			font-size: 12px;
+        }
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            background-color: #2c65d0a5;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s;
+            width: 200px;
+            font-size: 14px;
+        }
+        .blob:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+		.navigation-wrapper {
+			background-color: #fcfcfc;
+			width: 100%;
+			height: 110px;
+			margin-top: -30px;
+			border: 1px solid #d6d6d6;
+			border-radius: 7px;
+			text-align: center;
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			gap: 50px;
+		}
+
+		.nav-btn {
+			background-color: rgb(47, 121, 232);
+			border-radius: 5px;
+			border: 1px solid rgb(189, 189, 189);
+			padding: 4px;
+			width: 140px;
+			height: 40px;
+			line-height: 30px;
+			color: white;
+			font-weight: 600;
+			cursor: pointer;
+			user-select: none;
+			transition: 0.1s;
+			margin-right: 10px;
+			margin-left: 10px;
+		}
+
+		.nav-btn:hover {
+			background-color: rgb(38, 105, 207);
+			transform: scale(1.05);
+		}
+
+		.nav-btn:active {
+			background-color: rgb(33, 95, 187);
+		}
+
+		.task-tooltip {
+        position: absolute;
+        background-color: rgb(33, 95, 187);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 14px;
+        z-index: 1000;
+        max-width: 500px;
+        word-wrap: break-word;
+		margin-top: -25px;
+    }
+
+    /* Modal styles */
+.modal-content {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 15px 20px;
+}
+
+.modal-title {
+    color: #333;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.task-detail {
+    margin-bottom: 15px;
+}
+
+.task-detail-label {
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.task-detail-value {
+    color: #333;
+    background-color: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+}
+
+#viewTitle {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #f4a10b;
+    margin-bottom: 15px;
+}
+
+#viewDescription {
+    white-space: pre-wrap;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.task-category, .task-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.task-category {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.task-status {
+    color: white;
+}
+
+.task-status.completed {
+    background-color: #28a745;
+}
+
+.task-status.in-progress {
+    background-color: #ffc107;
+}
+
+.task-status.not-completed {
+    background-color: #dc3545;
+}
+
+.modal-footer {
+    border-top: 1px solid #e9ecef;
+    padding: 15px 20px;
+}
+
+.btn-primary {
+    background-color: #2c64cd;
+    border-color: #2c64cd;
+}
+
+.btn-primary:hover {
+    background-color: #1e4a9d;
+    border-color: #1e4a9d;
+}
+
+.btn-secondary {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+#allTasksBtn {
+    position: absolute;
+    left: 235px;
+}
+
+.today:hover {
+    opacity: 0.7;
+}
+
+#allTasksBtn.active {
+    color: rgb(234, 143, 45);
+    font-weight: bold;
+    left: 214px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    .task-detail-label, .task-detail-value {
+        font-size: 0.9em;
+    }
+}
+
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">RRCM - Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav"></div>
+                <ul class="navbar-nav navigation-class">
+                    <li class="nav-item dropdown user-menu d-none">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userFirstName"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#" id="logoutButton">Logout</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+    </nav>
+    <div id="navbar"></div>
+    <div class="modal fade" id="taskViewModal" tabindex="-1" aria-labelledby="taskViewModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="taskViewModalLabel">Task Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="task-detail">
+              <div class="task-detail-label" style="text-align: center;">Title</div>
+              <div class="task-detail-value" style="text-align: center; font-weight: bold;" id="viewTitle"></div>
+            </div>
+            <div class="task-detail">
+              <div class="task-detail-label">Description</div>
+              <div class="task-detail-value" id="viewDescription"></div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="task-detail">
+                  <div class="task-detail-label">Department</div>
+                  <div class="task-detail-value" id="viewDepartment"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="task-detail">
+                  <div class="task-detail-label">Assigned To</div>
+                  <div class="task-detail-value" id="viewAssignedTo"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="task-detail">
+                  <div class="task-detail-label">Priority Level</div>
+                  <div class="task-detail-value" id="viewPriority"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="task-detail">
+                  <div class="task-detail-label">Created By</div>
+                  <div class="task-detail-value" id="viewCreatedBy"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="task-detail">
+                  <div class="task-detail-label">Start Date & Time</div>
+                  <div class="task-detail-value" id="viewStartDate"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="task-detail">
+                  <div class="task-detail-label">End Date & Time</div>
+                  <div class="task-detail-value" id="viewEndDate"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="task-detail">
+                  <div class="task-detail-label">Category</div>
+                  <div class="task-detail-value">
+                    <span class="task-category" id="viewCategory"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="task-detail">
+                  <div class="task-detail-label">Status</div>
+                  <div class="task-detail-value">
+                    <span class="task-status" id="viewTaskStatus"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="task-detail">
+                  <div class="task-detail-label">Created At</div>
+                  <div class="task-detail-value" id="viewCreatedAt"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="task-detail">
+                  <div class="task-detail-label">Last Modified</div>
+                  <div class="task-detail-value" id="viewUpdatedAt"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper">
+		<div id="navbar"></div>
+		<div class="main-container">
+			<div id="header"></div>
+		 		 <div class="user-box first-box">
+		  <div class="activity card" style="--delay: .2s">
+		   <div class="title">User Activities</div>
+		   <div class="subtitle"><b>Stephan F.</b> has downloaded a file: "Assay Data Register 2024 from Mining Campaign Results - 2024"</div>
+		   <div class="activity-links">
+			<div class="activity-link active">Latest Activity</div>
+			<div class="activity-link notify">Not Seen</div>
+		   </div>
+		   <div class="destination">
+			<div class="destination-card">
+			 <div class="destination-profile">
+			  <img class="profile-img" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80" alt="" />
+			  <div class="destination-length">
+				 Mary R.
+			  </div>
+			 </div>
+			 <div class="destination-points">
+			  <div class="point">Downloaded File</div>
+			  <div class="sub-point">
+				1/27/2024 2:42</div>
+			 </div>
+			</div>
+			<div class="destination-card">
+			 <div class="destination-profile">
+			  <img class="profile-img" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80" alt="" />
+			  <div class="destination-length">
+				Joe B.
+			  </div>
+			 </div>
+			 <div class="destination-points">
+			  <div class="point">Accessed Data Room</div>
+			  <div class="sub-point">1/27/2024 2:10</div>
+			 </div>
+			</div>
+		   </div>
+		  </div>
+		  <div class="employee card" style="--delay: .4s">
+		   <div class="title">Tasks Completed</div>
+		   <div class="employee-wrapper">
+			<div class="employee-info">
+			 <div class="subtitle">Completed:</div>
+			 <div class="subtitle-count">67</div>
+			 <div class="subtitle">Active:</div>
+			 <div class="subtitle-count dist">9</div>
+			</div>
+			<div class="employee-chart">
+			 <div class="circle">
+			  <div class="pie">
+			   <svg>
+				<circle cx="60" cy="60" r="50"></circle>
+			   </svg>
+			  </div>
+			  <div class="counter">80%</div>
+			 </div>
+			</div>
+		   </div>
+		   <div class="employee-profile">
+			<div class="employee-detail">
+			 <div class="employee-name">Last Completed:</div>
+			 <div class="employee-type">Comparative Table</div>
+			</div>
+		   </div>
+		   <div class="button offer-button my-tasks" data-url="/warehouse/tasks.html">View My Tasks</div>
+		  </div>
+		  <div class="cards-wrapper calendar-prototype" id="calendar1" style="--delay: .6s">
+		   <div class="cards-header">
+			<div class="cards-header-date">
+                <svg class="feather-chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6" />
+                </svg>
+                <div class="title">Thu, Jan 25 2024</div>
+                <svg class="feather-chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18l6-6-6-6" />
+                </svg>
+            </div>
+		   </div>
+		   <div class="cards card">
+			<div class="cards-head">
+			 <div class="cards-info">
+			  <div class="degree">
+			   <svg viewBox="0 0 512 512">
+				<circle cx="330.2" cy="240.1" fill="#feb137" r="78.9" />
+				<g fill="#ffd15b">
+				 <path d="M320.5 130c-7.4.6-14-5-14.6-12.3l-4.1-47a13.5 13.5 0 0126.9-2.4l4 47c.7 7.4-4.8 14-12.2 14.6z" />
+				 <path d="M320.5 130c-7.4.6-14-5-14.6-12.3l-4.1-47a13.5 13.5 0 0126.9-2.4l4 47c.7 7.4-4.8 14-12.2 14.6zM438 228.5c-.6-7.4 4.9-14 12.3-14.6l47-4a13.5 13.5 0 012.4 26.8l-47 4.1c-7.5.7-14-4.8-14.7-12.3zM413 307.7a13.5 13.5 0 0119-1.6l36.2 30.3a13.5 13.5 0 01-17.3 20.7l-36.2-30.4a13.5 13.5 0 01-1.6-19z" />
+				 <path d="M413 307.7a13.5 13.5 0 0119-1.6l36.2 30.3a13.5 13.5 0 01-17.3 20.7l-36.2-30.4a13.5 13.5 0 01-1.6-19zM190 120.6a13.5 13.5 0 0119-1.7l36.2 30.4a13.5 13.5 0 01-17.3 20.6l-36.2-30.3a13.5 13.5 0 01-1.7-19zM447.4 98a13.5 13.5 0 011.7 19l-30.4 36.2A13.5 13.5 0 01398 136l30.4-36.2a13.5 13.5 0 0119-1.6z" />
+				</g>
+				<path d="M360 335.4a70.8 70.8 0 00-87.4-74A95 95 0 0085 286a85 85 0 00-3.4 170h273a60.4 60.4 0 005.2-120.6z" fill="#d8ecfe" />
+				<path d="M360 335.4a70.8 70.8 0 00-87.4-74 95 95 0 00-125.7-68.3 95 95 0 0190.6 74.2 70.8 70.8 0 0187.4 74A60.4 60.4 0 01345.6 456h9.2a60.4 60.4 0 005.1-120.6z" fill="#c4e2ff" />
+			   </svg>
+			   90&#8451; in Ridgecrest, CA
+			  </div>
+			 </div>
+
+			 <svg viewBox="0 0 512 512" fill="currentColor">
+			  <path d="M272 512h-32c-26 0-47.2-21.1-47.2-47.1V454c-11-3.5-21.8-8-32.1-13.3l-7.7 7.7a47.1 47.1 0 01-66.7 0l-22.7-22.7a47.1 47.1 0 010-66.7l7.7-7.7c-5.3-10.3-9.8-21-13.3-32.1H47.1c-26 0-47.1-21.1-47.1-47.1v-32.2c0-26 21.1-47.1 47.1-47.1H58c3.5-11 8-21.8 13.3-32.1l-7.7-7.7a47.1 47.1 0 010-66.7l22.7-22.7a47.1 47.1 0 0166.7 0l7.7 7.7c10.3-5.3 21-9.8 32.1-13.3V47.1c0-26 21.1-47.1 47.1-47.1h32.2c26 0 47.1 21.1 47.1 47.1V58c11 3.5 21.8 8 32.1 13.3l7.7-7.7a47.1 47.1 0 0166.7 0l22.7 22.7a47.1 47.1 0 010 66.7l-7.7 7.7c5.3 10.3 9.8 21 13.3 32.1h10.9c26 0 47.1 21.1 47.1 47.1v32.2c0 26-21.1 47.1-47.1 47.1H454c-3.5 11-8 21.8-13.3 32.1l7.7 7.7a47.1 47.1 0 010 66.7l-22.7 22.7a47.1 47.1 0 01-66.7 0l-7.7-7.7c-10.3 5.3-21 9.8-32.1 13.3v10.9c0 26-21.1 47.1-47.1 47.1zM165.8 409.2a176.8 176.8 0 0045.8 19 15 15 0 0111.3 14.5V465c0 9.4 7.7 17.1 17.1 17.1h32.2c9.4 0 17.1-7.7 17.1-17.1v-22.2a15 15 0 0111.3-14.5c16-4.2 31.5-10.6 45.8-19a15 15 0 0118.2 2.3l15.7 15.7a17.1 17.1 0 0024.2 0l22.8-22.8a17.1 17.1 0 000-24.2l-15.7-15.7a15 15 0 01-2.3-18.2 176.8 176.8 0 0019-45.8 15 15 0 0114.5-11.3H465c9.4 0 17.1-7.7 17.1-17.1v-32.2c0-9.4-7.7-17.1-17.1-17.1h-22.2a15 15 0 01-14.5-11.2c-4.2-16.1-10.6-31.6-19-45.9a15 15 0 012.3-18.2l15.7-15.7a17.1 17.1 0 000-24.2l-22.8-22.8a17.1 17.1 0 00-24.2 0l-15.7 15.7a15 15 0 01-18.2 2.3 176.8 176.8 0 00-45.8-19 15 15 0 01-11.3-14.5V47c0-9.4-7.7-17.1-17.1-17.1h-32.2c-9.4 0-17.1 7.7-17.1 17.1v22.2a15 15 0 01-11.3 14.5c-16 4.2-31.5 10.6-45.8 19a15 15 0 01-18.2-2.3l-15.7-15.7a17.1 17.1 0 00-24.2 0l-22.8 22.8a17.1 17.1 0 000 24.2l15.7 15.7a15 15 0 012.3 18.2 176.8 176.8 0 00-19 45.8 15 15 0 01-14.5 11.3H47c-9.4 0-17.1 7.7-17.1 17.1v32.2c0 9.4 7.7 17.1 17.1 17.1h22.2a15 15 0 0114.5 11.3c4.2 16 10.6 31.5 19 45.8a15 15 0 01-2.3 18.2l-15.7 15.7a17.1 17.1 0 000 24.2l22.8 22.8a17.1 17.1 0 0024.2 0l15.7-15.7a15 15 0 0118.2-2.3z"></path>
+			  <path d="M256 367.4c-61.4 0-111.4-50-111.4-111.4s50-111.4 111.4-111.4 111.4 50 111.4 111.4-50 111.4-111.4 111.4zm0-192.8a81.5 81.5 0 000 162.8 81.5 81.5 0 000-162.8z"></path>
+			 </svg>
+
+             
+			</div>
+            <div class="items days">
+                <div class="item">Sun</div>
+                <div class="item">Mon</div>
+                <div class="item">Tue</div>
+                <div class="item">Wed</div>
+                <div class="item">Thu</div>
+                <div class="item">Fri</div>
+                <div class="item">Sat</div>
+            </div>              
+			<div class="items numbers">
+			 <div class="item">1</div>
+			 <div class="item">2</div>
+			 <div class="item">3</div>
+			 <div class="item">4</div>
+			 <div class="item">5</div>
+			 <div class="item">6</div>
+			 <div class="item">7</div>
+			 <div class="item">8</div>
+			 <div class="item">9</div>
+			 <div class="item">10</div>
+			 <div class="item">11</div>
+			 <div class="item">12</div>
+			 <div class="item">13</div>
+			 <div class="item">14</div>
+			 <div class="item">15</div>
+			 <div class="item">16</div>
+			 <div class="item">17</div>
+			 <div class="item">18</div>
+			 <div class="item">19</div>
+			 <div class="item">20</div>
+			 <div class="item">21</div>
+			 <div class="item">22</div>
+			 <div class="item">23</div>
+			 <div class="item">24</div>
+			 <div class="item">25</div>
+			 <div class="item">26</div>
+			 <div class="item">27</div>
+			 <div class="item">28</div>
+			 <div class="item is-active">29</div>
+			 <div class="item">30</div>
+			 <div class="item">31</div>
+			 <div class="item disable">1</div>
+			 <div class="item disable">2</div>
+			 <div class="item disable">3</div>
+			</div>
+		   </div>
+		  </div>
+          <div class="account-wrapper" style="--delay: .8s">
+			<div class="account-profile">
+				<img id="userProfilePicture" src="/warehouse/images/user.jpg" alt="Profile Image">
+				<div class="blob" style="right: -35px; top: 50%; -webkit-animation-delay: 1.8s; animation-delay: 1.8s;" data-element="Pd">
+					Pd
+					<div class="tooltip">
+						<strong>Palladium (Pd)</strong><br>
+						Atomic Number: 46<br>
+						Atomic Mass: 106.42 u<br>
+					</div>
+				</div>
+				<div class="blob" style="right: -20px; top: -20px; -webkit-animation-delay: 0.2s; animation-delay: 0.2s;" data-element="Pt">
+					Pt
+					<div class="tooltip">
+						<strong>Platinum (Pt)</strong><br>
+						Atomic Number: 78<br>
+						Atomic Mass: 195.084 u<br>
+					</div>
+				</div>
+				<div class="blob" style="top: 25px; left: -20px; -webkit-animation-delay: 0.9s; animation-delay: 0.9s;" data-element="Au">
+					Au
+					<div class="tooltip">
+						<strong>Gold (Au)</strong><br>
+						Atomic Number: 79<br>
+						Atomic Mass: 196.96657 u<br>
+					</div>
+				</div>
+             <div id="accountName" class="account-name">Name</div>
+             <div id="accountTitle" class="account-title">Job Title</div>
+            </div>
+
+
+			<div class="navigation-wrapper">
+				<div class="navigation-data-room nav-btn" data-url="https://dataroom.rrcmg.com/">Data Room</div>
+				<div class="navigation-portal nav-btn" data-url="https://portal.rrcmg.com/">Portal</div>
+			</div>
+
+           </div>
+        </div>
+		 <div class="user-box second-box" id="calendar2">
+		  <div class="cards-wrapper" style="--delay: 1s">
+		   <div class="cards-header">
+            <div class="cards-view">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                 <path d="M16 2v4M8 2v4M3 10h18"></path>
+                </svg>
+                Calendar View
+                <span class="today today-dot">Today</span>
+                <span class="today" id="allTasksBtn">All Tasks</span>
+               </div>
+			<div class="cards-header-date">
+			 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left">
+			  <path d="M15 18l-6-6 6-6" /></svg>
+			 <div class="title">Thu, Jan 25 2024</div>
+			 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+			  <path d="M9 18l6-6-6-6" /></svg>
+			</div>
+      <div class="cards-button button create-task" id="createTaskButton" data-url="/warehouse/tasks.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
+          <path d="M12 5v14M5 12h14"></path>
+        </svg>
+        Create
+      </div>
+    </div>
+		   <div class="cards card">
+			<table class="table table-tasks">
+				<thead>
+				 <tr>
+				  <th>Time Constraint</th>
+				  <th>Task Name</th>
+				  <th>Assigned To</th>
+				  <th>Category</th>
+				  <th style="text-align: center;">Status</th>
+				 </tr>
+				</thead>
+				<tbody id="taskTableBody">
+				 <!-- Task rows will be dynamically inserted here -->
+				</tbody>
+			   </table>
+		   </div>
+		  </div>
+		  <div class="card transection" style="--delay: 1.2s">
+		   <div class="transection-header">
+			<div class="head">Personal Messages</div>
+			<div class="head is-wait view-all">View All</div>
+		   </div>
+		   <div class="messages-wrapper">
+			<img class="profile-img-2" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1650&amp;q=80" alt="">
+			<div class="messages-name">
+			 <div class="messages-person">Kip R.</div>
+			 <div class="messages-status">Sent you a message.</div>
+			</div>
+			<div class="messages-count">2</div>
+		   </div>
+		   <div class="messages-wrapper">
+			<img class="profile-img-2" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1650&amp;q=80" alt="">
+
+			<div class="messages-name">
+			 <div class="messages-person">Jason P.</div>
+			 <div class="messages-status">Sent you a message.</div>
+			</div>
+			<div class="messages-count">11</div>
+		   </div>
+		   <div class="messages-wrapper">
+			<img class="profile-img-2" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1650&amp;q=80" alt="">
+
+			<div class="messages-name">
+			 <div class="messages-person">Lex S.</div>
+			 <div class="messages-status">Sent you a message.</div>
+			</div>
+			<div class="messages-count">3</div>
+		   </div>
+		   <div class="messages-wrapper">
+			<img class="profile-img-2" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1650&amp;q=80" alt="">
+			<div class="messages-name">
+			 <div class="messages-person">Laure K.</div>
+			 <div class="messages-status">Sent you a message.</div>
+			</div>
+			<div class="messages-count">8</div>
+		   </div>
+		  </div>
+		 </div>
+		</div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="js/login-state.js"></script>
+  <script src="js/user-auth.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>

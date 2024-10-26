@@ -1,0 +1,16 @@
+{
+    "participants": [
+        "Geology"
+    ],
+    "messages": [
+        {
+            "sender": {
+                "id": "1",
+                "name": "Irakli Javakhadze"
+            },
+            "message": "{\"type\":\"file\",\"filePath\":\"\/uploads\/670defcdcb91e.xlsx\",\"originalName\":\"1-Assay-Comparison UofN-Hazen-27Sep24 IJ 0715.xlsx\",\"fileExtension\":\"xlsx\",\"fileType\":\"application\/vnd.openxmlformats-officedocument.spreadsheetml.sheet\"}",
+            "timestamp": 1728966605,
+            "type": "file"
+        }
+    ]
+}

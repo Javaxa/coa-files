@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGS - Process Viewer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <link rel="stylesheet" href="/formbuilder/css/builder.css"></head>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/ui.css">
+    <link rel="stylesheet" href="/formbuilder/css/viewer.css"></head>
+<style>
+
+.dashboard-page {
+    color: inherit;
+}
+
+.task-page{
+    color: #0093ff;
+}
+    .sidebar-filter {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+            padding: 20px;
+            margin-left: 100px;
+        }
+
+        .assignee-item {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 4px solid transparent;
+}
+
+.assignee-item:hover {
+    background: #e9ecef;
+}
+
+/* Style for active user assignee */
+.assignee-item[data-type="user"].active {
+    background: #e7f1ff;
+    border-left: 4px solid #0d6efd;
+}
+
+/* Style for active department assignee */
+.assignee-item[data-type="department"].active {
+    background: #fff3e6;
+    border-left: 4px solid #fd7e14;
+}
+
+.assignee-type {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+.assignee-count {
+    background: #e9ecef;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin-left: 8px;
+}
+        .delegation-filter {
+            margin-bottom: 20px;
+        }
+
+        .delegation-type {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .delegation-type:hover {
+            background: #e9ecef;
+        }
+
+        .delegation-type.active {
+            background: #e7f1ff;
+            color: #0d6efd;
+        }
+
+        .delegation-type i {
+            margin-right: 10px;
+        }
+
+/* Task Card Container */
+.task-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transform-origin: center;
+    backdrop-filter: blur(5px);
+    width: 320px;
+    display: inline-grid;
+    margin: 10px;
+    cursor: pointer;
+}
+
+/* Hover Effects */
+.task-card:hover {
+    transform: scale(1.02) translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+/* Paper Texture Effect */
+.task-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    background: linear-gradient(45deg, transparent 48%, rgba(0,0,0,0.02) 49%, rgba(0,0,0,0.02) 51%, transparent 52%);
+    background-size: 8px 8px;
+    pointer-events: none;
+}
+
+/* Task Title */
+.task-card h5 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.task-card .align-items-start {
+    border-bottom: 2px solid #f0f0f0;
+}
+
+/* Task Description */
+.task-card p {
+    color: #505965;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+/* Status Badge */
+.task-status {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    text-transform: capitalize;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    min-width: 85px;
+    text-align: center;
+    font-size: 10px;
+}
+
+/* Status Colors */
+.status-not-completed {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.status-in-progress {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.status-completed {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+/* Footer Info */
+.task-card .d-flex {
+    margin-top: auto;
+}
+
+/* Meta Information */
+.task-card small.text-muted {
+    font-size: 0.85rem;
+    color: #64748b !important;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Icons */
+.task-card i.fas {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Clip Effect */
+.task-card::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+        .view-type-toggle {
+            background: #f8f9fa;
+            padding: 4px;
+            border-radius: 8px;
+            display: inline-flex;
+            margin-bottom: 20px;
+        }
+
+        .view-type-toggle button {
+            padding: 8px 16px;
+            border: none;
+            background: none;
+            border-radius: 6px;
+        }
+
+        .view-type-toggle button.active {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .status-not-completed { background: #ffd7d7; color: #721c24; }
+        .status-in-progress { background: #fff3cd; color: #856404; }
+        .status-completed { background: #d4edda; color: #155724; }
+
+        .form-content {
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+#formContentModal .modal-dialog {
+    max-width: 800px;
+}
+
+#formContentModal .modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.process-view-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.process-view-content {
+    background-color: #fefefe;
+    margin: 2% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 8px;
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+}
+
+#processViewContainer {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.progress-container {
+    width: 100%;
+    background-color: #f3f3f3;
+    border-radius: 13px;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    width: 0;
+    height: 12px;
+    background-color: #f8a441;
+    border-radius: 13px;
+    transition: width 0.3s ease-in-out;
+}
+
+#tasksList {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.btn-blue {
+    background: rgb(51, 107, 239);
+    color: white;
+    border: 1px solid grey;
+}
+
+.btn-blue:hover {
+    background: rgb(25, 86, 227);
+    border: 1px solid grey;
+}
+
+
+
+
+
+a {
+        text-decoration: none !important;
+    }
+
+
+.form-check-input:disabled~.form-check-label, .form-check-input[disabled]~.form-check-label {
+    cursor: default;
+    opacity: 1;
+    color: #525252;
+}
+
+.builder-header {
+    margin: 0 auto;
+    color: white;
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-family: monospace;
+}
+
+.formdisplaywrapper {
+  background: rgb(221, 221, 221);
+  margin: auto;
+  width: 50%;
+  border-radius: 5px;
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+.formdisplay {
+  width: 90%;
+  margin: auto;
+}
+
+.actual-form {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  word-break: break-word;
+}
+
+.form-component select {
+  margin-bottom: 10px;
+}
+
+#loadFormButton {
+  padding: 10px 15px;
+  background-color: #2f6384;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 200px;
+  margin: 0 auto;
+}
+
+.actual-form h2 {
+  text-align: center
+}
+
+.input-type-label {
+  display: none;
+  background-color: rgb(171 171 171) !important;
+  color: #0c0c0c;
+}
+
+.lb2 {
+  display: initial;
+}
+
+        .form-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 18px;
+            margin-bottom: 30px;
+        }
+        .form-viewer {
+            background: rgb(248 248 248);
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+            margin-bottom: 20px;
+        }
+        .form-content {
+            padding-left: 20px;
+            padding-right: 20px;
+            border-radius: 5px;
+        }
+
+
+        .delete-checkbox {
+            display: none;
+            margin-right: 10px;
+        }
+        #deleteButton, #cancelDeleteButton {
+            display: none;
+            margin-top: 10px;
+        }
+
+        #toggleDeleteMode {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            background: #e0e0e0;
+            color: #585858;
+            border: 1px solid #8f8f8f;
+        }
+
+        #toggleDeleteMode:hover {
+            background: #d4d4d4;
+        }
+
+        #toggleDeleteMode:active {
+            background: #b8b8b8;
+        }
+
+        .list-group-item {
+            padding: 0;
+            position: relative;
+        }
+
+        .list-group-item a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: #535353;
+            text-decoration: none;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .delete-checkbox {
+            position: absolute;
+            left: 10px;
+            top: 14px;
+            z-index: 1;
+        }
+
+        .list-group-item.delete-mode a {
+            padding-left: 2.5rem;
+        }
+
+        .list-group-item input[type="checkbox"] {
+            position: absolute;
+        }
+
+        .process-view-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .process-view-content {
+            background-color: #fefefe;
+            margin: 2% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 800px;
+            transition: height 0.5s ease-in-out;
+            overflow: visible;
+            position: relative;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            min-height: 450px; 
+        }
+
+        .process-view-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .process-view-navigation button {
+            padding: 10px 20px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+#processViewContainer {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+
+
+.process-view-navigation {
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;
+    padding: 10px 0;
+    margin-top: auto;
+}
+
+ 
+        .slide-content {
+            position: absolute;
+            width: 100%;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .slide-left-enter {
+            transform: translateX(100%);
+        }
+
+        .slide-left-enter-active {
+            transform: translateX(0%);
+        }
+
+        .slide-left-exit {
+            transform: translateX(0%);
+        }
+
+        .slide-left-exit-active {
+            transform: translateX(-100%);
+        }
+
+        .slide-right-enter {
+            transform: translateX(-100%);
+        }
+
+        .slide-right-enter-active {
+            transform: translateX(0%);
+        }
+
+        .slide-right-exit {
+            transform: translateX(0%);
+        }
+
+        .slide-right-exit-active {
+            transform: translateX(100%);
+        }
+
+        .yes-no-question {
+            text-align: center;
+        }
+
+    .yes-no-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .yes-no-container .form-check {
+        width: 120px;
+        height: 60px;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .yes-no-container .form-check:hover {
+        background-color: #f0f0f0;
+    }
+
+    .yes-no-container .form-check-input {
+        display: none;
+    }
+
+    .yes-no-container .form-check-label {
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .form-check.selected-yes {
+    background-color: #579bff !important;
+}
+
+.form-check.selected-no {
+    background-color: #579bff !important;
+}
+
+.form-check.selected-yes .form-check-label,
+.form-check.selected-no .form-check-label {
+    color: white;
+}
+
+          #processViewModal .actual-form {
+            max-width: 90%;
+            margin: auto;
+            text-align: center;
+          }
+
+          .progress-container {
+            width: 100%;
+            background-color: #f3f3f3;
+            border-radius: 13px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 12px;
+            background-color: #f8a441;
+            border-radius: 13px;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .slide-counter {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+
+    .form-check.selected-yes .form-check-label {
+    color: white;
+    }
+
+    .form-check.selected-no .form-check-label {
+    color: white;
+    }
+
+    .navbar-expand-lg .navbar-collapse {
+        display: contents !important;
+    }
+
+   .btn-primary {
+    background-color: #ffa844;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #d78221;
+}
+
+.btn-primary:active {
+    background-color: #b66a13 !important;
+}
+
+.btn-primary:focus {
+    background-color: #b66a13;
+}
+
+.modal-body .list-group-item {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #3c3c3c;
+    cursor: pointer;
+}
+
+.modal-body .list-group-item:hover {
+    background: #ebebeb;
+}
+
+.modal-body .list-group-item:active {
+    background: #cdcdcd;
+}
+
+.submission-wrapper {
+    border: 1px solid #a2a2a2;
+    padding: 50px;
+    position: relative;
+    border-radius: 12px;
+    margin-bottom: 100px;
+    width: 50%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; 
+}
+
+.alert-info {
+    background: #4d8fe6;
+    color: white;
+    border: 1px solid #a2a2a2;
+    margin-right: -51px;
+    margin-top: -21px !important;
+    margin-bottom: 0px !important;
+    padding: 10px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-top-right-radius: 11px;
+    font-size: 12px;
+    border-bottom-right-radius: 0px;
+    border-top-left-radius: 0px;
+}
+
+.container-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: -30px;
+}
+
+.file-preview i {
+    font-size: 48px;
+    color: #6c757d;
+}
+
+.file-label {
+    display: none;
+}
+
+.document-upload-marker .file-upload-wrapper {
+    flex-direction: column-reverse;
+}
+
+.img-fluid {
+    margin: auto;
+    border-radius: 8px;
+}
+
+
+
+.file-icon {
+    width: 48px;
+    height: 48px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.file-icon-default { background-image: url('/formbuilder/icons/default-icon.png'); }
+.file-icon-pdf { background-image: url('/formbuilder/icons/pdf-icon.png'); }
+.file-icon-word { background-image: url('/formbuilder/icons/word-icon.png'); }
+.file-icon-excel { background-image: url('/formbuilder/icons/excel-icon.png'); }
+.file-icon-powerpoint { background-image: url('/formbuilder/icons/powerpoint-icon.png'); }
+.file-icon-text { background-image: url('/formbuilder/icons/text-icon.webp'); }
+.file-icon-image { background-image: url('/formbuilder/icons/image-icon.png'); }
+.file-icon-audio { background-image: url('/formbuilder/icons/audio-icon.png'); }
+.file-icon-video { background-image: url('/formbuilder/icons/video-icon.png'); }
+.file-icon-archive { background-image: url('/formbuilder/icons/archive-icon.png'); }
+.file-icon-code { background-image: url('/formbuilder/icons/code-icon.png'); }
+
+.file-preview {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.file-name {
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.file-download-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    transition: 0.1s ease;
+}
+
+.file-download-link:hover {
+	transform: scale(1.03);
+}
+
+#documentViewerModal .modal-dialog {
+        max-width: 90%;
+        height: 90vh;
+        margin: 20px auto;
+    }
+
+    #documentViewerModal .modal-content {
+        height: 100%;
+    }
+
+    #documentViewerModal .modal-body {
+        height: calc(100% - 56px);
+        padding: 0;
+    }
+
+    #documentViewer {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .map-page {
+    width: 26px !important;
+    }
+
+    .home-page {
+        width: 28px !important;  
+    }
+
+    .lookup-page {
+        width: 26px !important;  
+    }
+
+    .dashboard-page {
+        width: 34px !important;  
+    }
+
+    .task-page {
+        width: 29px !important;  
+    }
+
+
+
+
+</style>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">BGS - Process Viewer</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav"></div>
+                <ul class="navbar-nav navigation-class">
+                    <li class="nav-item dropdown user-menu d-none">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userFirstName"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#" id="logoutButton">Logout</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+    </nav>
+    <div id="navbar"></div>
+
+    <div class="wrapper">
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar-filter">
+                    <h5 class="mb-3">Filters</h5>
+                    <div class="view-type-toggle w-100 mb-4">
+                        <button class="active" data-view="all">All</button>
+                        <button data-view="users">
+                            <i class="fas fa-user"></i> Personal
+                        </button>
+                        <button data-view="departments">
+                            <i class="fas fa-building"></i> Department
+                        </button>
+                    </div>
+                    <div class="delegation-filter">
+                        <h6 class="mb-2">Delegation Type</h6>
+                        <div class="delegation-type active" data-type="all">
+                            <i class="fas fa-tasks"></i> All
+                        </div>
+                        <div class="delegation-type" data-type="attachForm">
+                            <i class="fas fa-file-alt"></i> Form
+                        </div>
+                        <div class="delegation-type" data-type="document">
+                            <i class="fas fa-upload"></i> Document
+                        </div>
+                        <div class="delegation-type" data-type="dependency">
+                            <i class="fas fa-link"></i> Dependency
+                        </div>
+                    </div>
+                    <div id="assigneesList">
+                        <h6 class="mb-2">Assignees</h6>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div id="tasksList">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="processViewModal" class="process-view-modal">
+    <div class="process-view-content">
+        <span class="close">&times;</span>
+        <div class="slide-counter">Step <span id="currentSlide">1</span> of <span id="totalSlides"></span></div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div id="processViewContainer"></div>
+        <div class="process-view-navigation">
+            <button id="prevStep" class="btn btn-secondary">Previous</button>
+            <button id="nextStep" class="btn btn-primary">Next</button>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="js/login-state.js"></script>
+<script src="js/user-auth.js"></script>
+<script src="js/ui.js"></script>
+<script>
+$(document).ready(function() {
+let tasks = [];
+let currentViewType = 'all';
+let currentDelegationType = 'all';
+let selectedAssignee = null;
+
+
+        function loadTasks() {
+            $.getJSON('json/process_data.json?' + new Date().getTime(), function(data) {
+                tasks = data;
+                processAssignees();
+                updateTasksList();
+            });
+        }
+
+
+ function processAssignees() {
+    const users = new Map();
+    const departments = new Map();
+
+    tasks.forEach(task => {
+        if (task.assignedToName) {
+            users.set(task.assignedToId, {
+                id: task.assignedToId,
+                name: task.assignedToName,
+                department: task.departmentName,
+                type: 'user'
+            });
+        } else if (task.departmentId) {
+            departments.set(task.departmentId, {
+                id: task.departmentId,
+                name: task.departmentName,
+                type: 'department'
+            });
+        }
+    });
+
+    updateAssigneesList(Array.from(users.values()), Array.from(departments.values()));
+}
+
+        
+            function updateAssigneesList(users, departments) {
+                const $assigneesList = $('#assigneesList');
+                $assigneesList.empty();
+                if (currentViewType === 'all' || currentViewType === 'users') {
+                    $assigneesList.append('<div class="mb-2 mt-3"><strong>Users</strong></div>');
+                    users.forEach(user => {
+                        const tasksCount = tasks.filter(t => t.assignedToId === user.id).length;
+                        $assigneesList.append(`
+                            <div class="assignee-item ${selectedAssignee?.id === user.id ? 'active' : ''}" 
+                                 data-id="${user.id}" 
+                                 data-type="user">
+                                <div>${user.name}</div>
+                                <div class="assignee-type">${user.department}</div>
+                                <span class="assignee-count">${tasksCount} tasks</span>
+                            </div>
+                        `);
+                    });
+                }
+
+                if (currentViewType === 'all' || currentViewType === 'departments') {
+                    $assigneesList.append('<div class="mb-2 mt-3"><strong>Departments</strong></div>');
+                    departments.forEach(dept => {
+                        const tasksCount = tasks.filter(t => t.departmentId === dept.id && !t.assignedToName).length;
+                        $assigneesList.append(`
+                            <div class="assignee-item ${selectedAssignee?.id === dept.id ? 'active' : ''}" 
+                                 data-id="${dept.id}" 
+                                 data-type="department">
+                                <div>${dept.name}</div>
+                                <span class="assignee-count">${tasksCount} tasks</span>
+                            </div>
+                        `);
+                    });
+                }
+            }
+
+
+// First add the showBootstrapModal function at the top level
+function showBootstrapModal(title, message) {
+    $('#dynamicModal').remove();
+
+    const modalHtml = `
+        <div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">${title}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ${message}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    $('body').append(modalHtml);
+    const modalElement = document.getElementById('dynamicModal');
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+$(document).ready(function() {
+
+    $(document).on('click', '.task-card', function(e) {
+        if ($(e.target).closest('.card-buttons').length) {
+            return;
+        }
+
+        const taskId = $(this).data('id');
+        const task = tasks.find(t => t.id === taskId);
+        
+        console.log('Task:', task);
+        console.log('Attached Form:', task.attachedForm);
+
+        if (!task) {
+            console.error('Task not found:', taskId);
+            showBootstrapModal('Error', 'Could not find task details');
+            return;
+        }
+        
+        if (task.delegationType === 'attachForm') {
+            if (task.attachedForm) {
+                // Extract the base form ID from the filename
+                // Convert "12333-5f29965f2cd59ac8.txt" to "12333"
+                const formId = task.attachedForm.split('-')[0];
+                
+                console.log('Extracted form ID:', formId);
+                
+                $.ajax({
+                    url: '/formbuilder/php/get_submissions2.php',
+                    method: 'GET',
+                    data: { formId: formId },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log('Submission response:', response);
+                        
+                        // Check if we have submissions and they match our form ID
+                        if (response.success && response.submissions) {
+                            // Filter submissions to ensure they match our form ID
+                            const matchingSubmissions = response.submissions.filter(sub => 
+                                sub.formId === formId || 
+                                sub.filename.startsWith(formId + '_')
+                            );
+                            
+                            if (matchingSubmissions.length > 0) {
+                                displaySubmissions(matchingSubmissions, task);
+                            } else {
+                                showBootstrapModal('Info', 'No submissions found for this form.');
+                            }
+                        } else {
+                            showBootstrapModal('Info', response.message || 'No submissions found for this form.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX error:', status, error);
+                        console.log('XHR:', xhr.responseText);
+                        showBootstrapModal('Error', 'An error occurred while checking for submissions.');
+                    }
+                });
+            } else {
+                showBootstrapModal('Info', 'No form is currently attached to this task.');
+            }
+        }
+    });
+
+    function displaySubmissions(submissions, task) {
+    // Sort submissions by date, newest first
+    submissions.sort((a, b) => new Date(b.submissionDate) - new Date(a.submissionDate));
+
+    var modal = $(`
+        <div class="modal fade" id="submissionsModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">${task.title} - Submissions</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group">
+                            ${submissions.map((submission, index) => {
+                                const submissionDate = new Date(submission.submissionDate).toLocaleString('en-US', {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                });
+
+                                return `
+                                    <li class="list-group-item submission-item" 
+                                        data-submission='${JSON.stringify(submission)}'
+                                        style="cursor: pointer; transition: background-color 0.2s;">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="submission-info">
+                                                ${index + 1}) ${submission.submittedBy} - ${submissionDate}
+                                            </span>
+                                            <i class="fas fa-chevron-right text-muted"></i>
+                                        </div>
+                                    </li>
+                                `;
+                            }).join('')}
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `);
+
+    // Add click handler for list items
+    modal.find('.submission-item').on('click', function() {
+        const submission = $(this).data('submission');
+        openSubmissionViewer(submission);
+    });
+
+    // Add hover effect styles
+    const style = $(`
+        <style>
+            .submission-item:hover {
+                background-color: #f8f9fa;
+            }
+            .submission-item:active {
+                background-color: #e9ecef;
+            }
+            .submission-item {
+                padding: 12px 20px;
+            }
+            .submission-item .fa-chevron-right {
+                opacity: 0.5;
+                transition: transform 0.2s;
+                margin-left: 20px;
+            }
+            .submission-item:hover .fa-chevron-right {
+                transform: translateX(4px);
+                opacity: 1;
+            }
+        </style>
+    `);
+
+    // Remove any existing modal before creating a new one
+    $('#submissionsModal').remove();
+    $('style').last().remove();
+
+    $('body').append(style);
+    $('body').append(modal);
+    
+    var bootstrapModal = new bootstrap.Modal(modal[0]);
+    bootstrapModal.show();
+}
+});
+
+function openSubmissionViewer(submission) {
+    var viewerWindow = window.open('../formbuilder/submission-viewer.php', '_blank');
+    
+    viewerWindow.onload = function() {
+        viewerWindow.postMessage({
+            type: 'submissionData',
+            data: {
+                ...submission,
+                filename: submission.filename || localStorage.getItem('lastSubmissionFilename')
+            }
+        }, '*');
+    };
+}
+
+
+function updateTasksList() {
+    const $tasksList = $('#tasksList');
+    $tasksList.empty();
+
+    let filteredTasks = [...tasks];
+
+    if (currentViewType === 'users') {
+        filteredTasks = filteredTasks.filter(task => task.assignedToName);
+    } else if (currentViewType === 'departments') {
+        filteredTasks = filteredTasks.filter(task => !task.assignedToName);
+    }
+
+    if (currentDelegationType !== 'all') {
+        filteredTasks = filteredTasks.filter(task => task.delegationType === currentDelegationType);
+    }
+
+    if (selectedAssignee) {
+        filteredTasks = filteredTasks.filter(task => {
+            if (selectedAssignee.type === 'user') {
+                return String(task.assignedToId) === String(selectedAssignee.id);
+            } else if (selectedAssignee.type === 'department') {
+                return String(task.departmentId) === String(selectedAssignee.id) && !task.assignedToName;
+            }
+            return false;
+        });
+    }
+
+    // Load user data
+    $.ajax({
+        url: '/RGBA/warehouse/json/user_data.json',
+        method: 'GET',
+        dataType: 'json',
+        success: function(userData) {
+            filteredTasks.forEach(task => {
+                const user = userData.find(u => String(u.id) === String(task.assignedToId));
+                
+                // Get form information if a form is attached
+                if (task.attachedForm && task.delegationType === 'attachForm') {
+                    const formId = task.attachedForm.split('-')[0];
+                    $.ajax({
+                        url: '/RGBA/formbuilder/php/get_form_list.php', // Use existing endpoint
+                        method: 'GET',
+                        data: { formId: formId },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success && response.form) {
+                                renderTaskCard(task, user, response.form);
+                            } else {
+                                renderTaskCard(task, user, null);
+                            }
+                        },
+                        error: function() {
+                            renderTaskCard(task, user, null);
+                        }
+                    });
+                } else {
+                    renderTaskCard(task, user, null);
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error loading user data:', error);
+            updateTasksListFallback(filteredTasks);
+        }
+    });
+}
+
+function renderTaskCard(task, user, formData) {
+    const $tasksList = $('#tasksList');
+    
+    let assigneeDisplay = '';
+    if (task.assignedToName && user && user.profilePicture) {
+        assigneeDisplay = `
+            <div class="d-flex align-items-center">
+                <img src="/RGBA/warehouse/${user.profilePicture}" 
+                     alt="${task.assignedToName}" 
+                     style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; margin-right: 8px;"
+                     onerror="this.onerror=null; this.src='path/to/default-avatar.png'; this.style.display='none'; this.nextElementSibling.style.display='inline-block';"
+                >
+                <i class="fas fa-user" style="display: none; margin-right: 8px;"></i>
+                <span>${task.assignedToName}</span>
+            </div>
+        `;
+    } else {
+        assigneeDisplay = `
+            <div class="d-flex align-items-center">
+                <i class="fas fa-${task.assignedToName ? 'user' : 'building'}" style="margin-right: 8px;"></i>
+                <span>${task.assignedToName || task.departmentName}</span>
+            </div>
+        `;
+    }
+
+    let delegationDisplay = '';
+    if (task.delegationType !== 'attachForm') {
+        delegationDisplay = `
+            <i class="fas fa-${getDelegationIcon(task.delegationType)}"></i>
+            ${task.delegationType}
+        `;
+    }
+
+    let formDisplay = '';
+    if (task.delegationType === 'attachForm') {
+        if (task.attachedForm && formData) {
+            formDisplay = `
+                <span class="ms-2 badge bg-info" title="Attached Form">
+                    <i class="fas fa-paperclip"></i> ${formData.name}
+                </span>
+            `;
+        } else {
+            formDisplay = `
+                <span class="ms-2" style="color: #6c757d;">
+                    <i class="fas fa-file-alt"></i> No Form
+                </span>
+            `;
+        }
+    }
+
+    const cardHtml = `
+        <div class="task-card" data-id="${task.id}">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <h5 class="mb-0">${task.title}</h5>
+                <span class="task-status status-${task.status.toLowerCase().replace(' ', '-')}">${task.status}</span>
+            </div>
+            <p>${task.description}</p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div>
+                    <small class="text-muted">
+                        ${delegationDisplay}
+                        ${formDisplay}
+                    </small>
+                </div>
+                <div>
+                    <small class="text-muted">
+                        ${assigneeDisplay}
+                    </small>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Check if the card already exists
+    const existingCard = $tasksList.find(`[data-id="${task.id}"]`);
+    if (existingCard.length) {
+        existingCard.replaceWith(cardHtml);
+    } else {
+        $tasksList.append(cardHtml);
+    }
+}
+
+// Update the fallback function with the same form display logic
+function updateTasksListFallback(filteredTasks) {
+    const $tasksList = $('#tasksList');
+    filteredTasks.forEach(task => {
+        const formName = task.attachedForm ? task.attachedForm.split('-')[0] : null;
+        
+        let delegationDisplay = '';
+        if (task.delegationType !== 'attachForm') {
+            delegationDisplay = `
+                <i class="fas fa-${getDelegationIcon(task.delegationType)}"></i>
+                ${task.delegationType}
+            `;
+        }
+
+        let formDisplay = '';
+        if (task.delegationType === 'attachForm') {
+            if (task.attachedForm) {
+                formDisplay = `
+                    <span class="ms-2 badge bg-info" title="Attached Form">
+                        <i class="fas fa-paperclip"></i> Form ${formName}
+                    </span>
+                `;
+            } else {
+                formDisplay = `
+                    <span class="ms-2" style="color: #6c757d;">
+                        <i class="fas fa-file-alt"></i> No Form
+                    </span>
+                `;
+            }
+        }
+
+        $tasksList.append(`
+            <div class="task-card" data-id="${task.id}">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="mb-0">${task.title}</h5>
+                    <span class="task-status status-${task.status.toLowerCase().replace(' ', '-')}">${task.status}</span>
+                </div>
+                <p>${task.description}</p>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div>
+                        <small class="text-muted">
+                            ${delegationDisplay}
+                            ${formDisplay}
+                        </small>
+                    </div>
+                    <div>
+                        <small class="text-muted">
+                            <i class="fas fa-${task.assignedToName ? 'user' : 'building'}"></i>
+                            ${task.assignedToName || task.departmentName}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
+}
+
+            function getDelegationIcon(type) {
+                switch (type) {
+                    case 'attachForm': return 'file-alt';
+                    case 'document': return 'upload';
+                    case 'dependency': return 'link';
+                    default: return 'tasks';
+                }
+            }
+
+             // Event handler for assignee selection
+             $(document).on('click', '.assignee-item', function() {
+    const $this = $(this);
+    $('.assignee-item').removeClass('active');
+    
+    const clickedId = $this.data('id');
+    const clickedType = $this.data('type');
+    
+    if (selectedAssignee && String(selectedAssignee.id) === String(clickedId)) {
+        selectedAssignee = null;
+    } else {
+        $this.addClass('active');
+        selectedAssignee = {
+            id: clickedId,
+            type: clickedType
+        };
+    }
+    updateTasksList();
+});
+
+    // Other event handlers remain unchanged
+    $('.view-type-toggle button').click(function() {
+        $('.view-type-toggle button').removeClass('active');
+        $(this).addClass('active');
+        currentViewType = $(this).data('view');
+        processAssignees();
+        updateTasksList();
+    });
+
+    $('.delegation-type').click(function() {
+        $('.delegation-type').removeClass('active');
+        $(this).addClass('active');
+        currentDelegationType = $(this).data('type');
+        updateTasksList();
+    });
+
+
+            // Initial load
+            loadTasks();
+        });
+
+
+
+     
+            
+  </script>
+</body>
+</html>

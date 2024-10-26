@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGS - Messages</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/ui.css">
+</head>
+<style>
+
+    .message-page {
+        color: #0093ff;
+    }
+
+    .messages-container {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    padding-bottom: 50px;
+}
+
+.toggle-buttons button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.toggle-buttons button.active {
+    background-color: #0056b3;
+}
+
+.content {
+    display: flex;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    width: 60%;
+    height: 550px;
+}
+
+.sidebar {
+    background-color: #f6f6f6;
+    padding: 10px;
+    width: 30%;
+    overflow-y: auto;
+}
+
+
+
+/* Basic styles for the messaging interface */
+.message {
+    margin-bottom: 15px;
+    padding: 8px;
+    background-color: #eaeaea;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.message:hover {
+    background-color: #e5e5f4;
+}
+
+.message.selected {
+    background-color: #d4d4f5; 
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    padding-bottom: 60px;
+    width: 70%;
+    overflow-y: auto;
+    position: relative;
+    height: 550px;
+}
+
+.messages-display {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    overflow-y: auto;
+    height: 85%;
+}
+
+.message-input {
+    position: absolute;
+    bottom: 10px;
+    width: calc(100% - 20px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+input[type="text"] {
+    flex-grow: 1;
+    margin-right: 10px;
+    width: calc(100% - 110px);
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2d7df5;
+    color: white;
+    cursor: pointer;
+}
+
+.user-img {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  margin-right: 10px;
+}
+
+.outgoing-message {
+    background: #e5e5ff;
+    padding: 4px 10px;
+    border-radius: 10px;
+    border: 1px solid #cecece;
+    margin-bottom: 10px;
+    margin-right: 5px;
+    max-width: 60%;
+    word-wrap: break-word;
+}
+
+.incoming-message {
+    background: #d9fdd3;
+    padding: 4px 10px;
+    border-radius: 10px;
+    border: 1px solid #b2fab4;
+    margin-bottom: 10px;
+    max-width: 60%;
+    word-wrap: break-word;
+    align-self: flex-start;
+}
+
+.typing-indicator {
+    margin-bottom: 10px;
+    align-self: flex-start;
+    font-style: italic;
+    color: #6e6e6e;
+}
+
+.department-dropdown {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+}
+
+.user-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    width: fit-content;
+    margin: auto;
+    border-bottom: 1px solid #ccc;
+    background: transparent;
+}
+
+.user-header .user-img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-header #selectedUserName {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.messages-display {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.toggle-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.radio-button {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.radio-button input[type="radio"] {
+    display: none;
+}
+
+.radio-button span {
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.radio-button input[type="radio"]:checked + span {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.department-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.department-item:hover {
+    background-color: #f0f0f0;
+}
+
+.department-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.department-item.selected {
+    background-color: #fcac15;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.user-icon {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    margin-right: 10px;
+}
+
+.emoji-popup {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.emoji {
+    cursor: pointer;
+    font-size: 20px;
+    margin: 0 5px;
+}
+
+.message {
+    position: relative;
+}
+
+.outgoing-message, .incoming-message {
+    position: relative;
+}
+
+
+
+.message-container {
+    position: relative;
+    display: inline-block; 
+}
+
+    .emoji-popup {
+        display: none;
+        position: fixed;
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        width: fit-content;
+    }
+    .emoji {
+        cursor: pointer;
+        font-size: 20px;
+        margin: 0 5px;
+    }
+
+    #emojiButton {
+        margin-right: 10px;
+        border: 1px solid #c3c3c3;
+    }
+    
+    .emoji {
+        transition: transform 0.1s;
+        display: inline-block;
+    }
+
+    .emoji:hover {
+        transform: scale(1.15);
+    }
+
+    .department-header {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        text-align: center;
+        color: #4b4b4b;
+    }
+    .department-users-container {
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        padding: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        max-width: 500px;
+    }
+    .department-users {
+        display: flex;
+        overflow-x: auto;
+        justify-content: center;
+    }
+    .department-user {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 80px;
+    }
+    .department-user .user-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-bottom: 5px;
+        margin-right: 0px;
+    }
+    .department-user span {
+        font-size: 10px;
+        text-align: center;
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .no-users {
+        color: #888;
+        font-style: italic;
+    }
+ 
+
+
+
+    .input-wrapper {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+#messageText {
+    width: 100%;
+    padding-right: 40px;
+}
+
+#attachmentButton {
+    position: absolute;
+    right: 12px;
+    font-size: 18px;
+    background: none;
+    border: none;
+    color: #007bff;
+    transition: transform 0.1s;
+    }
+
+.img-fluid {
+    border-radius: 5px;
+}
+
+   #attachmentButton:hover {
+        transform: scale(1.1);
+    }
+
+.file-attachment, .photo-attachment {
+    display: inline-block;
+    margin: 5px 0;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.file-attachment i, .photo-attachment i {
+    margin-right: 5px;
+}
+    
+
+#cameraModal .modal-content {
+    background-color: #f8f9fa;
+}
+
+#cameraModal .modal-body {
+    padding: 0;
+    background-color: #000;
+    position: relative;
+}
+
+#cameraFeed, #capturedImage {
+    width: 100%;
+    height: auto;
+}
+
+#cameraModal .modal-footer {
+    justify-content: space-between;
+}
+
+#captureBtn, #retakeBtn, #uploadPhotoBtn {
+    width: 30%;
+}
+
+.file-preview-wrapper img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 2px solid transparent;
+}
+
+.file-preview-wrapper img:hover {
+    border: 2px solid rgb(255, 174, 51);
+} 
+
+.file-icon-default { background-image: url('/formbuilder/icons/default-icon.png'); }
+.file-icon-pdf { background-image: url('/formbuilder/icons/pdf-icon.png'); }
+.file-icon-word { background-image: url('/formbuilder/icons/word-icon.png'); }
+.file-icon-excel { background-image: url('/formbuilder/icons/excel-icon.png'); }
+.file-icon-powerpoint { background-image: url('/formbuilder/icons/powerpoint-icon.png'); }
+.file-icon-text { background-image: url('/formbuilder/icons/text-icon.webp'); }
+.file-icon-image { background-image: url('/formbuilder/icons/image-icon.png'); }
+.file-icon-audio { background-image: url('/formbuilder/icons/audio-icon.png'); }
+.file-icon-video { background-image: url('/formbuilder/icons/video-icon.png'); }
+.file-icon-archive { background-image: url('/formbuilder/icons/archive-icon.png'); }
+.file-icon-code { background-image: url('/formbuilder/icons/code-icon.png'); }
+
+.file-icon {
+    height: 25px;
+    width: 25px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-right: 2px;
+}
+
+.file-download-link {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.typing-indicator {
+    color: #888;
+    font-style: italic;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    background-color: #f1f1f1;
+    border-radius: 15px;
+    display: inline-block;
+}
+
+.incoming-message .user-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#newAIChatBtn {
+    display: block;
+    margin: auto;
+}
+
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Messages</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav"></div>
+                <ul class="navbar-nav navigation-class">
+                    <li class="nav-item dropdown user-menu d-none">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userFirstName"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#" id="logoutButton">Logout</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+    </nav>
+    <div id="navbar"></div>
+
+    <div class="wrapper">
+
+<div class="main-container">
+   
+    <div class="messages-container">
+        <div class="toggle-buttons">
+            <label class="radio-button">
+                <input type="radio" name="chatType" value="personal" checked>
+                <span>Personal</span>
+            </label>
+            <label class="radio-button">
+                <input type="radio" name="chatType" value="group">
+                <span>Department</span>
+            </label>
+            <label class="radio-button">
+                <input type="radio" name="chatType" value="ai">
+                <span>Chat with Ai</span>
+            </label>
+        </div>
+                        <!-- Add this modal for file attachment options -->
+                        <div class="modal fade" id="attachmentModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Attach File</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" style="text-align: center;">
+                                        <button id="uploadFileBtn" class="btn btn-primary">Upload File</button>
+                                        <button id="takePhotoBtn" class="btn btn-secondary">Take Photo</button>
+                                        <input type="file" id="fileInput" style="display: none;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+   <!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="" class="img-fluid" alt="Image preview">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Document Viewer Modal -->
+<div class="modal fade" id="documentViewerModal" tabindex="-1" aria-labelledby="documentViewerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="documentViewerModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe id="documentViewer" style="width: 100%; height: 80vh; border: none;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="modal fade" id="cameraModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Take Photo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <video id="cameraFeed" style="width: 100%; display: none;"></video>
+                        <canvas id="photoCanvas" style="display: none;"></canvas>
+                        <img id="capturedImage" style="width: 100%; display: none;">
+                    </div>
+                    <div class="modal-footer">
+                        <button id="captureBtn" class="btn btn-primary">Capture</button>
+                        <button id="retakeBtn" class="btn btn-secondary" style="display: none;">Retake</button>
+                        <button id="uploadPhotoBtn" class="btn btn-success" style="display: none;">Upload</button>
+                    </div>
+                </div>
+            </div>
+        </div>     
+        <div class="content">
+            <div class="sidebar" id="userList">
+                <select id="departmentDropdown" class="department-dropdown">
+                    <option value="all">All Departments</option>
+                </select>
+                <!-- User/Department list will be populated here -->
+            </div>
+            <div class="main" id="mainContent">
+                <div class="user-header">
+                    <img id="selectedUserImg" class="user-img" src="/RGBA/warehouse/images/user.jpg" alt="Selected User">
+                    <span id="selectedUserName"></span>
+                </div>
+                <div class="messages-display"></div>
+                <div class="message-input">
+                    <div class="input-wrapper">
+                        <input type="text" id="messageText" placeholder="Type a message...">
+                        <button type="button" id="attachmentButton" class="btn btn-light">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                    </div>
+                    <button type="button" id="emojiButton" class="btn btn-light">😊</button>
+                    <button type="submit" onclick="sendMessage()">Send</button>
+                </div>
+                <div id="emojiPopup" class="emoji-popup">
+                    <!-- Add more emojis as needed -->
+                    <span class="emoji" data-emoji="😊">😊</span>
+                    <span class="emoji" data-emoji="😂">😂</span>
+                    <span class="emoji" data-emoji="👍">👍</span>
+                    <span class="emoji" data-emoji="❤️">❤️</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+  
+</div>
+  </div>
+
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="js/login-state.js"></script>
+  <script src="js/user-auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/chat.js"></script>
+
+</body>
+</html>

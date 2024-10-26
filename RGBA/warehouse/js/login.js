@@ -38,7 +38,7 @@ function performLogin() {
     // Simulate API call
     setTimeout(() => {
         $.ajax({
-            url: 'json/user_data.json',
+            url: '/RGBA/warehouse/json/user_data.json',
             dataType: 'json',
             success: function(users) {
                 const user = users.find(u => u.email.toLowerCase() === email && u.password === password);

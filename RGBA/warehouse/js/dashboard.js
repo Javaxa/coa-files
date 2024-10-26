@@ -728,7 +728,7 @@ function getTimeConstraintClass(timeConstraint) {
     // Update the loadExistingData function to trigger employee card update
     function loadExistingData() {
         return new Promise((resolve, reject) => {
-            $.getJSON('json/process_data.json?' + new Date().getTime(), function(data) {
+            $.getJSON('/RGBA/warehouse/json/process_data.json?' + new Date().getTime(), function(data) {
                 existingData = data;
                 updateEmployeeCard(); // Update whenever data is loaded
                 resolve(existingData);
@@ -746,7 +746,7 @@ function getTimeConstraintClass(timeConstraint) {
     }
 
  function loadDepartmentData() {
-        $.getJSON('json/departments.json', function(data) {
+        $.getJSON('/RGBA/warehouse/json/departments.json', function(data) {
             data.departments.forEach(function(department) {
                 departmentMapping[department.id] = department.name;
             });

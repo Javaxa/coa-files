@@ -80,7 +80,7 @@ function updateUI(tasksToDisplay = existingData) {
     }
 
     function loadExistingData() {
-        $.getJSON('json/process_data.json?' + new Date().getTime(), function(data) {
+        $.getJSON('/RGBA/warehouse/json/process_data.json?' + new Date().getTime(), function(data) {
             existingData = data;
             updateUI();
         }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -92,7 +92,7 @@ function updateUI(tasksToDisplay = existingData) {
         });
     }
 
-$.getJSON('json/user_data.json', function(userData) {
+$.getJSON('/RGBA/warehouse/json/user_data.json', function(userData) {
     window.userData = userData;
 });
 
@@ -1181,7 +1181,7 @@ function getDepartmentId(departmentName) {
 
 
 function loadDepartmentData() {
-  $.getJSON('json/departments.json', function(data) {
+  $.getJSON('/RGBA/warehouse/json/departments.json', function(data) {
     window.departmentData = data;
     departmentMapping = {};
     data.departments.forEach(function(department) {

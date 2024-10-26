@@ -125,7 +125,7 @@ function setupToggleButton() {
 function fetchNodes() {
     var nocache = new Date().getTime();
     $.ajax({
-        url: 'json/departments.json',
+        url: '/RGBA/warehouse/json/departments.json',
         dataType: 'json',
         cache: false,
         data: { nocache: nocache },
@@ -147,7 +147,7 @@ function fetchNodes() {
 
 function fetchUserData() {
     $.ajax({
-        url: 'json/user_data.json',
+        url: '/RGBA/warehouse/json/user_data.json',
         dataType: 'json',
         cache: false,
         success: function(data) {

@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-$formsDir = __DIR__ . '/../forms/';
+$formsDir = __DIR__ . '/RGBA/formbuilder/forms/';
 
 // If formId is provided, get specific form data
 if (isset($_GET['formId'])) {

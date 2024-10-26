@@ -9,7 +9,7 @@ $formId = $_GET['formId'] ?? '';
 $formId = str_replace('.txt', '', $formId);
 
 // Correct path resolution
-$submissions_dir = realpath(__DIR__ . '/../submissions');
+$submissions_dir = realpath(__DIR__ . '/RGBA/formbuilder/submissions');
 
 $debug = [
     'requestedFormId' => $formId,

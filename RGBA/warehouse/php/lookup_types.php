@@ -10,7 +10,7 @@ function logError($message) {
 
 
 function getLookupTypes() {
-    $filename = __DIR__ . '/../json/lookup_types.json'; 
+    $filename = __DIR__ . '/RGBA/warehouse/json/lookup_types.json'; 
     if (!file_exists($filename)) {
         logError("File does not exist: $filename");
         $initData = ['lookup_types' => []];
@@ -31,7 +31,7 @@ function getLookupTypes() {
 }
 
 function addLookupType($newLookupTypeName) {
-    $filename = __DIR__ . '/../json/lookup_types.json'; 
+    $filename = __DIR__ . '/RGBA/warehouse/json/lookup_types.json'; 
     $data = file_get_contents($filename);
     if ($data === false) {
         error_log("Failed to read file: $filename");
@@ -58,7 +58,7 @@ function addLookupType($newLookupTypeName) {
 }
 
 function updateSubElementOrder($lookupTypeId, $newOrder) {
-    $filename = __DIR__ . '/../json/lookup_types.json'; 
+    $filename = __DIR__ . '/RGBA/warehouse/json/lookup_types.json'; 
     error_log("Updating sub-element order for lookup type: $lookupTypeId");
     error_log("New order: " . json_encode($newOrder));
 
@@ -103,7 +103,7 @@ function updateSubElementOrder($lookupTypeId, $newOrder) {
 }
 
 function addSubElement($lookupTypeId, $subElementName) {
-    $filename = __DIR__ . '/../json/lookup_types.json'; 
+    $filename = __DIR__ . '/RGBA/warehouse/json/lookup_types.json'; 
     $data = file_get_contents($filename);
     if ($data === false || empty($data)) {
         return ['success' => false, 'message' => 'Could not load existing lookup types.'];
@@ -135,7 +135,7 @@ function addSubElement($lookupTypeId, $subElementName) {
 }
 
 function deleteLookupType($lookupTypeId) {
-    $filename = __DIR__ . '/../json/lookup_types.json'; 
+    $filename = __DIR__ . '/RGBA/warehouse/json/lookup_types.json'; 
     $data = file_get_contents($filename);
     if ($data === false) {
         error_log("Failed to read file: $filename");
@@ -169,7 +169,7 @@ function deleteLookupType($lookupTypeId) {
 }
 
 function deleteSubElement($lookupTypeId, $subElementId) {
-    $filename = __DIR__ . '/../json/lookup_types.json'; 
+    $filename = __DIR__ . '/RGBA/warehouse/json/lookup_types.json'; 
     $data = file_get_contents($filename);
     if ($data === false) {
         return ['success' => false, 'message' => 'Failed to read lookup types file.'];

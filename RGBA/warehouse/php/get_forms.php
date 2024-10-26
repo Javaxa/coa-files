@@ -3,14 +3,14 @@
 
 header('Content-Type: application/json');
 
-$formsDir = '../formbuilder/forms/';
+$formsDir = '/RGBA/formbuilder/forms/';
 $response = ['success' => false, 'forms' => [], 'message' => '', 'debug' => []];
 
 try {
     $response['debug'][] = 'Checking directory: ' . realpath($formsDir);
     
     if (!is_dir($formsDir)) {
-        $formsDir = '../../formbuilder/forms/';
+        $formsDir = '/RGBA/formbuilder/forms/';
         $response['debug'][] = 'Trying alternative directory: ' . realpath($formsDir);
         
         if (!is_dir($formsDir)) {

@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['forms'])) {
     $errorCount = 0;
 
     foreach ($formsToDelete as $formFile) {
-        $formPath = __DIR__ . '/../forms/' . $formFile;
+        $formPath = __DIR__ . '/RGBA/formbuilder/forms/' . $formFile;
         debug_log("Attempting to delete: $formPath");
 
         if (file_exists($formPath)) {

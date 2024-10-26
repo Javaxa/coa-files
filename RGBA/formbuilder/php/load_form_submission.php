@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 if (isset($_GET['formId']) && isset($_GET['submissionFile'])) {
     $formId = $_GET['formId'];
     $submissionFile = $_GET['submissionFile'];
-    $formsDir = $_SERVER['DOCUMENT_ROOT'] . '/formbuilder/forms/';
+    $formsDir = $_SERVER['DOCUMENT_ROOT'] . '/RGBA/formbuilder/forms/';
     $files = scandir($formsDir);
     $formFile = null;
 
@@ -32,7 +32,7 @@ if (isset($_GET['formId']) && isset($_GET['submissionFile'])) {
                 $response['formId'] = $formId;
 
                 // Load submission data
-                $submissionsDir = $_SERVER['DOCUMENT_ROOT'] . '/formbuilder/submissions/';
+                $submissionsDir = $_SERVER['DOCUMENT_ROOT'] . '/RGBA/formbuilder/submissions/';
                 $submissionPath = $submissionsDir . $submissionFile;
 
                 if (file_exists($submissionPath) && is_readable($submissionPath)) {

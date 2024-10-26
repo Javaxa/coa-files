@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $formsDir = __DIR__ . '/../forms/';
+    $formsDir = __DIR__ . '/RGBA/formbuilder/forms/';
     if (!is_dir($formsDir)) {
         mkdir($formsDir, 0777, true);
     }

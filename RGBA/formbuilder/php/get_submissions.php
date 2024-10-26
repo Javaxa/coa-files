@@ -8,7 +8,7 @@ if (empty($formId)) {
     exit;
 }
 
-$submissions_dir = __DIR__ . '/../submissions/';
+$submissions_dir = __DIR__ . '/RGBA/formbuilder/submissions/';
 $submissions = [];
 
 if (is_dir($submissions_dir)) {

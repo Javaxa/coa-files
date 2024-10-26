@@ -19,7 +19,7 @@ if (isset($_GET['formFile'])) {
     $formFile = $_GET['formFile'];
     debug_log("Form file requested: $formFile");
 
-    $formPath = __DIR__ . '/../forms/' . $formFile;
+    $formPath = __DIR__ . '/RGBA/formbuilder/forms/' . $formFile;
     debug_log("Full form path: $formPath");
 
     if (file_exists($formPath)) {

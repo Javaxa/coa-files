@@ -3,7 +3,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $userId = isset($_POST['id']) ? $_POST['id'] : '';
 
     if ($userId != '') {
-        $filePath = __DIR__ . '/../json/user_data.json';
+        $filePath = __DIR__ . '/RGBA/warehouse/json/user_data.json';
         $jsonData = file_get_contents($filePath);
         $dataArray = json_decode($jsonData, true);
         if ($dataArray === null) {

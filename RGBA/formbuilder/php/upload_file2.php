@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 // Define the root path for uploads relative to the website root
-$uploadDir = '../uploads/';
+$uploadDir = '/RGBA/uploads/';
 
 // Log the upload directory for debugging
 error_log("Upload directory: " . $uploadDir);

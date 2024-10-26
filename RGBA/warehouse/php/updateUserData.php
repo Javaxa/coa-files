@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $filePath = __DIR__ . '/../json/user_data.json';
+    $filePath = __DIR__ . '/RGBA/warehouse/json/user_data.json';
     
     if (!file_exists($filePath)) {
         http_response_code(500);

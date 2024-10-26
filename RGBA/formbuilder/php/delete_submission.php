@@ -11,7 +11,7 @@ if (!isset($data['filename'])) {
 }
 
 $filename = $data['filename'];
-$submissions_dir = __DIR__ . '/../submissions/';
+$submissions_dir = __DIR__ . '/RGBA/formbuilder/submissions/';
 $filepath = $submissions_dir . $filename;
 
 if (!file_exists($filepath)) {

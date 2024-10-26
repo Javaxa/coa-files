@@ -11,7 +11,7 @@ if ($form_data === null) {
 }
 
 // Create the submissions directory if it doesn't exist
-$submissions_dir = __DIR__ . '/../submissions/';
+$submissions_dir = __DIR__ . '/RGBA/formbuilder/submissions/';
 if (!file_exists($submissions_dir)) {
     mkdir($submissions_dir, 0777, true);
 }

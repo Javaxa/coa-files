@@ -380,7 +380,7 @@ function populateUserSelection(departmentId = null) {
     }
   
     $.ajax({
-        url: 'php/saveData.php',
+        url: '/RGBA/warehouse/php/saveData.php',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify([formData]),
@@ -666,7 +666,7 @@ function formatDateTimeForDisplay(dateString) {
     }
 
     $.ajax({
-        url: 'php/saveData.php',
+        url: '/RGBA/warehouse/php/saveData.php',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify([updatedTask]),
@@ -835,7 +835,7 @@ $('#attachProcessBtn').click(function() {
                     
                     // Save the updated task
                     $.ajax({
-                        url: 'php/saveData.php',
+                        url: '/RGBA/warehouse/php/saveData.php',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify([updatedTask]),
@@ -856,7 +856,7 @@ $('#attachProcessBtn').click(function() {
                     
                     // Save the updated task
                     $.ajax({
-                        url: 'php/saveData.php',
+                        url: '/RGBA/warehouse/php/saveData.php',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify([updatedTask]),
@@ -880,7 +880,7 @@ $('#attachProcessBtn').click(function() {
     // Update the loadAvailableForms function to better handle existing attachments
     function loadAvailableForms(existingAttachment = null) {
         $.ajax({
-            url: 'php/get_forms.php',
+            url: '/RGBA/warehouse/php/get_forms.php',
             type: 'GET',
             success: function(response) {
                 const formGrid = $('#formGrid');
@@ -1237,7 +1237,7 @@ $('#confirmDelete').on('click', function() {
     const card = $(this).data('card');
 
     $.ajax({
-        url: 'php/deleteTask.php',
+        url: '/RGBA/warehouse/php/deleteTask.php',
         type: 'POST',
         data: { taskId: idToDelete },
         dataType: 'json',

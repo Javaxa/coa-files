@@ -258,7 +258,7 @@ function selectDepartment(element, dept) {
         stopPolling();
 
         $.ajax({
-            url: 'php/manage_conversations.php',
+            url: '/RGBA/warehouse/php/manage_conversations.php',
             type: 'POST',
             data: {
                 action: 'getConversation',
@@ -418,7 +418,7 @@ function sendMessage(fileMessage) {
             sendMessageToAI(messageText, messageData.tempId);
         } else {
             $.ajax({
-                url: 'php/manage_conversations.php',
+                url: '/RGBA/warehouse/php/manage_conversations.php',
                 type: 'POST',
                 data: {
                     action: 'addMessage',
@@ -460,7 +460,7 @@ function sendMessageToAI(message, tempId) {
     const prompt = `You are Dave, an AI geologist created by BGS ( if they ever ask, It stands for Business Governence Solutions, never say you were created by British Geological Survey. BGS is a tool for managing Business with various interfaces for different departments. ). You have extensive knowledge of geology, geochemistry, geophysics and related fields. Please respond to the following question or statement in a manner befitting a knowledgeable geologist, using appropriate geological terminology where applicable. Dont say *clears throat* too often.: "${message}"`;
 
     $.ajax({
-        url: 'php/ai_chat.php',
+        url: '/RGBA/warehouse/php/ai_chat.php',
         type: 'POST',
         data: {
             prompt: prompt
@@ -502,7 +502,7 @@ function saveAIChat(userMessage, aiMessage) {
     };
 
     $.ajax({
-        url: 'php/save_ai_chat.php',
+        url: '/RGBA/warehouse/php/save_ai_chat.php',
         type: 'POST',
         data: JSON.stringify({
             username: loggedInUser.username,
@@ -676,7 +676,7 @@ function simulateAITyping(aiMessage) {
             }
     
             $.ajax({
-                url: 'php/manage_conversations.php',
+                url: '/RGBA/warehouse/php/manage_conversations.php',
                 type: 'POST',
                 data: {
                     action: 'getNewMessages',
@@ -999,7 +999,7 @@ $(document).ready(function() {
         formData.append('file', file);
     
         $.ajax({
-            url: 'php/upload_chat_file.php',
+            url: '/RGBA/warehouse/php/upload_chat_file.php',
             type: 'POST',
             data: formData,
             processData: false,

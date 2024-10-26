@@ -10,7 +10,7 @@ $(function() {
 $(document).ready(function() {
   function loadLookupTypes() {
   $.ajax({
-      url: 'php/lookup_types.php',
+      url: '/RGBA/warehouse/php/lookup_types.php',
       method: 'GET',
       dataType: 'json',
       success: function(response) {
@@ -43,7 +43,7 @@ $(document).ready(function() {
 function deleteLookupType(lookupTypeId) {
   if(confirm('Are you sure you want to delete this lookup type?')) {
       $.ajax({
-          url: 'php/lookup_types.php',
+          url: '/RGBA/warehouse/php/lookup_types.php',
           method: 'POST',
           data: { id: lookupTypeId, action: 'deleteLookupType' },
           dataType: 'json',
@@ -69,7 +69,7 @@ function deleteLookupType(lookupTypeId) {
       event.preventDefault();
       var lookupTypeName = $('#lookuptype').val();
       $.ajax({
-          url: 'php/lookup_types.php',
+          url: '/RGBA/warehouse/php/lookup_types.php',
           method: 'POST',
           data: { lookuptype: lookupTypeName },
           dataType: 'json',
@@ -96,7 +96,7 @@ function deleteLookupType(lookupTypeId) {
   function loadSubElements(lookupTypeId) {
 return new Promise((resolve, reject) => {
   $.ajax({
-      url: 'php/lookup_types.php?lookupTypeId=' + lookupTypeId,
+      url: '/RGBA/warehouse/php/lookup_types.php?lookupTypeId=' + lookupTypeId,
       method: 'GET',
       dataType: 'json',
       success: function(response) {
@@ -174,7 +174,7 @@ var newOrder = $('#subElementsContainer .sub-element').map(function() {
 }).get();
 
 $.ajax({
-  url: 'php/lookup_types.php',
+  url: '/RGBA/warehouse/php/lookup_types.php',
   method: 'POST',
   data: {
       action: 'updateSubElementOrder',
@@ -233,7 +233,7 @@ $('#subElementsModal').off('shown.bs.modal').on('shown.bs.modal', function () {
           
 function addSubElement(lookupTypeId, subElementName) {
 $.ajax({
-  url: 'php/lookup_types.php',
+  url: '/RGBA/warehouse/php/lookup_types.php',
   method: 'POST',
   data: { lookupTypeId: lookupTypeId, subElementName: subElementName },
   dataType: 'json',
@@ -254,7 +254,7 @@ $.ajax({
 
 function deleteSubElement(lookupTypeId, subElementId) {
 $.ajax({
-  url: 'php/lookup_types.php',
+  url: '/RGBA/warehouse/php/lookup_types.php',
   method: 'POST',
   data: { action: 'deleteSubElement', lookupTypeId: lookupTypeId, subElementId: subElementId },
   dataType: 'json',

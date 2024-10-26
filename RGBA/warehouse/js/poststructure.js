@@ -21,7 +21,7 @@ document.addEventListener("visibilitychange", function() {
 });
 
     $.ajax({
-        url: 'json/user_data.json',
+        url: '/RGBA/warehouse/json/user_data.json',
         dataType: 'json',
         success: function(data) {
             userData = data;
@@ -164,7 +164,7 @@ function fetchUserData() {
 
 function updateParent(nodeId, parentId) {
     $.ajax({
-        url: 'php/update-parent.php', 
+        url: '/RGBA/warehouse/php/update-parent.php', 
         type: 'POST',
         data: { nodeId: nodeId, parentId: parentId },
         success: function(response) {

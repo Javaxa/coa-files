@@ -545,7 +545,7 @@ function updateSelectElementsWithSubElements() {
                     formData.append('file', file, originalFileName);
                     
                     $.ajax({
-                        url: 'php/upload_file.php',
+                        url: '/RGBA/formbuilder/php/upload_file.php',
                         type: 'POST',
                         data: formData,
                         processData: false,
@@ -684,7 +684,7 @@ function updateSelectElementsWithSubElements() {
                 });
     
                 $.ajax({
-                    url: 'php/save_submission.php',
+                    url: '/RGBA/formbuilder/php/save_submission.php',
                     method: 'POST',
                     data: JSON.stringify(formData),
                     contentType: 'application/json',
@@ -800,7 +800,7 @@ $('#viewSubmissionsBtn').on('click', function() {
 
 function loadFormFromFile(formFile) {
     $.ajax({
-        url: 'php/load_form.php',
+        url: '/RGBA/formbuilder/php/load_form.php',
         method: 'GET',
         data: { formFile: formFile },
         dataType: 'json',
@@ -832,7 +832,7 @@ $('#deleteButton').click(function() {
     
     showBootstrapModal('Confirm Deletion', 'Are you sure you want to delete the selected forms?', function() {
         $.ajax({
-            url: 'php/delete_forms.php',
+            url: '/RGBA/formbuilder/php/delete_forms.php',
             method: 'POST',
             data: { forms: selectedForms },
             dataType: 'json',
@@ -962,7 +962,7 @@ function handlePhotoCapture(blob, $wrapper) {
     
     // Upload the file immediately
     $.ajax({
-        url: 'php/upload_file.php',
+        url: '/RGBA/formbuilder/php/upload_file.php',
         type: 'POST',
         data: formData,
         processData: false,
@@ -1005,7 +1005,7 @@ function displayAndStoreFile(file, $wrapper) {
 
 function loadSubmissions(formId) {
     $.ajax({
-        url: 'php/get_submissions.php',
+        url: '/RGBA/formbuilder/php/get_submissions.php',
         method: 'GET',
         data: { formId: formId },
         dataType: 'json',
@@ -1166,7 +1166,7 @@ function showBootstrapModal(title, message, confirmCallback = null, secondaryCal
 
 function deleteSubmission(submission, callback) {
     $.ajax({
-        url: 'php/delete_submission.php',
+        url: '/RGBA/formbuilder/php/delete_submission.php',
         method: 'POST',
         data: JSON.stringify({ filename: submission.filename }),
         contentType: 'application/json',

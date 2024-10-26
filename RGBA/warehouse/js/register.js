@@ -42,7 +42,7 @@ $(document).ready(function() {
 
 
         $.ajax({
-            url: 'php/registerUser.php',
+            url: '/RGBA/warehouse/php/registerUser.php',
             type: 'POST',
             data: formData,
             processData: false,

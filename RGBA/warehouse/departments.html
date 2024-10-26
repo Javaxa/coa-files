@@ -287,7 +287,7 @@ $(function() {
 $(document).ready(function() {
     var userData = [];
     $.ajax({
-        url: 'json/user_data.json', 
+        url: '/RGBA/warehouse/json/user_data.json', 
         dataType: 'json',
         success: function(data) {
             userData = data; 
@@ -346,7 +346,7 @@ $(document).ready(function() {
     $(document).ready(function() {
         function loadDepartments() {
             $.ajax({
-                url: 'php/departments.php',
+                url: '/RGBA/warehouse/php/departments.php',
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
@@ -362,7 +362,7 @@ $(document).ready(function() {
                                 event.stopPropagation();
                                 if(confirm('Are you sure you want to delete this department?')) {
                                     $.ajax({
-                                        url: 'php/departments.php',
+                                        url: '/RGBA/warehouse/php/departments.php',
                                         method: 'POST',
                                         data: { id: department.id, action: 'deleteDepartment' },
                                         dataType: 'json',
@@ -396,7 +396,7 @@ $(document).ready(function() {
                 event.preventDefault();
                 var departmentName = $('#department').val();
                 $.ajax({
-                    url: 'php/departments.php',
+                    url: '/RGBA/warehouse/php/departments.php',
                     method: 'POST',
                     data: { department: departmentName },
                     dataType: 'json',

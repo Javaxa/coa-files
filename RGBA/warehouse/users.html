@@ -382,7 +382,7 @@ td {
     <script>
 $(document).ready(function () {
     function populateDepartmentFilters() {
-        $.getJSON('json/departments.json', function(data) {
+        $.getJSON('/RGBA/warehouse/json/departments.json', function(data) {
             var departments = data.departments;
             var listGroup = $('#departmentsListGroup');
             listGroup.empty(); 
@@ -488,7 +488,7 @@ $('.form-information').on('submit', function(e) {
     }
 
     $.ajax({
-        url: operationMode === "create" ? 'php/saveUserData.php' : 'php/updateUserData.php',
+        url: operationMode === "create" ? '/RGBA/warehouse/php/saveUserData.php' : '/RGBA/warehouse/php/updateUserData.php',
         type: 'POST',
         data: formData,
         processData: false,
@@ -546,7 +546,7 @@ $(".btn-user-add").on("click", function() {
         var userId = $(this).attr("data-id");
         if(confirm("Are you sure you want to delete this user?")) {
             $.ajax({
-                url: 'php/deleteUser.php',
+                url: '/RGBA/warehouse/php/deleteUser.php',
                 type: 'POST',
                 data: { id: userId },
                 success: function(response) {
@@ -563,7 +563,7 @@ var existingData = [];
 var operationMode = "create"; 
 
 function updateUI() {
-	$.getJSON('json/user_data.json?' + new Date().getTime(), function(data) {
+	$.getJSON('/RGBA/warehouse/json/user_data.json?' + new Date().getTime(), function(data) {
 		existingData = data; 
 		var html = '';
 		$.each(data, function(key, value) {
@@ -666,7 +666,7 @@ var departmentsByName = {};
 
 function loadAndPrepareDepartmentsData() {
         $.ajax({
-            url: 'json/departments.json',
+            url: '/RGBA/warehouse/json/departments.json',
             method: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -689,7 +689,7 @@ function loadAndPrepareDepartmentsData() {
 
 function populateDepartmentDropdown(dropdownId) {
     $.ajax({
-        url: 'json/departments.json', 
+        url: '/RGBA/warehouse/json/departments.json', 
         method: 'GET',
         dataType: 'json',
         success: function(data) {

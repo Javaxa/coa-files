@@ -143,7 +143,7 @@ if (!formId || !submissionData.filename) {
     alert('Error: Form ID or filename is undefined');
     return;
 }
-var ajaxUrl = 'php/load_form_submission.php';
+var ajaxUrl = '/RGBA/formbuilder/php/load_form_submission.php';
 $.ajax({
     url: ajaxUrl,
     method: 'GET',

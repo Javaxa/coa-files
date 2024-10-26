@@ -336,7 +336,7 @@ function submitForm() {
 
             // Submit the form data
             $.ajax({
-                url: '/formbuilder/php/save_submission.php',
+                url: '/RGBA/formbuilder/php/save_submission.php',
                 method: 'POST',
                 data: JSON.stringify(processViewFormData),
                 contentType: 'application/json',
@@ -539,7 +539,7 @@ function handleFileUpload(file, $wrapper) {
     
     // Upload the file
     $.ajax({
-        url: '/formbuilder/php/upload_file.php',  // Use consistent path
+        url: '/RGBA/formbuilder/php/upload_file.php',  // Use consistent path
         type: 'POST',
         data: formData,
         processData: false,
@@ -1113,7 +1113,7 @@ function updateProgressBar() {
                             if (task.delegationType === 'attachForm' && task.attachedForm) {
                                 const formId = task.attachedForm.split('-')[0];
                                 $.ajax({
-                                    url: '/formbuilder/php/get_form_list.php',
+                                    url: '/RGBA/formbuilder/php/get_form_list.php',
                                     method: 'GET',
                                     data: { formId: formId },
                                     dataType: 'json',

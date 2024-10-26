@@ -1325,7 +1325,7 @@ function updateSaveButton(originalId) {
 
 function checkFormExistence(formName, formId, htmlContent) {
     $.ajax({
-        url: 'php/check_form_exists.php',
+        url: '/RGBA/formbuilder/php/check_form_exists.php',
         method: 'POST',  // Make sure this is set to 'POST'
         data: { formId: formId },
         dataType: 'json',
@@ -1382,7 +1382,7 @@ function saveFormToServer(formName, formId, htmlContent, saveMode) {
     htmlContent = $tempDiv.html();
 
     $.ajax({
-        url: 'php/save_form.php',
+        url: '/RGBA/formbuilder/php/save_form.php',
         method: 'POST',
         data: {
             formName: formName,
@@ -1874,7 +1874,7 @@ function showBootstrapModal(title, message, confirmCallback = null) {
 
   function loadForm(formFile) {
     $.ajax({
-        url: 'php/load_form.php',
+        url: '/RGBA/formbuilder/php/load_form.php',
         method: 'GET',
         data: { formFile: formFile },
         dataType: 'json',
@@ -1909,7 +1909,7 @@ function setHighestComponentId() {
 
 function loadFormList() {
     $.ajax({
-      url: 'php/get_form_list.php',
+      url: '/RGBA/formbuilder/php/get_form_list.php',
       method: 'GET',
       dataType: 'json',
       success: function(response) {

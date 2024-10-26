@@ -1,0 +1,62 @@
+{
+    "participants": [
+        "1",
+        1
+    ],
+    "messages": [
+        {
+            "sender": {
+                "id": "1",
+                "name": "Irakli Javakhadze"
+            },
+            "message": "{\"type\":\"file\",\"filePath\":\"\/uploads\/6704fc8021f18.png\",\"originalName\":\"Screenshot 2024-10-03 at 1.52.08\u202fPM.png\",\"fileExtension\":\"png\",\"fileType\":\"image\/png\"}",
+            "timestamp": 1728380032,
+            "type": "file"
+        },
+        {
+            "sender": {
+                "id": "1",
+                "name": "Irakli Javakhadze"
+            },
+            "message": "{\"type\":\"file\",\"filePath\":\"\/uploads\/6704fc83e0bb3.pdf\",\"originalName\":\"aafb7344-dee7-46c3-93ee-d8cb2ab2259b.pdf\",\"fileExtension\":\"pdf\",\"fileType\":\"application\/pdf\"}",
+            "timestamp": 1728380035,
+            "type": "file"
+        },
+        {
+            "sender": {
+                "id": "1",
+                "name": "Irakli Javakhadze"
+            },
+            "message": "{\"type\":\"file\",\"filePath\":\"\/uploads\/6704fc873d216.xlsx\",\"originalName\":\"6701d3f177dc3.xlsx\",\"fileExtension\":\"xlsx\",\"fileType\":\"application\/vnd.openxmlformats-officedocument.spreadsheetml.sheet\"}",
+            "timestamp": 1728380039,
+            "type": "file"
+        },
+        {
+            "sender": {
+                "id": "1",
+                "name": "Irakli Javakhadze"
+            },
+            "message": "{\"type\":\"file\",\"filePath\":\"\/uploads\/6704fc8bc43d1.docx\",\"originalName\":\"1-RRCM-Bulletin 6-Metallurgical Data Summary-Final Draft-29Sep24 IJ 1015.docx\",\"fileExtension\":\"docx\",\"fileType\":\"application\/vnd.openxmlformats-officedocument.wordprocessingml.document\"}",
+            "timestamp": 1728380043,
+            "type": "file"
+        },
+        {
+            "sender": {
+                "id": "1",
+                "name": "Irakli Javakhadze"
+            },
+            "message": "{\"type\":\"file\",\"filePath\":\"\/uploads\/6717635fb9373.jpg\",\"originalName\":\"photo_1729586015747.jpg\",\"fileExtension\":\"jpg\",\"fileType\":\"image\/jpeg\"}",
+            "timestamp": 1729586015,
+            "type": "file"
+        },
+        {
+            "sender": {
+                "id": "1",
+                "name": "Irakli Javakhadze"
+            },
+            "message": "{\"type\":\"file\",\"filePath\":\"\/uploads\/671c3dd9bbfc5.jpg\",\"originalName\":\"photo_1729904089763.jpg\",\"fileExtension\":\"jpg\",\"fileType\":\"image\/jpeg\"}",
+            "timestamp": 1729904089,
+            "type": "file"
+        }
+    ]
+}

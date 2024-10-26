@@ -1,0 +1,88 @@
+[2024-09-16 02:45:06] Update supply process started
+[2024-09-16 02:45:06] POST data: Array
+(
+    [Name] => 1
+    [Category] => Chemicals
+    [Stock] => 1
+    [Storage_Information] => 1
+    [Purchase_Location] => 
+    [Purchase_Date] => 
+    [Receipt] => 
+    [ID] => ID_rqkdvyiml
+    [current_photo] => /supply_photos/Screenshot 2024-09-14 at 8.30.46 PM.png
+)
+
+[2024-09-16 02:45:06] FILES data: Array
+(
+    [Photo] => Array
+        (
+            [name] => Screenshot 2024-07-09 at 12.16.55 PM.png
+            [full_path] => Screenshot 2024-07-09 at 12.16.55 PM.png
+            [type] => image/png
+            [tmp_name] => /Applications/MAMP/tmp/php/phps497NW
+            [error] => 0
+            [size] => 2791587
+        )
+
+)
+
+[2024-09-16 02:45:06] Keeping current photo: /supply_photos/Screenshot 2024-09-14 at 8.30.46 PM.png
+[2024-09-16 02:45:06] Item updated in CSV data
+[2024-09-16 02:45:06] CSV file updated
+[2024-09-16 02:45:06] Response: {"success":true,"item":{"Name":"1","Category":"Chemicals","Stock":"1","Storage_Information":"1","Purchase_Location":"","Purchase_Date":"","Receipt":"","ID":"ID_rqkdvyiml","Photo":"\/supply_photos\/Screenshot 2024-09-14 at 8.30.46\u202fPM.png"}}
+[2024-09-16 02:45:06] Update supply process started
+[2024-09-16 02:45:06] POST data: Array
+(
+)
+
+[2024-09-16 02:45:06] FILES data: Array
+(
+)
+
+[2024-09-16 02:45:06] Response: {"success":true}
+[2024-09-16 02:46:11] Update supply process started
+[2024-09-16 02:46:11] Upload directory: /Applications/MAMP/htdocs/coa-files/supply_photos/
+[2024-09-16 02:46:11] CSV file: warehouse_supply_data.csv
+[2024-09-16 02:46:11] POST data: Array
+(
+    [Name] => 1
+    [Category] => Chemicals
+    [Stock] => 1
+    [Storage_Information] => 1
+    [Purchase_Location] => 
+    [Purchase_Date] => 
+    [Receipt] => 
+    [ID] => ID_rqkdvyiml
+    [current_photo] => /supply_photos/Screenshot 2024-09-14 at 8.30.46 PM.png
+)
+
+[2024-09-16 02:46:11] FILES data: Array
+(
+    [Photo] => Array
+        (
+            [name] => Screenshot 2024-09-14 at 8.30.46 PM.png
+            [full_path] => Screenshot 2024-09-14 at 8.30.46 PM.png
+            [type] => image/png
+            [tmp_name] => /Applications/MAMP/tmp/php/phpD7yYVL
+            [error] => 0
+            [size] => 687946
+        )
+
+)
+
+[2024-09-16 02:46:11] Keeping current photo: /supply_photos/Screenshot 2024-09-14 at 8.30.46 PM.png
+[2024-09-16 02:46:11] Item updated in CSV data
+[2024-09-16 02:46:11] CSV file updated
+[2024-09-16 02:46:11] Response: {"success":true,"item":{"Name":"1","Category":"Chemicals","Stock":"1","Storage_Information":"1","Purchase_Location":"","Purchase_Date":"","Receipt":"","ID":"ID_rqkdvyiml","Photo":"\/supply_photos\/Screenshot 2024-09-14 at 8.30.46\u202fPM.png"}}
+[2024-09-16 02:46:11] Update supply process started
+[2024-09-16 02:46:11] Upload directory: /Applications/MAMP/htdocs/coa-files/supply_photos/
+[2024-09-16 02:46:11] CSV file: warehouse_supply_data.csv
+[2024-09-16 02:46:11] POST data: Array
+(
+)
+
+[2024-09-16 02:46:11] FILES data: Array
+(
+)
+
+[2024-09-16 02:46:11] Response: {"success":true}

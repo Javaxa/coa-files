@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGS - Interactive Map Program</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="/warehouse/css/ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+</head>
+<style>
+    .map-page {
+        fill: #0093ff !important;
+    }
+
+    .bg-white {
+        padding-top: 35px !important;
+    }
+
+    .login-wrapper {
+        display: flex;
+    }
+
+    .navbar-expand-lg .nav-link {
+    color: rgb(244, 244, 244);
+    border-left: 1px solid rgb(244, 244, 244);
+    }
+
+
+
+    .btn-light {
+        margin-right: 10px;
+        background-color: #ffa844;
+        border: none;
+        color: white !important;
+    }
+
+    .btn-light:hover {
+        background-color: #d78221;
+    }
+
+    .btn-light:active {
+        background-color: #b66a13 !important;
+    }
+
+    .dropdown-menu {
+        right: 0px;
+        left: initial !important;
+    }
+
+    .nav-link {
+        cursor: pointer;
+    }
+
+
+
+</style>
+<body>
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Interactive Map Program</a>
+
+
+
+
+<div class="login-wrapper">
+
+            <div class="settings-button">
+                <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="fa-solid fa-gear"></i></button>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav navigation-class">
+                    <li class="nav-item dropdown user-menu d-none">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userFirstName"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#" id="logoutButton">Logout</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+
+
+
+
+
+    </nav>
+   
+
+
+        <div id="navbar"></div>
+
+
+
+        <div class="container-fluid mt-5">
+            <button id="elementPricesBtn" class="btn btn-light mb-3">Element List & Prices</button>
+            <h5 class="main-title">Cuddeback Lake Basin</h5>
+            <div class="dashboard-container">
+                <div class="dashboard-column" id="averages-column">
+                    <div id="elementAverageBox">
+                        <div style="display: flex; justify-content: space-between;">
+                            <h4>Elemental Data:</h4>
+                        </div>
+                        <div id="selectedElementContainer">
+                            <span id="selectedElementName"></span>
+                            <span id="selectedElement" data-bs-toggle="modal" data-bs-target="#periodicModal" data-tooltip="Periodic Table View"></span>
+                        </div>
+                        <div id="overallAverages" class="zone-item">
+                            <div class="zone-title basin-title">Basin Statistics:</div>
+                            <div class="zone-stat empty-space">
+                                <span>Assays Done:</span>
+                                <span id="overallAssayCount" style="font-weight: bold;"></span>
+                            </div>
+                            <div class="zone-stat">
+                                <span>Average:</span>
+                                <span id="averageValue" class="average-value"></span>
+                            </div>
+                            <div class="zone-stat">
+                                <span>Value/tonne:</span>
+                                <span id="averageValuePerTonne" class="price-value"></span>
+                            </div>
+                            <div class="zone-stat empty-space-top">
+                                <span>Highest:</span>
+                                <span id="highestValue" class="highest-value"></span>
+                            </div>
+                            <div class="zone-stat">
+                                <span>Value/tonne:</span>
+                                <span id="highestValuePerTonne" class="price-value"></span>
+                            </div>
+                        </div>
+                        <div id="zoneAveragesContainer" class="mt-2">
+                            <div class="zone-stat-title">Zone Statistics:</div>
+                            <div id="zoneAveragesBox">
+                                <div id="zoneAveragesList"></div>
+                            </div>
+                        </div>
+                        <button id="visualizeButton" class="btn btn-sm btn-outline-primary" style="width: 100%; margin-top: 5px;">Data in Charts & Tables</button>
+                    </div>
+                </div>
+                <div class="dashboard-column" id="map-column">
+                    <div id="map">
+                        <div id="legendWrapper" class="legend-wrapper">
+                            <h5>Map Legend</h5>
+                            <div class="legend-item">
+                                <div class="point-dot custom-div-icon" style="background: #fff; border: 1px solid #000; margin-left: 2px;">DH</div>
+                                <span class="legend-text">20ft Incursion</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="point-dot red-dot-icon" style="margin-left: 2px;"></div>
+                                <span class="legend-text">4ft Incursion</span>
+                            </div>
+                            <div class="legend-item">
+                                <img src="overlays/shafticon.png" alt="Shaft" style="width: 26px; height: 26px; margin-right: 8px">
+                                <span class="legend-text">Shaft</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="point-dot source-icon icon-width"></div>
+                                <span class="legend-text">Source Sample</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="point-dot purple-rectangle-icon icon-width"></div>
+                                <span class="legend-text">Rock</span>
+                            </div>
+                        </div>
+                        <div id="heatmapLegend" class="legend-wrapper" style="display: none;">
+                            <h5>Heat Map Legend</h5>
+                            <div id="legendColors"></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="dashboard-column" id="filters-column">
+                    <div id="sidebar">
+                            <h5>Filters</h3>
+                            <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#incursionFilters" aria-expanded="false" aria-controls="incursionFilters">
+                                Incursion Type <span class="filter-arrow">&darr;</span>
+                            </button>
+                            <div class="collapse" id="incursionFilters">
+                                <div class="checkbox-container">
+                                    <label><input type="checkbox" value="HY20" checked> 20-Foot</label>
+                                    <label><input type="checkbox" value="HN04"> 4-Foot</label>
+                                    <label><input type="checkbox" value="Shaft"> Shaft</label>
+                                    <label><input type="checkbox" value="Source Sample"> Source Sample</label>
+                                    <label><input type="checkbox" value="Rock"> Rock</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#assayFilters" aria-expanded="false" aria-controls="assayFilters">
+                                Assay Type <span class="filter-arrow">&darr;</span>
+                            </button>
+                            <div class="collapse" id="assayFilters">
+                                <div class="checkbox-container">
+                                    <label data-tooltip="Nitric, Hydrochloric, Perchloric, Hydrofluoric"><input type="checkbox" value="4-Acid Dig"> 4-Acid</label>
+                                    <label data-tooltip="Lithium metaborate"><input type="checkbox" value="LMB Flux" checked> LMB Flux</label>
+                                    <label data-tooltip="Lithium metaborate + HCl"><input type="checkbox" value="LMB+" checked> LMB+</label>
+                                    <label data-tooltip="Aqua Regia Digestions"><input type="checkbox" value="Metallurgical"> Metallurgical</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#zoneFilters" aria-expanded="false" aria-controls="zoneFilters">
+                                Zone <span class="filter-arrow">&darr;</span>
+                            </button>
+                            <div class="collapse" id="zoneFilters">
+                                <div class="checkbox-container">
+                                    <label><input type="checkbox" value="1" checked> Zone 1</label>
+                                    <label><input type="checkbox" value="2" checked> Zone 2</label>
+                                    <label><input type="checkbox" value="3" checked> Zone 3</label>
+                                    <label><input type="checkbox" value="4" checked> Zone 4</label>
+                                    <label><input type="checkbox" value="5" checked> Zone 5</label>
+                                    <label><input type="checkbox" value="6" checked> Zone 6</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#depthFilters" aria-expanded="false" aria-controls="depthFilters">
+                                Depth <span class="filter-arrow">&darr;</span>
+                            </button>
+                            <div class="collapse" id="depthFilters">
+                                <div class="checkbox-container" id="depthCheckboxContainer">
+                                    <!-- Depth radio buttons will be dynamically added here -->
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCOAFilters" aria-expanded="false" aria-controls="sidebarCOAFilters">
+                                COA <span class="filter-arrow">&darr;</span>
+                            </button>
+                            <div class="collapse mt-2" id="sidebarCOAFilters">
+                                <div class="checkbox-container" id="sidebarCOACheckboxContainer">
+                        
+                                </div>
+                            </div>
+                        <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#cutoffGradeFilter" aria-expanded="false" aria-controls="cutoffGradeFilter">
+                            Cut-off Grade <span class="filter-arrow">&darr;</span>
+                        </button>
+                        <div class="collapse mt-2" id="cutoffGradeFilter">
+                            <div class="checkbox-container">
+                                <div class="form-group">
+                                    Minimum ppm:
+                                    <input type="number" style="display: inline;" class="form-control" id="minCutoff">
+                                </div>
+                                <div class="form-group">
+                                    Maximum ppm:
+                                    <input type="number" style="display: inline;" class="form-control" id="maxCutoff">
+                                </div>
+                                <button class="btn btn-primary mt-2" id="applyCutoff">Apply</button>
+                                <button class="btn btn-danger mt-2" style="margin-top: -5px !important;" id="removeCutoff">Remove</button>
+                                <button class="btn btn-light mt-2" style="margin-right: 0px;     margin-top: -5px !important;" id="acaCutoff" data-tooltip="Applies Average Crustal Abundance (ppm value)">ACA Cut-off</button>
+                            </div>
+                        </div>
+                            <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#overlayFilters" aria-expanded="false" aria-controls="overlayFilters">
+                                Overlays<span class="filter-arrow">&darr;</span>
+                            </button>
+                            <div class="collapse" id="overlayFilters">
+                                <div class="overlay-checkbox-container">
+                                    <div class="overlay-opacity-control">
+                                        <label for="overlayOpacitySlider">Overlay Opacity: <span id="opacityValue">100%</span></label>
+                                        <input type="range" id="overlayOpacitySlider" min="0" max="100" value="100" class="opacity-slider">
+                                    </div>
+                                    <label><input type="checkbox" value="Zone" checked> Zone</label>
+                                    <label><input type="checkbox" value="Magnetic">Seismic + Magnetic</label>
+                                    <label><input type="checkbox" value="Claims">Claims</label>
+                                    <label><input type="checkbox" value="BLMClaims">BLM Claims</label>
+                                    <label><input type="checkbox" value="PLSS">PLSS Grid</label>
+                                    <label><input type="checkbox" value="Ownership">Land Ownership</label>
+                                    <div class="heatmap-controls">
+                                        <h6>Heat Map Controls</h6>
+                                        <button id="toggleHeatmapButton" class="btn btn-sm btn-outline-primary">Show Heat Map</button>
+                                        <button id="heatmapModeButton" class="btn btn-sm btn-outline-danger">Heat Map by Highest ppm</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#iconFilters" aria-expanded="false" aria-controls="iconFilters">
+                                Incursion Icon Settings <span class="filter-arrow">&darr;</span>
+                            </button>
+                            <div class="collapse" id="iconFilters">
+                                <div class="overlay-checkbox-container">
+                                    <div class="icon-size-controls">
+                                        <h6>Incursion Icon Settings</h6>
+                                        <div id="iconSizeMode">
+                                            <label>
+                                                <input type="radio" name="iconSizeMode" value="fixed" checked> Fixed Icon Sizes
+                                            </label>
+                                            <label data-tooltip="Scale icon size based on highest grade of DH">
+                                                <input type="radio" name="iconSizeMode" value="highest"> Size based on Highest Grade
+                                            </label>
+                                            <label data-tooltip="Scale icon size based on average grade of DH">
+                                                <input type="radio" name="iconSizeMode" value="average"> Size based on Average Grade
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div id="dhLabelsControl" style="display: none;">
+                                        <label for="showDHLabels" class="form-check-label">
+                                            <input type="checkbox" id="showDHLabels">
+                                            Show Incursion ID's
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+<!--Modals-->
+<div class="modal fade" id="exportConfirmModal" tabindex="-1" aria-labelledby="exportConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exportConfirmModalLabel">Confirm Data Export</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="exportConfirmBody">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="confirmExportBtn">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="top20Modal" tabindex="-1" aria-labelledby="top20ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="top20ModalLabel">Top 20 Valuable Elements</h5>
+                <label style="margin: auto;"></label>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="padding-top: 0px;">
+                <div id="zoneFilterContainer">
+                    <label class="form-label" style="text-align: center; display: block; margin-bottom: 10px;">Filter by Zone</label>
+                    <div class="zone-filter-container">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zoneAll" value="all" checked>
+                            <label class="form-check-label" for="zoneAll">All Zones</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zone1" value="1">
+                            <label class="form-check-label" for="zone1">Zone 1</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zone2" value="2">
+                            <label class="form-check-label" for="zone2">Zone 2</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zone3" value="3">
+                            <label class="form-check-label" for="zone3">Zone 3</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zone4" value="4">
+                            <label class="form-check-label" for="zone4">Zone 4</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zone5" value="5">
+                            <label class="form-check-label" for="zone5">Zone 5</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="zoneFilter" id="zone6" value="6">
+                            <label class="form-check-label" for="zone6">Zone 6</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="elementCategoryFilterContainer">
+                    <label class="form-label" style="text-align: center; display: block; margin-top: 15px; margin-bottom: 10px;">Filter by Element Category</label>
+                    <div class="element-category-filter-container">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="elementCategoryFilter" id="categoryAll" value="all" checked>
+                            <label class="form-check-label" for="categoryAll">All Metals</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="elementCategoryFilter" id="categoryPrecious" value="precious">
+                            <label class="form-check-label" for="categoryPrecious">Key Precious</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="elementCategoryFilter" id="categoryCritical" value="critical">
+                            <label class="form-check-label" for="categoryCritical">Key Critical</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="elementCategoryFilter" id="categoryIndustrial" value="industrial">
+                            <label class="form-check-label" for="categoryIndustrial">Key Industrial</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="top20-content">
+                    <div class="row" style="padding-left: 50px; padding-right: 50px;">
+                            <div style="margin-bottom: 30px; display: flex;">
+                                <div class="col-md-6">
+                                    <h6 style="text-align: center; margin-bottom: 10px;">Top 20 by Average Grade Value</h6>
+                                    <canvas id="averageValueChart"></canvas>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 style="text-align: center; margin-bottom: 10px;">Top 20 by Highest Grade Value</h6>
+                                    <canvas id="highestValueChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <table id="top20AverageTable" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Element</th>
+                                            <th>Average Grade (ppm)</th>
+                                            <th>Value ($/tonne)</th>
+                                            <th>
+                                                <span class="header-main">Production (kg)</span>
+                                                <span class="header-sub">10,000 tonnes per day</span>
+                                            </th>
+                                            <th>
+                                                <span class="header-main">Production (kg)</span>
+                                                <span class="header-sub">365 days a year</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table id="top20HighestTable" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Element</th>
+                                            <th>Highest Grade (ppm)</th>
+                                            <th>Value ($/tonne)</th>
+                                            <th>
+                                                <span class="header-main">Production (kg)</span>
+                                                <span class="header-sub">10,000 tonnes per day</span>
+                                            </th>
+                                            <th>
+                                                <span class="header-main">Production (kg)</span>
+                                                <span class="header-sub">365 days a year</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+            <div class="modal fade" id="visualizationModal" tabindex="-1" aria-labelledby="visualizationModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="visualizationModalLabel">Zone Statistics Evaluation</h5>
+                            <div id="modalSelectedElementContainer" class="ms-3">
+                                <span id="modalSelectedElementName"></span>
+                                <span id="modalSelectedElement"></span>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="chart-container">
+                                <div class="chart-wrapper">
+                                    <canvas id="barChart"></canvas>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <canvas id="pieChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="modal fade" id="coaModal" tabindex="-1" aria-labelledby="coaModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" style="max-width: 1150px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="coaModalLabel"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <iframe id="coaIframe" src="" width="100%" height="600px" style="display: none;"></iframe>
+                        <div id="excelContainer" style="display: none;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>          
+        <div class="modal fade" id="periodicModal" tabindex="-1" aria-labelledby="periodicModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" style="max-width: 1100px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="periodicModalLabel">Select Element of Interest</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <select id="elementSelect" class="form-select select-style mb-3">
+                            <option value="Au">Gold (Au)</option>
+                            <option value="Pt">Platinum (Pt)</option>
+                            <option value="Pd">Palladium (Pd)</option>
+                            <option value="Rh">Rhodium (Rh)</option>
+                            <option value="Ir">Iridium (Ir)</option>
+                            <option value="Os">Osmium (Os)</option>
+                            <option value="Ru">Ruthenium (Ru)</option>
+                            <option value="Ag">Silver (Ag)</option>
+                            <option value="Al">Aluminum (Al)</option>
+                            <option value="As">Arsenic (As)</option>
+                            <option value="B">Boron (B)</option>
+                            <option value="Ba">Barium (Ba)</option>
+                            <option value="Be">Beryllium (Be)</option>
+                            <option value="Bi">Bismuth (Bi)</option>
+                            <option value="Ca">Calcium (Ca)</option>
+                            <option value="Cd">Cadmium (Cd)</option>
+                            <option value="Ce">Cerium (Ce)</option>
+                            <option value="Co">Cobalt (Co)</option>
+                            <option value="Cr">Chromium (Cr)</option>
+                            <option value="Cs">Cesium (Cs)</option>
+                            <option value="Cu">Copper (Cu)</option>
+                            <option value="Cl">Chlorine (Cl)</option>
+                            <option value="Fe">Iron (Fe)</option>
+                            <option value="Ga">Gallium (Ga)</option>
+                            <option value="Ge">Germanium (Ge)</option>
+                            <option value="Hf">Hafnium (Hf)</option>
+                            <option value="Hg">Mercury (Hg)</option>
+                            <option value="In">Indium (In)</option>
+                            <option value="K">Potassium (K)</option>
+                            <option value="La">Lanthanum (La)</option>
+                            <option value="Li">Lithium (Li)</option>
+                            <option value="Mg">Magnesium (Mg)</option>
+                            <option value="Mn">Manganese (Mn)</option>
+                            <option value="Mo">Molybdenum (Mo)</option>
+                            <option value="Na">Sodium (Na)</option>
+                            <option value="Nb">Niobium (Nb)</option>
+                            <option value="Ni">Nickel (Ni)</option>
+                            <option value="P">Phosphorus (P)</option>
+                            <option value="Pb">Lead (Pb)</option>
+                            <option value="Rb">Rubidium (Rb)</option>
+                            <option value="Re">Rhenium (Re)</option>
+                            <option value="S">Sulfur (S)</option>
+                            <option value="Sb">Antimony (Sb)</option>
+                            <option value="Sc">Scandium (Sc)</option>
+                            <option value="Se">Selenium (Se)</option>
+                            <option value="Sn">Tin (Sn)</option>
+                            <option value="Sr">Strontium (Sr)</option>
+                            <option value="Ta">Tantalum (Ta)</option>
+                            <option value="Te">Tellurium (Te)</option>
+                            <option value="Th">Thorium (Th)</option>
+                            <option value="Ti">Titanium (Ti)</option>
+                            <option value="Tl">Thallium (Tl)</option>
+                            <option value="U">Uranium (U)</option>
+                            <option value="V">Vanadium (V)</option>
+                            <option value="W">Tungsten (W)</option>
+                            <option value="Y">Yttrium (Y)</option>
+                            <option value="Zn">Zinc (Zn)</option>
+                            <option value="Zr">Zirconium (Zr)</option>
+                            <option value="Dy">Dysprosium (Dy)</option>
+                            <option value="Er">Erbium (Er)</option>
+                            <option value="Eu">Europium (Eu)</option>
+                            <option value="Gd">Gadolinium (Gd)</option>
+                            <option value="Ho">Holmium (Ho)</option>
+                            <option value="Lu">Lutetium (Lu)</option>
+                            <option value="Nd">Neodymium (Nd)</option>
+                            <option value="Pr">Praseodymium (Pr)</option>
+                            <option value="Sm">Samarium (Sm)</option>
+                            <option value="Tb">Terbium (Tb)</option>
+                            <option value="Tm">Thulium (Tm)</option>
+                            <option value="Yb">Ytterbium (Yb)</option>                               
+                        </select>   
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="elementPricesModal" tabindex="-1" aria-labelledby="elementPricesModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="elementPricesModalLabel">Element List & Prices (per gram)</h5>
+                        <button id="sortElementsBtn" class="btn btn-sm btn-outline-primary" style="position: absolute; right: 45px;">Sort by Value</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="elementPricesContainer" class="row"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-check">
+                            <input class="form-check-input" style="margin-right: 10px;" type="checkbox" id="darkModeToggle">
+                            <label class="form-check-label" for="darkModeToggle">
+                                Dark Mode
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+        
+        <div class="mt-4" style="max-width: 1200px; margin: auto;">
+            <button class="table-download btn btn-outline-primary mb-3">Export Data to Excel</button>
+            <button id="clearSelectionButton" class="btn btn-outline-danger mb-3" style="display:none;" onclick="clearPointSelection()">Remove Drill Hole Selection</button>
+            <span id="selectedDH" class="ml-2"></span>    
+            <span id="selectedElementPPM" class="ml-2"></span>
+            <span id="selectedElementHighestPPM" class="ml-2"></span>           
+            <button id="viewTop20Button" class="top20button">
+                View Top 20 Valuable Elements
+            </button>  
+            <table id="elementTable" style="display: block; height: 1500px; overflow: auto;" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th data-column="Description" class="sortable">Description</th>
+                        <th data-column="Incursion Type" class="sortable">Incursion Type</th>
+                        <th data-column="Lab" class="sortable">Lab</th>
+                        <th data-column="STID" class="sortable">STID</th>
+                        <th data-column="Zone" class="sortable">Zone</th>
+                        <th data-column="Northing" class="sortable">Northing</th>
+                        <th data-column="Easting" class="sortable">Easting</th>
+                        <th data-column="DH" class="sortable">DH</th>
+                        <th data-column="Depth" class="sortable">Depth</th>
+                        <th data-column="Assay Type" class="sortable">Assay Type</th>
+                        <th data-column="COA" class="sortable">COA</th>
+                        <th data-column="Sample Weight" class="sortable">Sample Weight (kg)</th>
+                        <th data-column="Element (PPM)" class="sortable">Element (ppm)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div id="infoPopup" class="info-popup">
+        <div class="info-popup-content">
+            <span class="close-btn">&times;</span>
+            <h2>Notice</h2>
+            <p>The default data currently being displayed is:</p>
+            <ul>
+                <li>Gold (Au)</li>
+                <li>20-Foot Incursions</li>
+                <li>Sediment Assays with LMB Flux & LMB+ only</li>
+            </ul>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
+    <script src="https://unpkg.com/leaflet-providers@latest/leaflet-providers.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/login-state.js"></script>
+    <script src="js/user-auth.js"></script>
+    <script src="/warehouse/js/ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/leaflet-geometryutil@0.10.1/src/leaflet.geometryutil.js"></script>
+
+</body>
+</html>
+

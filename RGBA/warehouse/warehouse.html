@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGS - Inventory Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/ui.css">
+</head>
+<style>
+    .home-page {
+        color: #0093ff;
+    }
+
+    .navbar-expand-lg .navbar-nav {
+        flex-direction: row;
+    }
+
+    .navbar-collapse .dropdown-toggle {
+        margin-right: 10px;
+    }
+
+    .navbar-collapse .dropdown-actions {
+        margin-top: 22px;
+    }
+
+    .navbar-brand {
+        border-right: 1px solid #ffffff;
+        padding-right: 15px;
+    }
+
+.dropdown-toggle-a {
+    background-color: #ffa844;
+}
+
+.dropdown-toggle-a:focus {
+    background-color: #d78221;
+}
+
+.dropdown-toggle-a:hover {
+    background-color: #d78221;
+}
+
+.dropdown-toggle-a:active {
+    background-color: #b66a13 !important;
+}
+
+.leaflet-top, .leaflet-right {
+        position: absolute;
+        z-index: 999 !important;
+        pointer-events: none;
+    }
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand"  href="#">Inventory Management</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" style="position: absolute; right: 0px; z-index: 1000;" id="navbarNav">
+                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-a" data-bs-toggle="dropdown" aria-expanded="false">
+                    Actions
+                </button>
+                <div class="btn-group">
+                    <ul class="dropdown-menu dropdown-actions">
+                        <li><button class="dropdown-item" id="filterButton">Filters</button></li>
+                        <li><button class="dropdown-item" id="registerButton">Register Sample</button></li>
+                        <li><button class="dropdown-item" id="checkShelfInventoryButton">Shelf Inventory</button></li>
+                        <li><button class="dropdown-item" id="identifyMisplacedButton">Misplaced Samples</button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item" id="resetButton">Reset View</button></li>
+                    </ul>
+                    <li class="nav-item" id="placementGuideButtonContainer" style="display: none;">
+                        <button id="placementGuideButton" class="btn btn-danger">Placement Guide</button>
+                    </li>
+                </div>
+
+                <ul class="navbar-nav navigation-class">
+                    <li class="nav-item dropdown user-menu d-none">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userFirstName"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#" id="logoutButton">Logout</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <div class="search-container">
+                        <div class="input-group" style="position: relative;">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search with STID">
+                            <div class="input-group-append">
+                                <div class="btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-outline-light active btn-stid" id="stidToggle">
+                                        <input type="radio" name="searchType" value="stid" checked> STID
+                                    </label>
+                                    <label class="btn btn-outline-light btn-dh" id="dhToggle">
+                                        <input type="radio" name="searchType" value="dh"> DH
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="sampleCounter"></div>
+                        </div>
+                    </div> 
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="appliedFilters" class="container mt-2"></div>
+            </div>
+        </div>
+    </nav>
+    <div id="navbar"></div>
+        <div class="container mt-5">
+            <div id="map"></div>
+  
+        <div class="mt-4">
+            <table id="resultTable" class="table result-table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>STID</th>
+                        <th>Zone</th>
+                        <th>Northing</th>
+                        <th>Easting</th>
+                        <th>DH #</th>
+                        <th>Depth (ft)</th>
+                        <th>Jar/Bag</th>
+                        <th>Shelf #</th>
+                        <th>Weight (kg)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="resultBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    <div class="modal fade" id="placementGuideModal" tabindex="-1" aria-labelledby="placementGuideModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="placementGuideModalLabel">Placement Guide</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="placementGuideBody">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editModalLabel">Edit Cell Content</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="originalContent" class="form-label edit-modal-label">Original Content:</label>
+                <input type="text" class="form-control" id="originalContent" readonly>
+              </div>
+              <div class="mb-3">
+                <label for="newContent" class="form-label edit-modal-label">New Content:</label>
+                <input type="text" class="form-control" id="newContent">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="saveEditButton">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel">Filter Options</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="filterForm">
+                        <div class="mb-3">
+                            <label class="form-label">Zone</label>
+                            <div class="zone-buttons">
+                                <div class="zone-button" data-zone="">Any</div>
+                                <div class="zone-button" data-zone="1">1</div>
+                                <div class="zone-button" data-zone="2">2</div>
+                                <div class="zone-button" data-zone="3">3</div>
+                                <div class="zone-button" data-zone="4">4</div>
+                                <div class="zone-button" data-zone="5">5</div>
+                                <div class="zone-button" data-zone="6">6</div>
+                            </div>
+                            <input type="hidden" id="filterZone" name="filterZone" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="filterDH" class="form-label">DH</label>
+                            <select id="filterDH" class="form-select">
+                                <option value="">Any</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="filterDepth" class="form-label">Depth</label>
+                            <select id="filterDepth" class="form-select">
+                                <option value="">Any</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="filterJarBag" class="form-label">Jar/Bag</label>
+                            <select id="filterJarBag" class="form-select">
+                                <option value="">Any</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="filterShelf" class="form-label">Shelf</label>
+                            <select id="filterShelf" class="form-select">
+                                <option value="">Any</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="applyFilterButton">Apply Filters</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="modal fade" id="shelfInventoryModal" tabindex="-1" aria-labelledby="shelfInventoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shelfInventoryModalLabel">Shelf Inventory</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="shelfCountDisplay" class="shelf-count-grid">
+
+        </div>
+        <div id="sampleDetailView" style="display: none;">
+            
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerModalLabel">Register Sample</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm">
+                        <ul class="nav nav-pills nav-justified mb-3" id="registerSteps" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="step1-tab" data-bs-toggle="pill" data-bs-target="#step1" type="button" role="tab" aria-controls="step1" aria-selected="true">Identifier</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="step2-tab" data-bs-toggle="pill" data-bs-target="#step2" type="button" role="tab" aria-controls="step2" aria-selected="false">Location</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="step3-tab" data-bs-toggle="pill" data-bs-target="#step3" type="button" role="tab" aria-controls="step3" aria-selected="false">Storage</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="registerStepsContent">
+                            <div class="tab-pane fade show active" id="step1" role="tabpanel" aria-labelledby="step1-tab">
+                                <div class="mb-3">
+                                    <label for="registerDescription" class="form-label">Description</label>
+                                    <input type="text" id="registerDescription" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerStid" class="form-label">STID</label>
+                                    <input type="text" id="registerStid" placeholder="required" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerDH" class="form-label">DH</label>
+                                    <input type="text" id="registerDH" class="form-control">
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="step2" role="tabpanel" aria-labelledby="step2-tab">
+                                <div class="mb-3">
+                                    <label for="registerNorthing" class="form-label">Northing</label>
+                                    <input type="number" id="registerNorthing" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerEasting" class="form-label">Easting</label>
+                                    <input type="number" id="registerEasting" class="form-control">
+                                </div>
+                                <button type="button" class="btn btn-secondary mb-3" id="selectPointOnMap">
+                                    Select Point on Map
+                                </button>
+                                <div class="mb-3">
+                                    <label for="registerDepth" class="form-label">Depth (ft)</label>
+                                    <input type="number" id="registerDepth" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerZone" class="form-label">Zone</label>
+                                    <select id="registerZone" class="form-select">
+                                        <option value="">Select Zone</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="step3" role="tabpanel" aria-labelledby="step3-tab">
+                                <div class="mb-3">
+                                    <label class="form-label">Jar/Bag</label>
+                                    <div class="btn-group w-100 sample-container" role="group" aria-label="Jar or Bag selection">
+                                        <input type="radio" class="btn-check" name="registerJarBag" id="registerJar" value="Jar" autocomplete="off" checked>
+                                        <label class="btn btn-outline-primary" for="registerJar">
+                                            <i class="fa-solid fa-jar"></i>
+                                            <table>
+                                                <tr>
+                                                    <td>Jar</td>
+                                                </tr>
+                                            </table>
+                                        </label>
+                                        <input type="radio" class="btn-check" name="registerJarBag" id="registerBag" value="Bag" autocomplete="off">
+                                        <label class="btn btn-outline-primary" for="registerBag">
+                                            <i class="fa-solid fa-box-open"></i>
+                                            <table>
+                                                <tr>
+                                                    <td>Bag</td>
+                                                </tr>
+                                            </table>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="mb-3">
+                                        <label for="registerShelf" class="form-label">Shelf #</label>
+                                        <select id="registerShelf" class="form-select">
+                                        <option value="">Select Shelf</option>
+                                        </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerWeight" class="form-label">Weight (kg)</label>
+                                    <input type="number" id="registerWeight" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="prevStepBtn" style="display:none;">Previous</button>
+                    <button type="button" class="btn btn-primary" id="nextStepBtn">Next</button>
+                    <button type="button" class="btn btn-success" id="registerSampleButton" style="display:none;">Register Sample</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/login-state.js"></script>
+<script src="js/user-auth.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>

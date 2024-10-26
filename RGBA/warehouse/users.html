@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGS - User Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/inventory.css">
+    <link rel="stylesheet" href="css/ui.css">
+</head>
+<style>
+
+.dashboard-page {
+        color: #0093ff;
+}
+
+.main-content {
+	background: initial;
+}
+
+a {
+	text-decoration: none !important;
+}
+
+.toggle-password {
+    height: 100%;
+}
+
+.user-table>thead>tr>th {
+	vertical-align: middle;
+}
+
+.user-table th {
+	padding: 8px !important;
+	font-weight: bold;
+	text-align: center;
+}
+
+.user-table th:nth-child(n+5) {
+	padding: initial;
+}
+
+.user-table td {
+	font-size: 14px;
+	vertical-align: middle;
+	padding: 8px 0;
+}
+
+.user-table td:last-of-type {
+	min-width: initial;;
+}
+
+.form-control {
+	width: -webkit-fill-available;
+  }
+
+.search-box {
+  width: 200px;
+}
+
+  .main-view {
+	display: initial;
+    background-color: white;
+    padding: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;;
+  }
+
+  .table-striped {
+	margin-top: 50px;
+	width: 100%;
+  }
+
+
+  .modal-content {
+	text-align: left;
+  }
+
+  .close {
+	opacity: 0.5;
+  }
+
+  
+  .close:hover {
+	opacity: 0.3;
+  }
+
+ .btn {
+	border-radius: 0px;
+	background-color: #286090;
+	border: none;
+	border-radius: 8px;
+	display: inline;
+  }
+
+  td .btn:hover {
+	background-color: #224a6e;
+  }
+
+  td .btn:active {
+	background-color: #223a50 !important;
+  }
+
+  .btn-style-ed {
+	background-color: #286090;
+    color: white;
+	border: none;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+  }
+
+  .btn-style-de {
+	background-color: #286090;
+    color: white;
+	border: none;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+	border-left: 1px solid #0f3b61;
+  }
+
+  .btn-style-de:hover {
+	border-left: 1px solid #0f3b61 !important;
+    color: white;
+}
+
+.btn-style-ed:hover {
+    color: white;
+}  
+
+.btn-info:hover {
+	background: #215783;
+}
+
+.btn-info:focus {
+	background: #215783 !important;
+}
+
+.btn-info:active {
+	background: #215783 !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #efefef;
+}
+
+td {
+	vertical-align: middle !important;
+}
+
+.btn-default {
+	display: inline-block;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.fa-eye-slash::before {
+	content: "";
+}
+
+.main-content {
+    background: initial;
+    width: 80%;
+    margin: auto;
+    margin-top: 90px;
+    border-radius: 6px;
+    border: 1px solid #c6c6c6;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.btn-filter-department {
+    position: absolute;
+    left: 30px;
+    top: 30px;
+}
+
+
+.btn-user-add {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+}
+
+.btn-blue-style {
+    color: white;
+}
+
+.btn-blue-style:hover {
+    background-color: #184f7f;
+    color: rgb(229, 229, 229);
+}
+
+.btn-blue-style:active {
+    background-color: #105592 !important;
+    color: rgb(194, 194, 194) !important;
+}
+
+.profile-picture-preview {
+            max-width: 100px;
+            max-height: 100px;
+            margin-top: 10px;
+        }
+
+
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">User Management</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav navigation-class">
+                    <li class="nav-item dropdown user-menu d-none">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userFirstName"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#" id="logoutButton">Logout</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+    </nav>
+   
+
+    <div class="wrapper">
+        <div id="navbar"></div>
+        <div class="main-container">
+            <div class="main-content">
+                <div class="main-view">
+                    <!-- Updated Filter Modal -->
+                    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="filterModalLabel">Filter by Department</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="list-group" id="departmentsListGroup">
+                                        <!-- Departments will be dynamically added here -->
+                                    </div>
+                                    <button class="btn btn-info btn-remove-filter btn-blue-style" style="margin-top: 15px;" type="button">Remove Department Filter</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h1>User Manager</h1>
+                    <div class="action-bar">
+                        <button class="btn btn-primary btn-user-add btn-blue-style" type="button" data-bs-toggle="modal" data-bs-target="#userModal">Add user</button>
+                    </div>
+                    <input class="form-control search-box" type="text" placeholder="Search Users" />
+                    <button class="btn btn-info btn-filter-department btn-blue-style" type="button" data-bs-toggle="modal" data-bs-target="#filterModal">Filter by Department</button>
+
+                    <!-- Updated User Modal -->
+                    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="userModalLabel">User Information</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-information" enctype="multipart/form-data">
+								<div class="form-group">
+									<label for="department">Department:</label>
+									<select class="form-control department" id="department" name="department" required>
+			
+									</select>
+								</div>
+							  <div class="form-group">
+								  <label for="priority">Access Level:</label>
+								  <select class="form-control priority" id="priority" name="priority" required>
+									  <option value="1">1</option>
+									  <option value="2">2</option>
+									  <option value="3">3</option>
+									  <option value="4">4</option>
+									  <option value="5">5</option>
+								  </select>
+							  </div>
+								<div class="form-group"><label for="firstName">First name:</label><input class="form-control firstname" required="required" type="text"
+									placeholder="First name" /></div>
+								<div class="form-group"><label for="lastname">Last name:</label><input class="form-control lastname" required="required" type="text"
+									placeholder="Last name" /></div>
+								<div class="form-group"><label for="phone">Phone:</label><input class="form-control phone" required="required" type="text" placeholder="Phone number"/></div>
+								<div class="form-group"><label for="email">Email:</label><input class="form-control email" required="required" type="text" placeholder="Email"/></div>
+								<div class="form-group"><label for="address">Address:</label><input class="form-control address" required="required" type="text" placeholder="Address"/></div>
+								<div class="form-group"><label for="birthday">Birthday:</label><input class="form-control birthday" required="required" type="date" name="bday"/></div>
+								<div class="form-group"><label for="gender" style="margin-right: 10px;">Gender:</label>
+								<div style="display: inline-block;">	
+								Male
+								<input class="male" type="radio" name="gender" value="Male" checked="checked"/>	
+								Female
+								<input class="female" type="radio" name="gender" value="Female" />
+								
+								</div>
+								</div>
+								<div class="form-group">
+									<label for="password">Password:</label>
+									<div class="input-group">
+										<input type="password" class="form-control password" placeholder="Password" required="required">
+										<span class="input-group-btn">
+											<button class="btn btn-default toggle-password" style="background-color: #e6e6e6; border: 1px solid #ccc; z-index: 10;" type="button"><i class="fa fa-eye"></i></button>
+										</span>
+									</div>
+								</div>					                                
+                                <div class="form-group">
+                                <label for="profilePicture">Profile Picture:</label>
+                                <input type="file" class="form-control profilePicture" name="profilePicture" accept="image/*">
+                                <img id="profilePicturePreview" class="profile-picture-preview" src="" alt="Profile Picture Preview" style="display:none;">
+                            </div>
+                            <input type="hidden" class="user-id" name="id" value="">
+                            <button class="btn btn-primary btn-save-change" type="submit">Save changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+					  <table class="user-table table-striped" id="table-list">
+						<thead>
+						  <tr>
+							<th>ID</th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Phone</th>
+							<th>Email</th>
+							<th>Address</th>
+							<th>Birthday</th>
+							<th>Gender</th>
+							<th>Department</th>
+							<th>Access Level</th>
+							<th>Action</th>
+						  </tr>
+						</thead>
+						<tbody></tbody>
+					  </table>
+				</div>
+				</div>	
+		 </div>
+		</div>
+		
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="js/login-state.js"></script>
+    <script src="js/user-auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script>
+$(document).ready(function () {
+    function populateDepartmentFilters() {
+        $.getJSON('json/departments.json', function(data) {
+            var departments = data.departments;
+            var listGroup = $('#departmentsListGroup');
+            listGroup.empty(); 
+            
+            $.each(departments, function(index, department) {
+                var listItem = $('<a href="#" class="list-group-item list-group-item-action department-filter"></a>')
+                    .text(department.name)
+                    .attr('data-department', department.name);
+
+                listGroup.append(listItem);
+            });
+        }).fail(function() {
+            console.error('Failed to load departments from JSON.');
+        });
+    }
+
+    populateDepartmentFilters();
+
+     $(document).on('click', '.department-filter', function(e) {
+            e.preventDefault();
+            var selectedDepartment = $(this).data('department');
+            $('#table-list tbody tr').filter(function() {
+                $(this).toggle($(this).find('td').eq(8).text() === selectedDepartment);
+            });
+            hideModal('filterModal');
+        });
+
+        $('.btn-remove-filter').on('click', function() {
+            $('#table-list tbody tr').show();
+            hideModal('filterModal');
+        });
+
+
+    function showModal(modalId) {
+            var myModal = new bootstrap.Modal(document.getElementById(modalId));
+            myModal.show();
+        }
+
+        function hideModal(modalId) {
+            var myModal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+            if (myModal) {
+                myModal.hide();
+            }
+        }
+
+        $('.profilePicture').on('change', function(e) {
+            var file = e.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#profilePicturePreview').attr('src', e.target.result).show();
+            }
+            reader.readAsDataURL(file);
+        });
+
+
+$(document).on('click', '.toggle-password', function() {
+    $(this).toggleClass('fa-eye fa-eye-slash');
+    var input = $(this).closest('.input-group').find('.password');
+    if (input.attr('type') === 'password') {
+        input.attr('type', 'text');
+    } else {
+        input.attr('type', 'password');
+    }
+});
+
+$(".search-box").on("keyup", function() {
+    var searchText = $(this).val().toLowerCase();
+    $("#table-list tbody tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(searchText) > -1)
+    });
+});
+
+$('.form-information').on('submit', function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    
+    // Ensure correct field names and values
+    formData.set('firstname', $('.firstname').val());
+    formData.set('lastname', $('.lastname').val());
+    formData.set('email', $('.email').val());
+    formData.set('phone', $('.phone').val());
+    formData.set('address', $('.address').val());
+    formData.set('birthday', $('.birthday').val());
+    formData.set('gender', $('input[name="gender"]:checked').val() || 'Unspecified');
+    formData.set('password', $('.password').val());
+    
+    // Convert department ID to name before submitting
+    var departmentId = $('.department').val();
+    var departmentName = departmentNamesById[departmentId] || 'Unassigned';
+    formData.set('department', departmentName);
+    
+    formData.set('priority', $('.priority').val() || '1');
+
+    // Ensure the user ID is included for edit operations
+    if (operationMode === "edit") {
+        var userId = $('.user-id').val();
+        if (!userId) {
+            console.error("User ID is missing for edit operation");
+            alert("Error: User ID is missing. Please try again.");
+            return;
+        }
+        formData.set('id', userId);
+    }
+
+    $.ajax({
+        url: operationMode === "create" ? 'php/saveUserData.php' : 'php/updateUserData.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log("Success response:", response);
+            $('#userModal').modal('hide');
+            updateUI();
+        },
+        error: function(xhr, status, error) {
+            console.error("Error details:", {
+                status: status,
+                error: error,
+                responseText: xhr.responseText
+            });
+            alert("An error occurred. Status: " + status + ". Error: " + error + ". Response: " + xhr.responseText);
+        }
+    });
+});
+
+
+
+	function clearForm() {
+    $('.form-information').trigger('reset');
+}
+
+
+function resetForm() {
+        $('.form-information')[0].reset();
+        $('#profilePicturePreview').attr('src', '').hide();
+        $('.user-id').val('');
+        operationMode = "create";
+    }
+
+    // Reset form when modal is closed
+    $('#userModal').on('hidden.bs.modal', function () {
+        resetForm();
+    });
+
+    
+
+
+$('#myModal').on('hidden.bs.modal', function () {
+    clearForm();
+});
+
+$(".btn-user-add").on("click", function() {
+        operationMode = "create";
+        resetForm();
+        $('#userModal').modal('show');
+    });
+
+
+ $("#table-list tbody").on("click", ".btn-delete", function() {
+        var userId = $(this).attr("data-id");
+        if(confirm("Are you sure you want to delete this user?")) {
+            $.ajax({
+                url: 'php/deleteUser.php',
+                type: 'POST',
+                data: { id: userId },
+                success: function(response) {
+                    updateUI();
+                },
+                error: function(xhr, status, error) {
+                    alert("Error in deletion: " + xhr.responseText);
+                }
+            });
+        }
+    });
+
+var existingData = []; 
+var operationMode = "create"; 
+
+function updateUI() {
+	$.getJSON('json/user_data.json?' + new Date().getTime(), function(data) {
+		existingData = data; 
+		var html = '';
+		$.each(data, function(key, value) {
+			html += '<tr>'
+					+ '<td>' + value.id + '</td>'
+					+ '<td>' + value.firstname + '</td>'
+					+ '<td>' + value.lastname + '</td>'
+					+ '<td>' + value.phone + '</td>'
+					+ '<td>' + value.email + '</td>' 
+					+ '<td>' + value.address + '</td>'
+					+ '<td>' + value.birthday + '</td>' 
+					+ '<td>' + value.gender + '</td>'
+					+ '<td>' + value.department + '</td>'
+					+ '<td>' + value.priority + '</td>'
+					+ '<td><div class="btn btn-edit btn-style-ed" data-id="' + value.id + '" data-target="#myModal" data-toggle="modal">Edit</div>'
+					+ '<div class="btn btn-delete btn-style-de" data-id="' + value.id + '">Delete</div></td>' 
+					+ '</tr>';
+		});
+		$('#table-list tbody').html(html);
+	}).fail(function() {
+		console.error('Error loading updated data');
+	});
+}
+
+    updateUI();
+
+
+$(".search-box").on("keyup", function() {
+    var searchText = $(this).val().toLowerCase();
+    $("#table-list tbody tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(searchText) > -1)
+    });
+});
+
+
+$('#myModal').on('hidden.bs.modal', function () {
+    window.location.reload();
+});
+
+
+$("#table-list").on("click", ".btn-edit", function() {
+        operationMode = "edit";
+        var userId = $(this).data("id");
+        var userRow = $(this).closest('tr');
+        var departmentName = userRow.find('td:nth-child(9)').text().trim(); 
+
+        var departmentId = departmentsByName[departmentName];
+        if(departmentId) {
+            $('#department').val(departmentId);
+        } else {
+            console.error("Department name not found in departmentsByName mapping: " + departmentName);
+            $('#department').val('');
+        }
+
+        var user = existingData.find(u => u.id.toString() === userId.toString());
+        var password = user ? user.password : ''; 
+
+        var userData = {
+            id: userRow.find('td:nth-child(1)').text(),
+            firstname: userRow.find('td:nth-child(2)').text(),
+            lastname: userRow.find('td:nth-child(3)').text(),
+            phone: userRow.find('td:nth-child(4)').text(),
+            email: userRow.find('td:nth-child(5)').text(),
+            address: userRow.find('td:nth-child(6)').text(),
+            birthday: userRow.find('td:nth-child(7)').text(),
+            gender: userRow.find('td:nth-child(8)').text(),
+            priority: userRow.find('td:nth-child(10)').text(),
+        };
+
+        $('.user-id').val(userData.id); 
+        $('.firstname').val(userData.firstname);
+        $('.lastname').val(userData.lastname);
+        $('.phone').val(userData.phone);
+        $('.email').val(userData.email);
+        $('.address').val(userData.address);
+        $('.birthday').val(userData.birthday);
+        $('.department').val(departmentId);
+        $('.priority').val(userData.priority);
+        $('.password').val(password);
+        if (userData.gender === "Male") {
+            $('.male').prop('checked', true);
+        } else if (userData.gender === "Female") {
+            $('.female').prop('checked', true);
+        }
+
+        var profilePicture = user.profilePicture;
+        if (profilePicture) {
+            $('#profilePicturePreview').attr('src', profilePicture).show();
+        } else {
+            $('#profilePicturePreview').hide();
+        }
+
+        $('#userModal').modal('show');
+    });
+    });
+
+
+var departmentNamesById = {};
+var departmentsByName = {};
+
+function loadAndPrepareDepartmentsData() {
+        $.ajax({
+            url: 'json/departments.json',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var departmentDropdown = $('#department');
+                departmentDropdown.empty();
+                departmentDropdown.append('<option value="">Select Department</option>');
+
+                data.departments.forEach(function(department) {
+                    departmentNamesById[department.id] = department.name;
+                    departmentsByName[department.name] = department.id; 
+                    departmentDropdown.append(`<option value="${department.id}">${department.name}</option>`);
+                });
+            },
+            error: function() {
+                console.log('Error loading department data.');
+            }
+        });
+    }
+
+
+function populateDepartmentDropdown(dropdownId) {
+    $.ajax({
+        url: 'json/departments.json', 
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            var departmentDropdown = $(dropdownId); 
+            departmentDropdown.empty(); 
+
+            data.departments.forEach(function(department) {
+                departmentDropdown.append('<option value="' + department.id + '">' + department.name + '</option>');
+            });
+        },
+        error: function() {
+            console.error('Error loading department types.');
+        }
+    });
+}
+
+
+$(document).ready(function() {
+    populateDepartmentDropdown('#department'); 
+	loadAndPrepareDepartmentsData();
+});
+
+
+
+    </script>
+</body>
+</html>

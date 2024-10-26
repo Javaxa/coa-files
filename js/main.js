@@ -2364,7 +2364,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (['HY20', 'HN04', 'Rock', 'Source Sample', 'Shaft'].includes(value)) {
                 if (this.checked) {
                     activeIncursionTypes.add(value);
-                    selectAllDepths(); // Select all depths when an incursion type is selected
+                    selectAllDepths();
                 } else {
                     activeIncursionTypes.delete(value);
                 }
@@ -2386,7 +2386,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cb.checked = this.checked;
             });
     
-            updateDepthFilter(); // Update depth filter for all filter changes
+            updateDepthFilter();
             updateMap();
             updateElementTable();
             updateElementAverages();

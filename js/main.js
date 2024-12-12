@@ -2431,14 +2431,35 @@ document.querySelector('#elementTable tbody').addEventListener('click', function
         
         // Special handling for Set 25
         if (cellValue === 'Hazen_COA_Set_25.pdf') {
-            document.getElementById('coaModalLabel').textContent = cellValue;
-            document.getElementById('coaIframe').src = coaFiles[cellValue]; // Use the full URL from coaFiles
-            document.getElementById('coaIframe').style.display = 'block';
-            document.getElementById('excelContainer').style.display = 'none';
-            const modal = new bootstrap.Modal(document.getElementById('coaModal'));
-            modal.show();
+            const fileUrl = coaFiles[cellValue];
+            
+            // Check if file exists
+            fetch(fileUrl, { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('coaModalLabel').textContent = cellValue;
+                        document.getElementById('coaIframe').src = fileUrl;
+                        document.getElementById('coaIframe').style.display = 'block';
+                        document.getElementById('excelContainer').style.display = 'none';
+                        const modal = new bootstrap.Modal(document.getElementById('coaModal'));
+                        modal.show();
+                    } else {
+                        throw new Error('File not found');
+                    }
+                })
+                .catch(error => {
+                    // If file not found at the first URL, try alternate URL
+                    const alternateUrl = `"https://main--stellular-khapse-e51f2d.netlify.app/coas/${cellValue}`;
+                    document.getElementById('coaModalLabel').textContent = cellValue;
+                    document.getElementById('coaIframe').src = alternateUrl;
+                    document.getElementById('coaIframe').style.display = 'block';
+                    document.getElementById('excelContainer').style.display = 'none';
+                    const modal = new bootstrap.Modal(document.getElementById('coaModal'));
+                    modal.show();
+                });
             return;
         }
+
 
         // Original handling for all other COAs
         const fileExtension = cellValue.split('.').pop().toLowerCase();

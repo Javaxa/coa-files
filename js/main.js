@@ -30,6 +30,7 @@ const coaFiles = {
     "COA_RE21096417.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/coas/COA_RE21096417.pdf",
     "COA_RE21095480.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/coas/COA_RE21095480.pdf",
     "COA_RE21096266.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/coas/COA_RE21096266.pdf",
+    "Hazen_COA_Set_25.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/coas/Hazen_COA_Set_25.pdf",
     "COA_RE21096307.pdf": "https://main--stellular-khapse-e51f2d.netlify.app/coas/COA_RE21096307.pdf"
 };
 

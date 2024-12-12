@@ -2425,36 +2425,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
  
-        document.querySelector('#elementTable tbody').addEventListener('click', function(e) {
+document.querySelector('#elementTable tbody').addEventListener('click', function(e) {
     if (e.target && e.target.classList.contains('editable')) {
         const cellValue = e.target.textContent.trim();
-        const fileUrl = coaFiles[cellValue];
-
-        if (fileUrl) {
+        
+        // Special handling for Set 25
+        if (cellValue === 'Hazen_COA_Set_25.pdf') {
             document.getElementById('coaModalLabel').textContent = cellValue;
-            const fileExtension = cellValue.split('.').pop().toLowerCase();
-
-            if (fileExtension === 'pdf') {
-                document.getElementById('coaIframe').src = fileUrl;
-                document.getElementById('coaIframe').style.display = 'block';
-                document.getElementById('excelContainer').style.display = 'none';
-            } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
-                const viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`;
-                document.getElementById('coaIframe').src = viewerUrl;
-                document.getElementById('coaIframe').style.display = 'block';
-                document.getElementById('excelContainer').style.display = 'none';
-            } else {
-                document.getElementById('coaIframe').src = '';
-                document.getElementById('coaIframe').style.display = 'none';
-                document.getElementById('excelContainer').textContent = 'Cannot display the file. Unsupported file format.';
-                document.getElementById('excelContainer').style.display = 'block';
-            }
-
+            document.getElementById('coaIframe').src = coaFiles[cellValue]; // Use the full URL from coaFiles
+            document.getElementById('coaIframe').style.display = 'block';
+            document.getElementById('excelContainer').style.display = 'none';
             const modal = new bootstrap.Modal(document.getElementById('coaModal'));
             modal.show();
-        } else {
-            alert('File not found.');
+            return;
         }
+
+        // Original handling for all other COAs
+        const fileExtension = cellValue.split('.').pop().toLowerCase();
+        document.getElementById('coaModalLabel').textContent = cellValue;
+        
+        if (fileExtension === 'pdf') {
+            document.getElementById('coaIframe').src = `/coas/${cellValue}`;
+            document.getElementById('coaIframe').style.display = 'block';
+            document.getElementById('excelContainer').style.display = 'none';
+        } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+            const encodedUrl = encodeURIComponent(window.location.origin + '/coas/' + cellValue);
+            document.getElementById('coaIframe').src = viewerUrl;
+            document.getElementById('coaIframe').style.display = 'block';
+            document.getElementById('excelContainer').style.display = 'none';
+        } else {
+            document.getElementById('coaIframe').src = '';
+            document.getElementById('coaIframe').style.display = 'none';
+            document.getElementById('excelContainer').textContent = 'Cannot display the file. Unsupported file format.';
+            document.getElementById('excelContainer').style.display = 'block';
+        }
+
+        const modal = new bootstrap.Modal(document.getElementById('coaModal'));
+        modal.show();
     }
 });
 
